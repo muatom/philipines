@@ -1,0 +1,3114 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הפיליפינים 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --bg: #f0f9ff;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gradient-start: #0ea5e9;
+            --gradient-end: #06b6d4;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 24px 20px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-emoji {
+            font-size: 40px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            position: relative;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 8px;
+            padding-bottom: calc(6px + env(safe-area-inset-bottom));
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 10px;
+            color: var(--text-light);
+            border: none;
+            background: none;
+            font-family: inherit;
+            min-width: 56px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(14, 165, 233, 0.08);
+        }
+
+        .nav-item span.icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            padding: 20px 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title .emoji {
+            font-size: 24px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: box-shadow 0.2s;
+        }
+
+        .card:active {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        /* Flight specific */
+        .flight-route {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .flight-point {
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        .flight-code {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .flight-city {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .flight-time {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-top: 4px;
+        }
+
+        .flight-line {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            position: relative;
+        }
+
+        .flight-line::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            right: 12px;
+            height: 2px;
+            background: linear-gradient(to left, var(--primary), var(--border));
+            border-radius: 1px;
+        }
+
+        .flight-line .plane {
+            font-size: 20px;
+            position: relative;
+            z-index: 1;
+            background: var(--card);
+            padding: 0 4px;
+            transform: scaleX(-1);
+        }
+
+        .flight-duration {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: -4px;
+            margin-bottom: 12px;
+        }
+
+        .flight-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .flight-detail {
+            text-align: center;
+        }
+
+        .flight-detail-label {
+            font-size: 10px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .flight-detail-value {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* Day navigation */
+        .day-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 0 16px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .day-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .day-btn {
+            flex: 0 0 auto;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: var(--card);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .day-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+        }
+
+        .day-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .day-content.active {
+            display: block;
+        }
+
+        .itinerary-item {
+            display: flex;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .itinerary-item:last-child {
+            border-bottom: none;
+        }
+
+        .itinerary-time {
+            flex: 0 0 auto;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 50px;
+            padding-top: 2px;
+        }
+
+        .itinerary-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .itinerary-details p {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .itinerary-icon {
+            font-size: 18px;
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            background: rgba(14, 165, 233, 0.08);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hotel */
+        .hotel-dates {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .hotel-date {
+            flex: 1;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            text-align: center;
+        }
+
+        .hotel-date-label {
+            font-size: 10px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .hotel-date-value {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .hotel-address {
+            font-size: 13px;
+            color: var(--text-light);
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .hotel-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 8px 14px;
+            background: rgba(14, 165, 233, 0.08);
+            border-radius: 8px;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        .hotel-link:active {
+            background: rgba(14, 165, 233, 0.15);
+        }
+
+        /* Todo */
+        .todo-input-wrap {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .todo-input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            background: var(--card);
+            outline: none;
+            transition: border-color 0.2s;
+            direction: rtl;
+        }
+
+        .todo-input:focus {
+            border-color: var(--primary);
+        }
+
+        .todo-add-btn {
+            padding: 12px 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .todo-add-btn:active {
+            background: var(--primary-dark);
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .todo-item.done {
+            opacity: 0.5;
+        }
+
+        .todo-item.done .todo-text {
+            text-decoration: line-through;
+        }
+
+        .todo-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            transition: all 0.2s;
+            background: var(--card);
+        }
+
+        .todo-item.done .todo-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .todo-checkbox::after {
+            content: '';
+            display: none;
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2.5px 2.5px 0;
+            transform: rotate(45deg);
+            margin-top: -2px;
+        }
+
+        .todo-item.done .todo-checkbox::after {
+            display: block;
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .todo-delete {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+
+        .todo-delete:active {
+            opacity: 1;
+            color: var(--danger);
+        }
+
+        .todo-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .todo-progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .todo-progress-fill {
+            height: 100%;
+            background: linear-gradient(to left, var(--success), #34d399);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* Emergency */
+        .emergency-card {
+            border-right: 4px solid var(--danger);
+        }
+
+        .emergency-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .emergency-value {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .emergency-phone {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        /* Links */
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s;
+        }
+
+        .link-item:active {
+            box-shadow: var(--shadow-md);
+        }
+
+        .link-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(14, 165, 233, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex: 0 0 auto;
+        }
+
+        .link-info {
+            flex: 1;
+        }
+
+        .link-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .link-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .link-arrow {
+            color: var(--text-light);
+            font-size: 18px;
+            transform: scaleX(-1);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-blue {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--primary-dark);
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .badge-orange {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        /* Utility */
+        .mt-8 { margin-top: 8px; }
+        .mt-12 { margin-top: 12px; }
+        .text-sm { font-size: 13px; }
+        .text-muted { color: var(--text-light); }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0;
+        }
+
+        /* Stopover indicator */
+        .stopover-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Packing List */
+        .pack-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            background: var(--border);
+            border-radius: 12px;
+            padding: 3px;
+        }
+
+        .pack-tab {
+            flex: 1;
+            padding: 9px 8px;
+            border: none;
+            border-radius: 10px;
+            background: none;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pack-tab.active {
+            background: var(--card);
+            color: var(--text);
+            box-shadow: var(--shadow);
+            font-weight: 600;
+        }
+
+        .pack-category {
+            margin-bottom: 12px;
+        }
+
+        .pack-category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--card);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .pack-category-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pack-category-count {
+            font-size: 12px;
+            color: var(--text-light);
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .pack-category-items {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .pack-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .pack-item:last-child { border-bottom: none; }
+
+        .pack-item.done { opacity: 0.45; }
+        .pack-item.done .pack-item-text { text-decoration: line-through; }
+
+        .pack-item-check {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 5px;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .pack-item.done .pack-item-check {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .pack-item.done .pack-item-check::after {
+            content: '';
+            width: 5px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-top: -2px;
+        }
+
+        .pack-item-text { flex: 1; }
+
+        .pack-summary {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .pack-summary-card {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .pack-summary-num {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .pack-summary-label {
+            font-size: 10px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Budget */
+        .budget-hero {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .budget-hero-amount {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 4px 0;
+        }
+
+        .budget-hero-label {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        .budget-hero-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 4px;
+            margin-top: 14px;
+            overflow: hidden;
+        }
+
+        .budget-hero-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        .budget-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .budget-stat {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .budget-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .budget-stat-label {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .budget-add-wrap {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .budget-add-wrap input, .budget-add-wrap select {
+            padding: 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 13px;
+            background: var(--card);
+            outline: none;
+            direction: rtl;
+        }
+
+        .budget-add-wrap input:focus, .budget-add-wrap select:focus {
+            border-color: var(--primary);
+        }
+
+        .budget-add-wrap .budget-desc { flex: 2; }
+        .budget-add-wrap .budget-amount { flex: 1; min-width: 70px; }
+
+        .budget-add-row2 {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .budget-add-row2 select {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 13px;
+            background: var(--card);
+            outline: none;
+            direction: rtl;
+        }
+
+        .budget-add-row2 select:focus { border-color: var(--primary); }
+
+        .budget-expense {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .budget-expense-icon {
+            font-size: 18px;
+            width: 32px;
+            text-align: center;
+        }
+
+        .budget-expense-info { flex: 1; }
+
+        .budget-expense-desc {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .budget-expense-meta {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 1px;
+        }
+
+        .budget-expense-amount {
+            font-size: 15px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .budget-expense-delete {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.3;
+        }
+
+        .budget-expense-delete:active {
+            opacity: 1;
+            color: var(--danger);
+        }
+
+        .budget-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 16px 0 8px;
+            color: var(--text-light);
+        }
+
+        /* Nav overflow for 8 items */
+        .nav {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            justify-content: flex-start;
+            gap: 0;
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+
+        .nav::-webkit-scrollbar { display: none; }
+
+        .nav-item {
+            min-width: 52px;
+            padding: 6px 6px;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card: #1e293b;
+                --text: #f1f5f9;
+                --text-light: #94a3b8;
+                --border: #334155;
+            }
+
+            .header {
+                background: linear-gradient(135deg, #0369a1, #0891b2);
+            }
+
+            .nav {
+                background: #1e293b;
+                border-top-color: #334155;
+            }
+
+            .flight-line::before {
+                background: linear-gradient(to left, var(--primary), #334155);
+            }
+
+            .todo-input {
+                background: #1e293b;
+                color: var(--text);
+            }
+
+            .todo-checkbox {
+                background: #1e293b;
+            }
+
+            .itinerary-icon {
+                background: rgba(14, 165, 233, 0.15);
+            }
+
+            .link-icon {
+                background: rgba(14, 165, 233, 0.15);
+            }
+
+            .hotel-date {
+                background: #0f172a;
+            }
+
+            .pack-tabs {
+                background: #334155;
+            }
+
+            .pack-tab.active {
+                background: #1e293b;
+            }
+
+            .pack-item-check {
+                background: #1e293b;
+            }
+
+            .budget-add-wrap input, .budget-add-wrap select,
+            .budget-add-row2 select {
+                background: #1e293b;
+                color: var(--text);
+            }
+
+            .budget-hero {
+                background: linear-gradient(135deg, #0369a1, #0891b2);
+            }
+
+            .converter-select, .converter-input {
+                background: #1e293b;
+                color: var(--text);
+                border-color: #334155;
+            }
+
+            .converter-result {
+                background: #0f172a;
+            }
+        }
+
+        /* Currency Converter */
+        .converter-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .converter-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+            align-items: stretch;
+        }
+
+        .converter-input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 18px;
+            font-family: 'Heebo', sans-serif;
+            font-weight: 600;
+            background: var(--bg);
+            color: var(--text);
+            direction: ltr;
+            text-align: right;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .converter-input:focus {
+            border-color: var(--primary);
+        }
+
+        .converter-select {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: 'Heebo', sans-serif;
+            font-weight: 600;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            min-width: 100px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .converter-select:focus {
+            border-color: var(--primary);
+        }
+
+        .converter-swap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .converter-swap button {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .converter-swap button:active {
+            transform: rotate(180deg);
+        }
+
+        .converter-result {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .converter-result-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            direction: ltr;
+        }
+
+        .converter-result-label {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .converter-rate-info {
+            font-size: 12px;
+            color: var(--text-light);
+            text-align: center;
+            padding-top: 8px;
+        }
+
+        .converter-quick-amounts {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .converter-quick-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 8px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--card);
+            color: var(--text);
+            font-family: 'Heebo', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .converter-quick-btn:active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .converter-loading {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+        }
+
+        .converter-loading .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <span class="header-emoji">🏝️</span>
+        <h1>הפיליפינים 2026</h1>
+        <p>הרפתקה טרופית לזוג</p>
+        <div class="countdown" id="countdown">
+            <span>⏳</span>
+            <span id="countdown-text">טוען...</span>
+        </div>
+    </div>
+
+    <!-- Flights Section -->
+    <div class="section" id="sec-flights">
+        <div class="section-title">
+            <span class="emoji">✈️</span>
+            טיסות
+        </div>
+
+        <!-- Flight 1: Taba → Athens -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-blue">1. טאבה → אתונה</span>
+                5 באפריל 2026 | יום ראשון
+            </div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">TCP</div>
+                    <div class="flight-city">טאבה</div>
+                    <div class="flight-time">15:40</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">ATH</div>
+                    <div class="flight-city">אתונה</div>
+                    <div class="flight-time">18:50</div>
+                </div>
+            </div>
+            <div class="flight-duration">משך טיסה: ~3:10 שעות</div>
+            <div class="flight-details">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מחיר</div>
+                    <div class="flight-detail-value">$1,076</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מזוודה</div>
+                    <div class="flight-detail-value">20 ק"ג</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">עליה</div>
+                    <div class="flight-detail-value">2×8 ק"ג</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="https://drive.google.com/drive/folders/1H1CxcL5BIh1eClRBaHXaJqXvpoJn79Nu" class="hotel-link" target="_blank">🎫 כרטיס טיסה</a>
+            </div>
+        </div>
+
+        <!-- Flight 2: Athens → Manila (via Singapore) -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-blue">2. אתונה → מנילה</span>
+                6 באפריל 2026 | יום שני
+            </div>
+            <div class="stopover-badge">🔄 עצירה בסינגפור (SIN)</div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">ATH</div>
+                    <div class="flight-city">אתונה</div>
+                    <div class="flight-time">08:55</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">SIN</div>
+                    <div class="flight-city">סינגפור</div>
+                    <div class="flight-time">01:10</div>
+                </div>
+            </div>
+            <div class="flight-duration">הגעה 7/4 | 01:10</div>
+
+            <div class="divider"></div>
+
+            <div class="card-label" style="margin-top: 4px;">
+                7 באפריל 2026 | המשך
+            </div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">SIN</div>
+                    <div class="flight-city">סינגפור</div>
+                    <div class="flight-time">14:40</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">MNL</div>
+                    <div class="flight-city">מנילה</div>
+                    <div class="flight-time">—</div>
+                </div>
+            </div>
+            <div class="flight-duration">עצירה בסינגפור: ~13:30 שעות</div>
+            <div class="flight-details">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מחיר</div>
+                    <div class="flight-detail-value">$1,132</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מזוודה</div>
+                    <div class="flight-detail-value">20 ק"ג (Tom)</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">שדה הגעה</div>
+                    <div class="flight-detail-value">NAIA (MNL)</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="https://drive.google.com/drive/folders/15dvjt0k7dXqEVMXl4WNFUvY75dMbmIVJ" class="hotel-link" target="_blank">🎫 כרטיס טיסה</a>
+            </div>
+        </div>
+
+        <!-- Flight 3: Manila → Siargao (via Cebu) -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-blue">3. מנילה → סיארגאו</span>
+                8 באפריל 2026 | יום רביעי
+            </div>
+            <div class="stopover-badge">🔄 עצירה בסבו (CEB)</div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">MNL</div>
+                    <div class="flight-city">מנילה</div>
+                    <div class="flight-time">06:05</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">CEB</div>
+                    <div class="flight-city">סבו</div>
+                    <div class="flight-time">07:40</div>
+                </div>
+            </div>
+            <div class="flight-duration">משך טיסה: 1:35 שעות</div>
+
+            <div class="divider"></div>
+
+            <div class="card-label" style="margin-top: 4px;">
+                8 באפריל 2026 | המשך
+            </div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">CEB</div>
+                    <div class="flight-city">סבו</div>
+                    <div class="flight-time">08:50</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">IAO</div>
+                    <div class="flight-city">סיארגאו</div>
+                    <div class="flight-time">—</div>
+                </div>
+            </div>
+            <div class="flight-duration">עצירה בסבו: 1:10 שעות</div>
+            <div class="flight-details">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מחיר</div>
+                    <div class="flight-detail-value">$165</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מזוודה</div>
+                    <div class="flight-detail-value">20 ק"ג (Tom)</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">שדה הגעה</div>
+                    <div class="flight-detail-value">Sayak (IAO)</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="https://drive.google.com/drive/folders/1TQ0-pFL-r1jPdiwCvNQo4InQ9uOf25VG" class="hotel-link" target="_blank">🎫 כרטיס טיסה</a>
+            </div>
+        </div>
+
+        <!-- Flight 4: Siargao → El Nido (via Cebu) -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-orange">4. סיארגאו → אל נידו</span>
+                17 באפריל 2026 | יום שישי
+            </div>
+            <div class="stopover-badge">🔄 עצירה בסבו (CEB)</div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">IAO</div>
+                    <div class="flight-city">סיארגאו</div>
+                    <div class="flight-time">16:20</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">CEB</div>
+                    <div class="flight-city">סבו</div>
+                    <div class="flight-time">17:20</div>
+                </div>
+            </div>
+            <div class="flight-duration">משך טיסה: 1:00 שעה</div>
+
+            <div class="divider"></div>
+
+            <div class="card-label" style="margin-top: 4px;">
+                17 באפריל 2026 | המשך
+            </div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">CEB</div>
+                    <div class="flight-city">סבו</div>
+                    <div class="flight-time">18:50</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">ENI</div>
+                    <div class="flight-city">אל נידו</div>
+                    <div class="flight-time">—</div>
+                </div>
+            </div>
+            <div class="flight-duration">עצירה בסבו: 1:30 שעות</div>
+            <div class="flight-details">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מחיר</div>
+                    <div class="flight-detail-value">$502</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">Tom</div>
+                    <div class="flight-detail-value">20 ק"ג + 5 ק"ג</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">Daniella</div>
+                    <div class="flight-detail-value">5 ק"ג בלבד</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="https://drive.google.com/drive/folders/1vd3ueyf59ciaTEjgaDOCLbuvt9gWpQoU" class="hotel-link" target="_blank">🎫 כרטיס טיסה</a>
+            </div>
+        </div>
+
+        <!-- Flight 5: El Nido → Caticlan -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-orange">5. אל נידו → קטיקלאן (בורקאי)</span>
+                23 באפריל 2026 | יום חמישי
+            </div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">ENI</div>
+                    <div class="flight-city">אל נידו</div>
+                    <div class="flight-time">14:25</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">MPH</div>
+                    <div class="flight-city">קטיקלאן</div>
+                    <div class="flight-time">15:30</div>
+                </div>
+            </div>
+            <div class="flight-duration">משך טיסה: ~1:05 שעות</div>
+            <div class="flight-details">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מחיר</div>
+                    <div class="flight-detail-value">$378</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">Tom</div>
+                    <div class="flight-detail-value">7 ק"ג עליה</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">Daniella</div>
+                    <div class="flight-detail-value">7 ק"ג + 20 ק"ג</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="https://drive.google.com/drive/folders/1kIS4t6V9us3fYmCrBJtFVjoDe_ZOn6q1" class="hotel-link" target="_blank">🎫 כרטיס טיסה</a>
+            </div>
+        </div>
+
+        <!-- Flight 6: Caticlan → Manila -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-green">6. קטיקלאן → מנילה</span>
+                26 באפריל 2026 | יום ראשון
+            </div>
+            <div class="flight-route">
+                <div class="flight-point">
+                    <div class="flight-code">MPH</div>
+                    <div class="flight-city">קטיקלאן</div>
+                    <div class="flight-time">17:45</div>
+                </div>
+                <div class="flight-line">
+                    <span class="plane">✈️</span>
+                </div>
+                <div class="flight-point">
+                    <div class="flight-code">MNL</div>
+                    <div class="flight-city">מנילה T2</div>
+                    <div class="flight-time">18:55</div>
+                </div>
+            </div>
+            <div class="flight-duration">משך טיסה: ~1:10 שעות</div>
+            <div class="flight-details">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מחיר</div>
+                    <div class="flight-detail-value">$213</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מזוודה</div>
+                    <div class="flight-detail-value">20 ק"ג לאדם</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">עליה</div>
+                    <div class="flight-detail-value">7 ק"ג לאדם</div>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="https://drive.google.com/drive/folders/1YY3oAcuJNg-EcgUHD0eKHdj-ahkh0Qzk" class="hotel-link" target="_blank">🎫 כרטיס טיסה</a>
+            </div>
+        </div>
+
+        <!-- Total cost -->
+        <div class="card" style="text-align: center; background: linear-gradient(135deg, rgba(14,165,233,0.05), rgba(6,182,212,0.05));">
+            <div style="font-size: 13px; color: var(--text-light);">סה"כ טיסות</div>
+            <div style="font-size: 28px; font-weight: 800; color: var(--primary); margin-top: 4px;">$3,466</div>
+        </div>
+    </div>
+
+    <!-- Itinerary Section -->
+    <div class="section active" id="sec-itinerary">
+        <div class="section-title">
+            <span class="emoji">📅</span>
+            תוכנית יומית
+        </div>
+
+        <div class="day-nav" id="day-nav"></div>
+
+        <div id="days-container"></div>
+    </div>
+
+    <!-- Hotels Section -->
+    <div class="section" id="sec-hotels">
+        <div class="section-title">
+            <span class="emoji">🏨</span>
+            מלונות ולינה
+        </div>
+
+        <!-- Manila -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-blue">מנילה</span>
+                1 לילה
+            </div>
+            <div class="card-title">I'M Hotel</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">07/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">08/04</div>
+                </div>
+            </div>
+            <div class="flight-details" style="border: none; padding-top: 8px;">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">מחיר</div>
+                    <div class="flight-detail-value">$88</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">תשלום</div>
+                    <div class="flight-detail-value">חוייב</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ביטול</div>
+                    <div class="flight-detail-value">—</div>
+                </div>
+            </div>
+            <a href="https://secure.booking.com/confirmation.he.html?aid=2311236&label=he-il-booking-desktop-jAa4HzdofwF7sl9Xfy9gkAS652828999102%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9197280%3Ali%3Adec%3Adm&sid=3b9891aca7770ccf9300f2cd8a9c8609&auth_key=7uxZIXFy84MJDsAC" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>
+        </div>
+
+        <!-- Siargao - Surfing Temple -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-green">סיארגאו - ג'נרל לונה</span>
+                2 לילות
+            </div>
+            <div class="card-title">Surfing Temple Boutique Hotel</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">08/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">10/04</div>
+                </div>
+            </div>
+            <div class="flight-details" style="border: none; padding-top: 8px;">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ללילה</div>
+                    <div class="flight-detail-value">$353</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">סה"כ</div>
+                    <div class="flight-detail-value">$706</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">תשלום</div>
+                    <div class="flight-detail-value">חוייב</div>
+                </div>
+            </div>
+            <a href="https://secure.booking.com/confirmation.he.html?label=he-il-booking-desktop-jAa4HzdofwF7sl9Xfy9gkAS652828999102%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9197280%3Ali%3Adec%3Adm&sid=3fa64bfd9a27e66f4df3ce8802530cdf&aid=2311236&auth_key=9NEJk8DW8uD5yWyh&source=mytrips" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>
+        </div>
+
+        <!-- Siargao - Kalo Villas -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-green">סיארגאו - ג'נרל לונה</span>
+                3 לילות
+            </div>
+            <div class="card-title">Kalo Villas Siargao</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">10/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">13/04</div>
+                </div>
+            </div>
+            <div class="flight-details" style="border: none; padding-top: 8px;">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ללילה</div>
+                    <div class="flight-detail-value">$216</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">סה"כ</div>
+                    <div class="flight-detail-value">$647</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ביטול</div>
+                    <div class="flight-detail-value">חינם</div>
+                </div>
+            </div>
+            <div class="text-sm text-muted">תשלום: 5/4/26</div>
+            <a href="https://secure.booking.com/confirmation.he.html?label=he-il-booking-desktop-jAa4HzdofwF7sl9Xfy9gkAS652828999102%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9197280%3Ali%3Adec%3Adm&sid=3fa64bfd9a27e66f4df3ce8802530cdf&aid=2311236&auth_key=z8poLKAAPHpGx2Vg&source=mytrips" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>
+        </div>
+
+        <!-- Siargao - KAJALI -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-green">סיארגאו - ג'נרל לונה</span>
+                2 לילות
+            </div>
+            <div class="card-title">KAJALI</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">13/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">15/04</div>
+                </div>
+            </div>
+            <div class="flight-details" style="border: none; padding-top: 8px;">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ללילה</div>
+                    <div class="flight-detail-value">$128</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">סה"כ</div>
+                    <div class="flight-detail-value">$257</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ביטול</div>
+                    <div class="flight-detail-value">חינם</div>
+                </div>
+            </div>
+            <div class="text-sm text-muted">תשלום: 11/4/26</div>
+            <a href="https://secure.booking.com/confirmation.he.html?label=he-il-booking-desktop-jAa4HzdofwF7sl9Xfy9gkAS652828999102%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9197280%3Ali%3Adec%3Adm&sid=3fa64bfd9a27e66f4df3ce8802530cdf&aid=2311236&auth_key=hMphKIblgESfMcfv&source=mytrips" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>
+        </div>
+
+        <!-- Siargao - Bamboo Surf Beach -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-green">סיארגאו - פסיפיקו</span>
+                2 לילות
+            </div>
+            <div class="card-title">Bamboo Surf Beach</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">15/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">17/04</div>
+                </div>
+            </div>
+            <div class="flight-details" style="border: none; padding-top: 8px;">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ללילה</div>
+                    <div class="flight-detail-value">$173</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">סה"כ</div>
+                    <div class="flight-detail-value">$347</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">תשלום</div>
+                    <div class="flight-detail-value">חוייב</div>
+                </div>
+            </div>
+            <a href="https://secure.booking.com/confirmation.he.html?aid=2311236&label=he-il-booking-desktop-jAa4HzdofwF7sl9Xfy9gkAS652828999102%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9197280%3Ali%3Adec%3Adm&sid=3b9891aca7770ccf9300f2cd8a9c8609&auth_key=0bxixIJQnGmF0849" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>
+        </div>
+
+        <!-- El Nido - MISSING -->
+        <div class="card" style="border-right: 4px solid var(--danger);">
+            <div class="card-label">
+                <span class="badge badge-orange" style="background: rgba(239,68,68,0.1); color: #dc2626;">אל נידו - טרם הוזמן!</span>
+                4 לילות
+            </div>
+            <div class="card-title" style="color: var(--danger);">צריך להזמין לינה</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">17/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">21/04</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- El Nido - H Hotel -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-orange">אל נידו</span>
+                2 לילות
+            </div>
+            <div class="card-title">H Hotel El Nido</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">21/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">23/04</div>
+                </div>
+            </div>
+            <div class="flight-details" style="border: none; padding-top: 8px;">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ללילה</div>
+                    <div class="flight-detail-value">$330</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">סה"כ</div>
+                    <div class="flight-detail-value">$659</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ביטול</div>
+                    <div class="flight-detail-value">עד 20/4</div>
+                </div>
+            </div>
+            <a href="https://secure.booking.com/confirmation.he.html?aid=2311236&label=he-il-booking-desktop-jAa4HzdofwF7sl9Xfy9gkAS652828999102%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9197280%3Ali%3Adec%3Adm&sid=3b9891aca7770ccf9300f2cd8a9c8609&auth_key=ZxrlmCaCX7ugh76A" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>
+        </div>
+
+        <!-- Boracay - MISSING -->
+        <div class="card" style="border-right: 4px solid var(--danger);">
+            <div class="card-label">
+                <span class="badge badge-orange" style="background: rgba(239,68,68,0.1); color: #dc2626;">בורקאי - טרם הוזמן!</span>
+                1 לילה
+            </div>
+            <div class="card-title" style="color: var(--danger);">צריך להזמין לינה</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">23/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">24/04</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boracay - Shangri-La -->
+        <div class="card">
+            <div class="card-label">
+                <span class="badge badge-orange">בורקאי</span>
+                2 לילות
+            </div>
+            <div class="card-title">Shangri-La Boracay</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אין</div>
+                    <div class="hotel-date-value">24/04</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">26/04</div>
+                </div>
+            </div>
+            <div class="flight-details" style="border: none; padding-top: 8px;">
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ללילה</div>
+                    <div class="flight-detail-value">$773</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">סה"כ</div>
+                    <div class="flight-detail-value">$1,545</div>
+                </div>
+                <div class="flight-detail">
+                    <div class="flight-detail-label">ביטול</div>
+                    <div class="flight-detail-value">עד 9/4</div>
+                </div>
+            </div>
+            <a href="https://secure.booking.com/confirmation.he.html?label=he-il-booking-desktop-jAa4HzdofwF7sl9Xfy9gkAS652828999102%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-65526620%3Alp9197280%3Ali%3Adec%3Adm&sid=3b9891aca7770ccf9300f2cd8a9c8609&aid=2311236&auth_key=rjRv6HV7SclrDAKw&source=change_dates" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>
+        </div>
+
+        <!-- Manila last night - MISSING -->
+        <div class="card" style="border-right: 4px solid var(--danger);">
+            <div class="card-label">
+                <span class="badge badge-orange" style="background: rgba(239,68,68,0.1); color: #dc2626;">מנילה - טרם הוזמן!</span>
+                לילה אחרון
+            </div>
+            <div class="card-title" style="color: var(--danger);">צריך להזמין לינה (או טיסה הביתה)</div>
+            <div class="hotel-dates">
+                <div class="hotel-date">
+                    <div class="hotel-date-label">הגעה</div>
+                    <div class="hotel-date-value">26/04 | 18:55</div>
+                </div>
+                <div class="hotel-date">
+                    <div class="hotel-date-label">צ'ק-אאוט</div>
+                    <div class="hotel-date-value">??</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total cost -->
+        <div class="card" style="text-align: center; background: linear-gradient(135deg, rgba(14,165,233,0.05), rgba(6,182,212,0.05));">
+            <div style="font-size: 13px; color: var(--text-light);">סה"כ לינה (שהוזמנה)</div>
+            <div style="font-size: 28px; font-weight: 800; color: var(--primary); margin-top: 4px;">$4,249</div>
+            <div style="font-size: 13px; color: var(--danger); margin-top: 4px; font-weight: 600;">6 לילות עדיין לא הוזמנו | תקציב שנותר: $543</div>
+        </div>
+    </div>
+
+    <!-- Todo Section -->
+    <div class="section" id="sec-todo">
+        <div class="section-title">
+            <span class="emoji">✅</span>
+            רשימת מטלות
+        </div>
+
+        <div class="todo-progress">
+            <span id="todo-progress-text">0/0 הושלמו</span>
+            <div class="todo-progress-bar">
+                <div class="todo-progress-fill" id="todo-progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="todo-input-wrap">
+            <input type="text" class="todo-input" id="todo-input" placeholder="הוסף פריט חדש..." />
+            <button class="todo-add-btn" id="todo-add-btn">הוסף</button>
+        </div>
+
+        <div id="todo-list"></div>
+    </div>
+
+    <!-- Emergency Section -->
+    <div class="section" id="sec-emergency">
+        <div class="section-title">
+            <span class="emoji">🆘</span>
+            מידע לשעת חירום
+        </div>
+
+        <div class="card emergency-card">
+            <div class="emergency-title">🏛️ שגרירות ישראל במנילה</div>
+            <div class="emergency-value mt-8">
+                37th Floor, Discovery Primea<br>
+                6749 Ayala Avenue, Makati City, Manila
+            </div>
+            <div class="mt-8">
+                <a href="tel:+63281103456" class="emergency-phone">📞 +63-2-8110-3456</a>
+            </div>
+            <div class="mt-8 text-sm text-muted">
+                שעות פעילות: א'-ה' 09:00-13:00 (שעון מקומי)
+            </div>
+        </div>
+
+        <div class="card emergency-card">
+            <div class="emergency-title">🚨 מספרי חירום בפיליפינים</div>
+            <div class="mt-8">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div><strong>משטרה:</strong> <a href="tel:911" class="emergency-phone" style="font-size:14px">911</a></div>
+                    <div><strong>אמבולנס:</strong> <a href="tel:911" class="emergency-phone" style="font-size:14px">911</a></div>
+                    <div><strong>כיבוי אש:</strong> <a href="tel:911" class="emergency-phone" style="font-size:14px">911</a></div>
+                    <div><strong>משמר החופים:</strong> <a href="tel:+6329178100" class="emergency-phone" style="font-size:14px">+63-2-917-8100</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card emergency-card">
+            <div class="emergency-title">🛡️ ביטוח נסיעות</div>
+            <div class="emergency-value mt-8">
+                <strong>חברה:</strong> הראל ביטוח נסיעות<br>
+                <strong>פוליסה:</strong> TRV-2026-987654<br>
+                <strong>תוקף:</strong> 05/04/2026 - 26/04/2026
+            </div>
+            <div class="mt-8">
+                <a href="tel:+97235574777" class="emergency-phone">📞 +972-3-557-4777</a>
+            </div>
+            <div class="text-sm text-muted mt-8">קו חירום 24/7 לחו"ל</div>
+        </div>
+
+        <div class="card emergency-card">
+            <div class="emergency-title">🏥 בתי חולים מומלצים</div>
+            <div class="emergency-value mt-8">
+                <strong>מנילה:</strong> St. Luke's Medical Center, BGC<br>
+                📞 <a href="tel:+63287898700" style="color: var(--primary)">+63-2-8789-8700</a>
+            </div>
+            <div class="emergency-value mt-8">
+                <strong>אל נידו:</strong> El Nido District Hospital<br>
+                📞 <a href="tel:+63486611166" style="color: var(--primary)">+63-48-661-1166</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Links Section -->
+    <div class="section" id="sec-links">
+        <div class="section-title">
+            <span class="emoji">🔗</span>
+            קישורים חשובים
+        </div>
+
+        <a href="https://drive.google.com/drive/folders/1H1CxcL5BIh1eClRBaHXaJqXvpoJn79Nu" class="link-item" target="_blank">
+            <div class="link-icon">✈️</div>
+            <div class="link-info">
+                <div class="link-title">כרטיס טאבה → אתונה</div>
+                <div class="link-desc">5/4 | $1,076</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="https://drive.google.com/drive/folders/15dvjt0k7dXqEVMXl4WNFUvY75dMbmIVJ" class="link-item" target="_blank">
+            <div class="link-icon">✈️</div>
+            <div class="link-info">
+                <div class="link-title">כרטיס אתונה → מנילה</div>
+                <div class="link-desc">6-7/4 | via סינגפור | $1,132</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="https://drive.google.com/drive/folders/1TQ0-pFL-r1jPdiwCvNQo4InQ9uOf25VG" class="link-item" target="_blank">
+            <div class="link-icon">✈️</div>
+            <div class="link-info">
+                <div class="link-title">כרטיס מנילה → סיארגאו</div>
+                <div class="link-desc">8/4 | via סבו | $165</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="https://drive.google.com/drive/folders/1vd3ueyf59ciaTEjgaDOCLbuvt9gWpQoU" class="link-item" target="_blank">
+            <div class="link-icon">✈️</div>
+            <div class="link-info">
+                <div class="link-title">כרטיס סיארגאו → אל נידו</div>
+                <div class="link-desc">17/4 | via סבו | $502</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="https://drive.google.com/drive/folders/1kIS4t6V9us3fYmCrBJtFVjoDe_ZOn6q1" class="link-item" target="_blank">
+            <div class="link-icon">✈️</div>
+            <div class="link-info">
+                <div class="link-title">כרטיס אל נידו → קטיקלאן</div>
+                <div class="link-desc">23/4 | $378</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="https://drive.google.com/drive/folders/1YY3oAcuJNg-EcgUHD0eKHdj-ahkh0Qzk" class="link-item" target="_blank">
+            <div class="link-icon">✈️</div>
+            <div class="link-info">
+                <div class="link-title">כרטיס קטיקלאן → מנילה</div>
+                <div class="link-desc">26/4 | $213</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="#" class="link-item">
+            <div class="link-icon">🛡️</div>
+            <div class="link-info">
+                <div class="link-title">פוליסת ביטוח נסיעות</div>
+                <div class="link-desc">הראל ביטוח - מסמך הפוליסה</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="#" class="link-item">
+            <div class="link-icon">📋</div>
+            <div class="link-info">
+                <div class="link-title">eTravel Registration</div>
+                <div class="link-desc">טופס כניסה לפיליפינים</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="#" class="link-item">
+            <div class="link-icon">📱</div>
+            <div class="link-info">
+                <div class="link-title">eSIM / חבילת גלישה</div>
+                <div class="link-desc">Airalo - eSIM לפיליפינים</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+
+        <a href="#" class="link-item">
+            <div class="link-icon">🗺️</div>
+            <div class="link-info">
+                <div class="link-title">מפות אופליין - Google Maps</div>
+                <div class="link-desc">הורד מפות לשימוש ללא אינטרנט</div>
+            </div>
+            <span class="link-arrow">‹</span>
+        </a>
+    </div>
+
+    <!-- Packing Section -->
+    <div class="section" id="sec-packing">
+        <div class="section-title">
+            <span class="emoji">🎒</span>
+            רשימת ציוד
+        </div>
+
+        <div class="pack-summary" id="pack-summary"></div>
+
+        <div class="pack-tabs">
+            <button class="pack-tab active" data-who="tom">Tom</button>
+            <button class="pack-tab" data-who="dani">Dani</button>
+            <button class="pack-tab" data-who="shared">משותף</button>
+        </div>
+
+        <div id="pack-list"></div>
+    </div>
+
+    <!-- Budget Section -->
+    <div class="section" id="sec-budget">
+        <div class="section-title">
+            <span class="emoji">💰</span>
+            תקציב הטיול
+        </div>
+
+        <div class="budget-hero" id="budget-hero">
+            <div class="budget-hero-label">סה"כ הוצאות</div>
+            <div class="budget-hero-amount" id="budget-total">$0</div>
+            <div class="budget-hero-label" id="budget-remaining"></div>
+            <div class="budget-hero-bar">
+                <div class="budget-hero-fill" id="budget-bar" style="width:0%"></div>
+            </div>
+        </div>
+
+        <div class="budget-breakdown" id="budget-breakdown"></div>
+
+        <div class="budget-section-title">הוסף הוצאה</div>
+        <div class="budget-add-wrap">
+            <input type="text" class="budget-desc" id="budget-desc-input" placeholder="תיאור..." />
+            <input type="number" class="budget-amount" id="budget-amount-input" placeholder="סכום $" />
+        </div>
+        <div class="budget-add-row2">
+            <select id="budget-cat-input">
+                <option value="food">🍽️ אוכל ושתייה</option>
+                <option value="activity">🏄 פעילויות וטיולים</option>
+                <option value="transport">🚕 תחבורה</option>
+                <option value="shopping">🛍️ קניות</option>
+                <option value="wellness">💆 ספא ורווחה</option>
+                <option value="tips">💵 טיפים</option>
+                <option value="other">📦 אחר</option>
+            </select>
+            <select id="budget-who-input">
+                <option value="shared">משותף</option>
+                <option value="tom">Tom</option>
+                <option value="dani">Dani</option>
+            </select>
+            <button class="todo-add-btn" id="budget-add-btn" style="padding: 10px 16px;">הוסף</button>
+        </div>
+
+        <div class="budget-section-title">הוצאות קבועות (טיסות + מלונות)</div>
+        <div id="budget-fixed"></div>
+
+        <div class="budget-section-title">הוצאות יומיות</div>
+        <div id="budget-expenses"></div>
+    </div>
+
+    <!-- Currency Converter Section -->
+    <div class="section" id="sec-converter">
+        <div class="section-title">
+            <span class="emoji">💱</span>
+            המרת מטבעות
+        </div>
+
+        <div class="converter-card" id="converter-body">
+            <div class="converter-loading" id="converter-loading">
+                <div class="spinner"></div>
+                <div>טוען שערי חליפין...</div>
+            </div>
+            <div id="converter-ui" style="display:none;">
+                <div class="converter-input-group">
+                    <input type="number" class="converter-input" id="conv-amount" placeholder="הזן סכום" inputmode="decimal">
+                    <select class="converter-select" id="conv-from">
+                        <option value="USD">$ USD</option>
+                        <option value="ILS">₪ ILS</option>
+                        <option value="PHP">₱ PHP</option>
+                    </select>
+                </div>
+
+                <div class="converter-swap">
+                    <button id="conv-swap" title="החלף מטבעות">⇅</button>
+                </div>
+
+                <div class="converter-input-group">
+                    <div class="converter-input" id="conv-output" style="display:flex;align-items:center;justify-content:flex-end;background:var(--bg);min-height:48px;font-size:18px;color:var(--primary);">—</div>
+                    <select class="converter-select" id="conv-to">
+                        <option value="ILS">₪ ILS</option>
+                        <option value="USD">$ USD</option>
+                        <option value="PHP">₱ PHP</option>
+                    </select>
+                </div>
+
+                <div class="converter-quick-amounts" id="conv-quick"></div>
+
+                <div class="converter-result" id="conv-result" style="display:none;">
+                    <div class="converter-result-amount" id="conv-result-amount"></div>
+                    <div class="converter-result-label" id="conv-result-label"></div>
+                </div>
+
+                <div class="converter-rate-info" id="conv-rate-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="nav">
+        <button class="nav-item active" data-section="itinerary">
+            <span class="icon">📅</span>
+            <span>תוכנית</span>
+        </button>
+        <button class="nav-item" data-section="flights">
+            <span class="icon">✈️</span>
+            <span>טיסות</span>
+        </button>
+        <button class="nav-item" data-section="hotels">
+            <span class="icon">🏨</span>
+            <span>מלונות</span>
+        </button>
+        <button class="nav-item" data-section="budget">
+            <span class="icon">💰</span>
+            <span>תקציב</span>
+        </button>
+        <button class="nav-item" data-section="packing">
+            <span class="icon">🎒</span>
+            <span>ציוד</span>
+        </button>
+        <button class="nav-item" data-section="todo">
+            <span class="icon">✅</span>
+            <span>מטלות</span>
+        </button>
+        <button class="nav-item" data-section="emergency">
+            <span class="icon">🆘</span>
+            <span>חירום</span>
+        </button>
+        <button class="nav-item" data-section="converter">
+            <span class="icon">💱</span>
+            <span>המרה</span>
+        </button>
+        <button class="nav-item" data-section="links">
+            <span class="icon">🔗</span>
+            <span>קישורים</span>
+        </button>
+    </nav>
+
+    <script>
+        // ==================== DATA ====================
+
+        const TRIP_START = new Date('2026-04-05T15:40:00+02:00');
+
+        const itinerary = [
+            {
+                day: 1,
+                date: '05/04',
+                weekday: 'ראשון',
+                title: 'טאבה → אתונה',
+                items: [
+                    { time: '15:40', icon: '✈️', title: 'טיסה טאבה → אתונה', desc: 'Taba International Airport → Athens (ATH)' },
+                    { time: '18:50', icon: '🛬', title: 'נחיתה באתונה', desc: 'לילה באתונה / בשדה התעופה' },
+                ]
+            },
+            {
+                day: 2,
+                date: '06/04',
+                weekday: 'שני',
+                title: 'אתונה → סינגפור',
+                items: [
+                    { time: '08:55', icon: '✈️', title: 'טיסה אתונה → סינגפור', desc: 'ATH → SIN, הגעה 7/4 01:10' },
+                ]
+            },
+            {
+                day: 3,
+                date: '07/04',
+                weekday: 'שלישי',
+                title: 'סינגפור → מנילה',
+                items: [
+                    { time: '01:10', icon: '🛬', title: 'נחיתה בסינגפור', desc: 'Changi Airport - עצירת ביניים' },
+                    { time: '14:40', icon: '✈️', title: 'טיסה סינגפור → מנילה', desc: 'SIN → MNL (Ninoy Aquino Intl)' },
+                    { time: '', icon: '🏨', title: 'צ\'ק-אין I\'M Hotel', desc: 'מנילה, לילה אחד' },
+                ]
+            },
+            {
+                day: 4,
+                date: '08/04',
+                weekday: 'רביעי',
+                title: 'מנילה → סיארגאו',
+                items: [
+                    { time: '04:30', icon: '⏰', title: 'השכמה וצ\'ק-אאוט', desc: 'יציאה מ-I\'M Hotel למנילה' },
+                    { time: '06:05', icon: '✈️', title: 'טיסה מנילה → סבו', desc: 'MNL → CEB (07:40)' },
+                    { time: '08:50', icon: '✈️', title: 'טיסה סבו → סיארגאו', desc: 'CEB → IAO (Sayak Airport)' },
+                    { time: '', icon: '🏨', title: 'צ\'ק-אין Surfing Temple', desc: 'General Luna, Siargao - 2 לילות' },
+                    { time: '', icon: '🏖️', title: 'חוף ומנוחה', desc: 'התארגנות, חוף, שקיעה' },
+                ]
+            },
+            {
+                day: 5,
+                date: '09/04',
+                weekday: 'חמישי',
+                title: 'סיארגאו - גלישה וחוף',
+                items: [
+                    { time: '07:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר במלון' },
+                    { time: '09:00', icon: '🏄', title: 'שיעור גלישה', desc: 'Cloud 9 - ספוט הגלישה המפורסם של סיארגאו' },
+                    { time: '12:30', icon: '🍜', title: 'ארוחת צהריים', desc: 'מסעדה מקומית בג\'נרל לונה' },
+                    { time: '14:00', icon: '🏖️', title: 'חוף ומנוחה', desc: 'חוף, שחייה, שנורקלינג' },
+                    { time: '18:00', icon: '🌅', title: 'שקיעה', desc: 'שקיעה על החוף' },
+                    { time: '19:30', icon: '🍽️', title: 'ארוחת ערב', desc: 'מסעדה בג\'נרל לונה' },
+                ]
+            },
+            {
+                day: 6,
+                date: '10/04',
+                weekday: 'שישי',
+                title: 'סיארגאו - Kalo Villas',
+                items: [
+                    { time: '', icon: '🏨', title: 'מעבר ל-Kalo Villas', desc: 'צ\'ק-אאוט Surfing Temple → צ\'ק-אין Kalo Villas (3 לילות)' },
+                    { time: '10:00', icon: '🏝️', title: 'Island Hopping', desc: 'סיור איים - Naked Island, Daku Island, Guyam Island' },
+                    { time: '12:00', icon: '🍱', title: 'ארוחת צהריים', desc: 'פיקניק על אי' },
+                    { time: '15:00', icon: '🤿', title: 'סנורקלינג', desc: 'שנורקלינג בשוניות' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'מסעדה מומלצת' },
+                ]
+            },
+            {
+                day: 7,
+                date: '11/04',
+                weekday: 'שבת',
+                title: 'סיארגאו - לגונות ומערות',
+                items: [
+                    { time: '08:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר במלון' },
+                    { time: '09:30', icon: '🏊', title: 'Sugba Lagoon', desc: 'לגונה טורקיז מוקפת צוקים' },
+                    { time: '12:30', icon: '🍜', title: 'ארוחת צהריים', desc: 'ארוחה מקומית' },
+                    { time: '14:00', icon: '🕳️', title: 'Magpupungko Rock Pools', desc: 'בריכות סלע טבעיות (תלוי גאות)' },
+                    { time: '17:00', icon: '🌴', title: 'Palm Trees Swing', desc: 'הנדנדות המפורסמות על עצי הדקל' },
+                    { time: '19:30', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחת ערב' },
+                ]
+            },
+            {
+                day: 8,
+                date: '12/04',
+                weekday: 'ראשון',
+                title: 'סיארגאו - יום חופשי',
+                items: [
+                    { time: '09:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר בנחת' },
+                    { time: '10:30', icon: '🏖️', title: 'חוף ומנוחה', desc: 'יום רגוע על החוף' },
+                    { time: '14:00', icon: '🏄', title: 'גלישה / קיאק', desc: 'פעילות מים לבחירה' },
+                    { time: '17:00', icon: '💆', title: 'ספא', desc: 'עיסוי זוגי' },
+                    { time: '19:30', icon: '🍽️', title: 'ארוחת ערב', desc: 'מסעדה מומלצת' },
+                ]
+            },
+            {
+                day: 9,
+                date: '13/04',
+                weekday: 'שני',
+                title: 'סיארגאו - KAJALI',
+                items: [
+                    { time: '', icon: '🏨', title: 'מעבר ל-KAJALI', desc: 'צ\'ק-אאוט Kalo Villas → צ\'ק-אין KAJALI (2 לילות)' },
+                    { time: '10:00', icon: '🏖️', title: 'חוף ואטרקציות', desc: 'חופים וספוטים חדשים באזור' },
+                    { time: '13:00', icon: '🍜', title: 'ארוחת צהריים', desc: 'מסעדה מקומית' },
+                    { time: '15:00', icon: '🌊', title: 'פעילות מים', desc: 'גלישה / סנורקלינג / קיאק' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'מסעדה מומלצת' },
+                ]
+            },
+            {
+                day: 10,
+                date: '14/04',
+                weekday: 'שלישי',
+                title: 'סיארגאו - יום שני ב-KAJALI',
+                items: [
+                    { time: '08:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר' },
+                    { time: '09:30', icon: '🏝️', title: 'סיור / פעילות', desc: 'אטרקציה לבחירה' },
+                    { time: '13:00', icon: '🍜', title: 'ארוחת צהריים', desc: 'מסעדה מקומית' },
+                    { time: '15:00', icon: '🏖️', title: 'חוף ומנוחה', desc: 'יום רגוע' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחת ערב' },
+                ]
+            },
+            {
+                day: 11,
+                date: '15/04',
+                weekday: 'רביעי',
+                title: 'סיארגאו - פסיפיקו',
+                items: [
+                    { time: '', icon: '🏨', title: 'מעבר ל-Bamboo Surf Beach', desc: 'צ\'ק-אאוט KAJALI → צ\'ק-אין Bamboo Surf Beach, Pacifico (2 לילות)' },
+                    { time: '11:00', icon: '🏖️', title: 'Pacifico Beach', desc: 'חוף שקט ויפהפה, אווירה אחרת מג\'נרל לונה' },
+                    { time: '13:00', icon: '🍜', title: 'ארוחת צהריים', desc: 'אוכל מקומי' },
+                    { time: '15:00', icon: '🏄', title: 'גלישה בפסיפיקו', desc: 'ספוט גלישה רגוע יותר' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחה במלון / מסעדה קרובה' },
+                ]
+            },
+            {
+                day: 12,
+                date: '16/04',
+                weekday: 'חמישי',
+                title: 'סיארגאו - יום אחרון',
+                items: [
+                    { time: '08:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר' },
+                    { time: '09:30', icon: '🏖️', title: 'חוף ומנוחה', desc: 'יום אחרון בסיארגאו' },
+                    { time: '13:00', icon: '🍜', title: 'ארוחת צהריים', desc: 'ארוחה אחרונה בסיארגאו' },
+                    { time: '15:00', icon: '📦', title: 'אריזה', desc: 'הכנה לטיסה מחר' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחת פרידה מסיארגאו' },
+                ]
+            },
+            {
+                day: 13,
+                date: '17/04',
+                weekday: 'שישי',
+                title: 'סיארגאו → אל נידו',
+                items: [
+                    { time: '', icon: '⏰', title: 'צ\'ק-אאוט Bamboo Surf', desc: 'נסיעה לשדה התעופה Sayak' },
+                    { time: '16:20', icon: '✈️', title: 'טיסה סיארגאו → סבו', desc: 'IAO → CEB (17:20)' },
+                    { time: '18:50', icon: '✈️', title: 'טיסה סבו → אל נידו', desc: 'CEB → ENI' },
+                    { time: '', icon: '🏨', title: 'צ\'ק-אין באל נידו', desc: 'לינה באל נידו (טרם הוזמן!)' },
+                ]
+            },
+            {
+                day: 14,
+                date: '18/04',
+                weekday: 'שבת',
+                title: 'אל נידו - Island Hopping A',
+                items: [
+                    { time: '07:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר' },
+                    { time: '08:30', icon: '🚤', title: 'Tour A', desc: 'Big Lagoon, Secret Lagoon, Shimizu Island, 7 Commando Beach' },
+                    { time: '12:00', icon: '🍱', title: 'ארוחת צהריים', desc: 'פיקניק על אי טרופי' },
+                    { time: '13:30', icon: '🤿', title: 'סנורקלינג', desc: 'סנורקלינג ושחייה' },
+                    { time: '16:30', icon: '🚤', title: 'חזרה', desc: 'חזרה למלון' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'מסעדת דגים על החוף' },
+                ]
+            },
+            {
+                day: 15,
+                date: '19/04',
+                weekday: 'ראשון',
+                title: 'אל נידו - Island Hopping C',
+                items: [
+                    { time: '07:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר' },
+                    { time: '08:30', icon: '🚤', title: 'Tour C', desc: 'Matinloc Shrine, Secret Beach, Star Beach, Helicopter Island' },
+                    { time: '12:00', icon: '🍱', title: 'ארוחת צהריים', desc: 'ארוחה על סירה / אי' },
+                    { time: '13:30', icon: '🤿', title: 'סנורקלינג', desc: 'מים צלולים וצבעוניים' },
+                    { time: '16:00', icon: '🚤', title: 'חזרה', desc: 'חזרה למלון' },
+                    { time: '18:00', icon: '💆', title: 'ספא', desc: 'עיסוי לאחר יום ארוך' },
+                    { time: '20:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחה רומנטית על החוף' },
+                ]
+            },
+            {
+                day: 16,
+                date: '20/04',
+                weekday: 'שני',
+                title: 'אל נידו - Nacpan Beach',
+                items: [
+                    { time: '08:30', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר בנחת' },
+                    { time: '10:00', icon: '🏖️', title: 'Nacpan Beach', desc: 'אחד החופים היפים בעולם, 45 דק\' נסיעה' },
+                    { time: '13:00', icon: '🍜', title: 'ארוחת צהריים', desc: 'מסעדה על החוף' },
+                    { time: '15:00', icon: '🛶', title: 'קיאקינג', desc: 'שייט קיאק לחופים נסתרים' },
+                    { time: '17:00', icon: '🌅', title: 'שקיעה', desc: 'שקיעה על Nacpan' },
+                    { time: '19:30', icon: '🍽️', title: 'ארוחת ערב', desc: 'מסעדה בעיירה' },
+                ]
+            },
+            {
+                day: 17,
+                date: '21/04',
+                weekday: 'שלישי',
+                title: 'אל נידו - H Hotel',
+                items: [
+                    { time: '', icon: '🏨', title: 'מעבר ל-H Hotel El Nido', desc: 'צ\'ק-אין H Hotel (2 לילות)' },
+                    { time: '10:00', icon: '🏖️', title: 'חוף ומנוחה', desc: 'יום רגוע, חוף ובריכה' },
+                    { time: '13:00', icon: '🍽️', title: 'ארוחת צהריים', desc: 'מסעדה מקומית' },
+                    { time: '15:00', icon: '🛍️', title: 'קניות', desc: 'מזכרות ומתנות מהשוק המקומי' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחה מומלצת באל נידו' },
+                ]
+            },
+            {
+                day: 18,
+                date: '22/04',
+                weekday: 'רביעי',
+                title: 'אל נידו - יום אחרון',
+                items: [
+                    { time: '08:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר' },
+                    { time: '09:30', icon: '🏖️', title: 'חוף אחרון', desc: 'בוקר אחרון על חופי אל נידו' },
+                    { time: '12:00', icon: '🍽️', title: 'ארוחת צהריים', desc: 'ארוחה אחרונה באל נידו' },
+                    { time: '14:00', icon: '📦', title: 'אריזה', desc: 'הכנה לטיסה מחר' },
+                    { time: '18:00', icon: '🌅', title: 'שקיעה אחרונה', desc: 'שקיעה אחרונה באל נידו' },
+                    { time: '19:30', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחת פרידה' },
+                ]
+            },
+            {
+                day: 19,
+                date: '23/04',
+                weekday: 'חמישי',
+                title: 'אל נידו → בורקאי',
+                items: [
+                    { time: '', icon: '⏰', title: 'צ\'ק-אאוט H Hotel', desc: 'יציאה לשדה התעופה' },
+                    { time: '14:25', icon: '✈️', title: 'טיסה אל נידו → קטיקלאן', desc: 'ENI → MPH (15:30)' },
+                    { time: '16:00', icon: '🚢', title: 'מעבורת לבורקאי', desc: 'סירה מקטיקלאן לאי בורקאי' },
+                    { time: '17:00', icon: '🏨', title: 'צ\'ק-אין בורקאי', desc: 'לינה בבורקאי (טרם הוזמן!)' },
+                    { time: '19:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'White Beach, בורקאי' },
+                ]
+            },
+            {
+                day: 20,
+                date: '24/04',
+                weekday: 'שישי',
+                title: 'בורקאי - Shangri-La',
+                items: [
+                    { time: '', icon: '🏨', title: 'מעבר ל-Shangri-La Boracay', desc: 'צ\'ק-אין Shangri-La (2 לילות)' },
+                    { time: '09:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר ב-Shangri-La' },
+                    { time: '10:00', icon: '🏖️', title: 'Puka Shell Beach', desc: 'חוף שקט בצפון האי' },
+                    { time: '13:00', icon: '🍽️', title: 'ארוחת צהריים', desc: 'מסעדה על החוף' },
+                    { time: '15:00', icon: '🤿', title: 'סנורקלינג / צלילה', desc: 'פעילות מים' },
+                    { time: '18:00', icon: '🌅', title: 'שקיעה', desc: 'שקיעה מפורסמת בבורקאי' },
+                    { time: '20:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'D\'Mall / White Beach' },
+                ]
+            },
+            {
+                day: 21,
+                date: '25/04',
+                weekday: 'שבת',
+                title: 'בורקאי - יום אחרון',
+                items: [
+                    { time: '08:00', icon: '🍳', title: 'ארוחת בוקר', desc: 'ארוחת בוקר ב-Shangri-La' },
+                    { time: '10:00', icon: '🏖️', title: 'White Beach', desc: 'חוף White Beach המפורסם' },
+                    { time: '13:00', icon: '🍽️', title: 'ארוחת צהריים', desc: 'ארוחה אחרונה על החוף' },
+                    { time: '15:00', icon: '💆', title: 'ספא', desc: 'עיסוי זוגי אחרון' },
+                    { time: '17:00', icon: '🛍️', title: 'קניות אחרונות', desc: 'D\'Mall - מזכרות ומתנות' },
+                    { time: '19:00', icon: '📦', title: 'אריזה', desc: 'הכנה לטיסה מחר' },
+                    { time: '20:00', icon: '🍽️', title: 'ארוחת ערב', desc: 'ארוחת פרידה מבורקאי' },
+                ]
+            },
+            {
+                day: 22,
+                date: '26/04',
+                weekday: 'ראשון',
+                title: 'בורקאי → מנילה',
+                items: [
+                    { time: '', icon: '⏰', title: 'צ\'ק-אאוט Shangri-La', desc: 'מעבורת חזרה לקטיקלאן' },
+                    { time: '17:45', icon: '✈️', title: 'טיסה קטיקלאן → מנילה', desc: 'MPH → MNL T2 (18:55)' },
+                    { time: '19:00', icon: '🏨', title: 'מנילה', desc: 'לינה / טיסה הביתה (טרם הוחלט)' },
+                ]
+            },
+        ];
+
+        const defaultTodos = [
+            { id: 1, text: '🚨 להזמין לינה באל נידו 17-21/04 (4 לילות)', done: false },
+            { id: 2, text: '🚨 להזמין לינה בבורקאי 23-24/04 (1 לילה)', done: false },
+            { id: 3, text: '🚨 להזמין לינה/טיסה הביתה ממנילה 26/04', done: false },
+            { id: 4, text: '🚨 לבדוק לינה באתונה 5-6/04 (לילה אחד)', done: false },
+            { id: 5, text: 'לחדש דרכונים (תוקף לפחות 6 חודשים)', done: false },
+            { id: 6, text: 'ביטוח נסיעות', done: false },
+            { id: 7, text: 'חיסונים - לבדוק עם רופא', done: false },
+            { id: 8, text: 'להזמין eSIM לפיליפינים', done: false },
+            { id: 9, text: 'להוריד מפות אופליין - Google Maps', done: false },
+            { id: 10, text: 'למלא eTravel form', done: false },
+            { id: 11, text: 'להודיע לבנק על נסיעה לחו"ל', done: false },
+            { id: 12, text: 'צילום דרכונים ומסמכים חשובים', done: false },
+            { id: 13, text: 'מטען נייד / סוללה חיצונית', done: false },
+            { id: 14, text: 'קרם הגנה SPF50+', done: false },
+            { id: 15, text: 'תרופות אישיות + ערכת עזרה ראשונה', done: false },
+            { id: 16, text: 'בגדי ים ומגבת מיקרופייבר', done: false },
+            { id: 17, text: 'נעלי מים / סנדלים', done: false },
+            { id: 18, text: 'ספריי נגד יתושים', done: false },
+            { id: 19, text: 'להזמין העברה משדה התעופה במנילה', done: false },
+            { id: 20, text: 'להדפיס אישורי הזמנה', done: false },
+        ];
+
+        // ==================== NAVIGATION ====================
+
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const target = item.dataset.section;
+                navItems.forEach(n => n.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById('sec-' + target).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // ==================== COUNTDOWN ====================
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = TRIP_START - now;
+            const el = document.getElementById('countdown-text');
+
+            if (diff <= 0) {
+                el.textContent = 'הטיול כבר התחיל! 🎉';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            if (days > 0) {
+                el.textContent = `עוד ${days} ימים ו-${hours} שעות לטיול!`;
+            } else {
+                el.textContent = `עוד ${hours} שעות לטיול!`;
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+
+        // ==================== ITINERARY ====================
+
+        function renderItinerary() {
+            const navEl = document.getElementById('day-nav');
+            const container = document.getElementById('days-container');
+
+            navEl.innerHTML = itinerary.map((day, i) => `
+                <button class="day-btn ${i === 0 ? 'active' : ''}" data-day="${i}">
+                    יום ${day.day} | ${day.date}
+                </button>
+            `).join('');
+
+            container.innerHTML = itinerary.map((day, i) => `
+                <div class="day-content ${i === 0 ? 'active' : ''}" data-day="${i}">
+                    <div class="card">
+                        <div class="card-title">${day.title}</div>
+                        <div class="card-subtitle">יום ${day.weekday} | ${day.date}/2026</div>
+                        ${day.items.map(item => `
+                            <div class="itinerary-item">
+                                <div class="itinerary-time">${item.time}</div>
+                                <div class="itinerary-icon">${item.icon}</div>
+                                <div class="itinerary-details">
+                                    <h4>${item.title}</h4>
+                                    <p>${item.desc}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            navEl.querySelectorAll('.day-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const dayIdx = btn.dataset.day;
+                    navEl.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                    container.querySelectorAll('.day-content').forEach(d => d.classList.remove('active'));
+                    btn.classList.add('active');
+                    container.querySelector(`.day-content[data-day="${dayIdx}"]`).classList.add('active');
+                });
+            });
+        }
+
+        renderItinerary();
+
+        // ==================== TODO LIST ====================
+
+        function loadTodos() {
+            const version = 'v2';
+            const stored = localStorage.getItem('ph-trip-todos');
+            const storedVersion = localStorage.getItem('ph-trip-todos-version');
+            if (stored && storedVersion === version) {
+                return JSON.parse(stored);
+            }
+            localStorage.setItem('ph-trip-todos-version', version);
+            return [...defaultTodos];
+        }
+
+        function saveTodos(todos) {
+            localStorage.setItem('ph-trip-todos', JSON.stringify(todos));
+        }
+
+        let todos = loadTodos();
+        let nextId = Math.max(...todos.map(t => t.id), 0) + 1;
+
+        function renderTodos() {
+            const list = document.getElementById('todo-list');
+            const total = todos.length;
+            const done = todos.filter(t => t.done).length;
+            const pct = total > 0 ? (done / total * 100) : 0;
+
+            document.getElementById('todo-progress-text').textContent = `${done}/${total} הושלמו`;
+            document.getElementById('todo-progress-fill').style.width = pct + '%';
+
+            list.innerHTML = todos.map(todo => `
+                <div class="todo-item ${todo.done ? 'done' : ''}" data-id="${todo.id}">
+                    <div class="todo-checkbox" onclick="toggleTodo(${todo.id})"></div>
+                    <div class="todo-text">${escapeHtml(todo.text)}</div>
+                    <button class="todo-delete" onclick="deleteTodo(${todo.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function toggleTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.done = !todo.done;
+                saveTodos(todos);
+                renderTodos();
+            }
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(t => t.id !== id);
+            saveTodos(todos);
+            renderTodos();
+        }
+
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            const text = input.value.trim();
+            if (!text) return;
+            todos.push({ id: nextId++, text, done: false });
+            saveTodos(todos);
+            renderTodos();
+            input.value = '';
+            input.focus();
+        }
+
+        document.getElementById('todo-add-btn').addEventListener('click', addTodo);
+        document.getElementById('todo-input').addEventListener('keypress', e => {
+            if (e.key === 'Enter') addTodo();
+        });
+
+        renderTodos();
+
+        // ==================== PACKING LIST ====================
+
+        const packingData = {
+            tom: [
+                { cat: '📄 מסמכים', items: ['דרכון + צילום', 'ביטוח נסיעות (מודפס)', 'אישורי הזמנות מלונות', 'כרטיסי טיסה (מודפסים)', 'רישיון נהיגה בינלאומי'] },
+                { cat: '👕 ביגוד', items: ['חולצות קצרות ×5', 'מכנסיים קצרות ×3', 'מכנסיים ארוכות ×1', 'בגד ים ×2', 'תחתונים ×8', 'גרביים ×3', 'חולצה ארוכה / קפוצ\'ון דק'] },
+                { cat: '👟 נעליים', items: ['סנדלים / כפכפים', 'נעלי מים', 'נעלי ספורט'] },
+                { cat: '🔌 אלקטרוניקה', items: ['טלפון + מטען', 'מטען נייד (Power Bank)', 'אוזניות', 'מצלמה + כרטיס זיכרון', 'מתאם חשמל אוניברסלי', 'eSIM (להתקין מראש)'] },
+                { cat: '🧴 טואלטיקה', items: ['קרם הגנה SPF50+', 'דאודורנט', 'משחת שיניים + מברשת', 'סכין גילוח', 'שמפו (מיני)', 'מגבת מיקרופייבר'] },
+                { cat: '💊 בריאות', items: ['תרופות אישיות', 'אקמול / נורופן', 'פלסטרים', 'ספריי / קרם נגד יתושים', 'כדורים לבחילה (טיסות/סירות)', 'אלקוג\'ל'] },
+                { cat: '🏖️ חוף ופעילויות', items: ['משקפי שמש', 'כובע', 'שקית אטומה למים (Dry Bag)', 'נרתיק עמיד למים לטלפון', 'מסכת שנורקל'] },
+            ],
+            dani: [
+                { cat: '📄 מסמכים', items: ['דרכון + צילום', 'ביטוח נסיעות (מודפס)', 'אישורי הזמנות', 'כרטיסי טיסה'] },
+                { cat: '👗 ביגוד', items: ['שמלות קלות ×3', 'חולצות ×4', 'מכנסיים קצרות ×2', 'חצאית / מכנסיים ארוכות ×1', 'בגד ים ×2', 'כיסוי לבגד ים (Cover-up)', 'תחתונים ×8', 'חזייה ×3', 'חולצה ארוכה / סוודר דק'] },
+                { cat: '👟 נעליים', items: ['סנדלים / כפכפים', 'נעלי מים', 'נעלי ספורט'] },
+                { cat: '🔌 אלקטרוניקה', items: ['טלפון + מטען', 'מטען נייד', 'אוזניות'] },
+                { cat: '🧴 טואלטיקה', items: ['קרם הגנה SPF50+', 'קרם לחות', 'דאודורנט', 'משחת שיניים + מברשת', 'שמפו + מרכך (מיני)', 'מברשת / גומיות לשיער', 'מייקאפ בסיסי'] },
+                { cat: '💊 בריאות', items: ['תרופות אישיות', 'אקמול / נורופן', 'פלסטרים', 'ספריי נגד יתושים', 'כדורים לבחילה', 'מוצרי היגיינה אישית'] },
+                { cat: '🏖️ חוף ופעילויות', items: ['משקפי שמש', 'כובע', 'מסכת שנורקל'] },
+            ],
+            shared: [
+                { cat: '🏥 עזרה ראשונה', items: ['ערכת עזרה ראשונה', 'תרופות נגד שלשול', 'מלח להשרייה (ORS)', 'פלסטרים עמידים למים', 'תחבושות'] },
+                { cat: '🔧 ציוד משותף', items: ['מפצל / שקע חשמל', 'מתאם חשמל (Type A/B)', 'שקיות זיפלוק (לרטוב)', 'כביסה - סבון מיני + חבל', 'שקית כביסה', 'מנעול מזוודה'] },
+                { cat: '✈️ לטיסה', items: ['כרית צוואר', 'מסכת שינה', 'אטמי אוזניים', 'חטיפים לטיסה', 'בקבוק מים (ריק)'] },
+                { cat: '🎒 נוחות', items: ['תיק יום קטן', 'עט (לטפסים)', 'כסף מזומן (פסו)', 'כרטיסי אשראי'] },
+            ]
+        };
+
+        let currentPackWho = 'tom';
+        const PACK_KEY = 'ph-trip-packing-v1';
+
+        function loadPackState() {
+            const s = localStorage.getItem(PACK_KEY);
+            return s ? JSON.parse(s) : {};
+        }
+
+        function savePackState(state) {
+            localStorage.setItem(PACK_KEY, JSON.stringify(state));
+        }
+
+        function getPackKey(who, cat, item) {
+            return `${who}:${cat}:${item}`;
+        }
+
+        function renderPacking() {
+            const state = loadPackState();
+            const data = packingData[currentPackWho];
+            const listEl = document.getElementById('pack-list');
+
+            let totalItems = 0, packedItems = 0;
+
+            // Count all
+            Object.entries(packingData).forEach(([who, cats]) => {
+                cats.forEach(c => c.items.forEach(item => {
+                    totalItems++;
+                    if (state[getPackKey(who, c.cat, item)]) packedItems++;
+                }));
+            });
+
+            // Count current tab
+            let tabTotal = 0, tabPacked = 0;
+            data.forEach(c => c.items.forEach(item => {
+                tabTotal++;
+                if (state[getPackKey(currentPackWho, c.cat, item)]) tabPacked++;
+            }));
+
+            document.getElementById('pack-summary').innerHTML = `
+                <div class="pack-summary-card">
+                    <div class="pack-summary-num">${packedItems}/${totalItems}</div>
+                    <div class="pack-summary-label">סה"כ ארוז</div>
+                </div>
+                <div class="pack-summary-card">
+                    <div class="pack-summary-num">${tabPacked}/${tabTotal}</div>
+                    <div class="pack-summary-label">${currentPackWho === 'shared' ? 'משותף' : currentPackWho === 'tom' ? 'Tom' : 'Dani'}</div>
+                </div>
+                <div class="pack-summary-card">
+                    <div class="pack-summary-num">${totalItems - packedItems}</div>
+                    <div class="pack-summary-label">נותר לארוז</div>
+                </div>
+            `;
+
+            listEl.innerHTML = data.map(c => {
+                const catPacked = c.items.filter(i => state[getPackKey(currentPackWho, c.cat, i)]).length;
+                return `
+                <div class="pack-category">
+                    <div class="pack-category-header">
+                        <h3>${c.cat}</h3>
+                        <span class="pack-category-count">${catPacked}/${c.items.length}</span>
+                    </div>
+                    <div class="pack-category-items">
+                        ${c.items.map(item => {
+                            const key = getPackKey(currentPackWho, c.cat, item);
+                            const done = state[key] ? 'done' : '';
+                            return `<div class="pack-item ${done}" onclick="togglePack('${escapeHtml(key)}')">
+                                <div class="pack-item-check"></div>
+                                <div class="pack-item-text">${escapeHtml(item)}</div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function togglePack(key) {
+            const state = loadPackState();
+            state[key] = !state[key];
+            savePackState(state);
+            renderPacking();
+        }
+
+        document.querySelectorAll('.pack-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.pack-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentPackWho = tab.dataset.who;
+                renderPacking();
+            });
+        });
+
+        renderPacking();
+
+        // ==================== BUDGET ====================
+
+        const BUDGET_KEY = 'ph-trip-budget-v1';
+        const BUDGET_LIMIT = 10000;
+
+        const fixedExpenses = [
+            { desc: 'טאבה → אתונה', amount: 1076, cat: 'flight', icon: '✈️' },
+            { desc: 'אתונה → מנילה (via SIN)', amount: 1132, cat: 'flight', icon: '✈️' },
+            { desc: 'מנילה → סיארגאו', amount: 165, cat: 'flight', icon: '✈️' },
+            { desc: 'סיארגאו → אל נידו', amount: 502, cat: 'flight', icon: '✈️' },
+            { desc: 'אל נידו → קטיקלאן', amount: 378, cat: 'flight', icon: '✈️' },
+            { desc: 'קטיקלאן → מנילה', amount: 213, cat: 'flight', icon: '✈️' },
+            { desc: 'I\'M Hotel, מנילה', amount: 88, cat: 'hotel', icon: '🏨' },
+            { desc: 'Surfing Temple (2L)', amount: 706, cat: 'hotel', icon: '🏨' },
+            { desc: 'Kalo Villas (3L)', amount: 647, cat: 'hotel', icon: '🏨' },
+            { desc: 'KAJALI (2L)', amount: 257, cat: 'hotel', icon: '🏨' },
+            { desc: 'Bamboo Surf (2L)', amount: 347, cat: 'hotel', icon: '🏨' },
+            { desc: 'H Hotel El Nido (2L)', amount: 659, cat: 'hotel', icon: '🏨' },
+            { desc: 'Shangri-La Boracay (2L)', amount: 1545, cat: 'hotel', icon: '🏨' },
+        ];
+
+        const catIcons = { food: '🍽️', activity: '🏄', transport: '🚕', shopping: '🛍️', wellness: '💆', tips: '💵', other: '📦' };
+        const catNames = { food: 'אוכל ושתייה', activity: 'פעילויות', transport: 'תחבורה', shopping: 'קניות', wellness: 'ספא', tips: 'טיפים', other: 'אחר' };
+
+        function loadExpenses() {
+            const s = localStorage.getItem(BUDGET_KEY);
+            return s ? JSON.parse(s) : [];
+        }
+
+        function saveExpenses(exp) {
+            localStorage.setItem(BUDGET_KEY, JSON.stringify(exp));
+        }
+
+        function renderBudget() {
+            const expenses = loadExpenses();
+            const fixedTotal = fixedExpenses.reduce((s, e) => s + e.amount, 0);
+            const dailyTotal = expenses.reduce((s, e) => s + e.amount, 0);
+            const grandTotal = fixedTotal + dailyTotal;
+            const flightsTotal = fixedExpenses.filter(e => e.cat === 'flight').reduce((s, e) => s + e.amount, 0);
+            const hotelsTotal = fixedExpenses.filter(e => e.cat === 'hotel').reduce((s, e) => s + e.amount, 0);
+
+            document.getElementById('budget-total').textContent = '$' + grandTotal.toLocaleString();
+            document.getElementById('budget-remaining').textContent = `תקציב כולל: $${BUDGET_LIMIT.toLocaleString()} | נותר: $${(BUDGET_LIMIT - grandTotal).toLocaleString()}`;
+            document.getElementById('budget-bar').style.width = Math.min(100, (grandTotal / BUDGET_LIMIT * 100)) + '%';
+
+            // Breakdown
+            const catTotals = {};
+            expenses.forEach(e => { catTotals[e.cat] = (catTotals[e.cat] || 0) + e.amount; });
+
+            document.getElementById('budget-breakdown').innerHTML = `
+                <div class="budget-stat">
+                    <div class="budget-stat-value" style="color: var(--primary);">$${flightsTotal.toLocaleString()}</div>
+                    <div class="budget-stat-label">✈️ טיסות</div>
+                </div>
+                <div class="budget-stat">
+                    <div class="budget-stat-value" style="color: var(--primary);">$${hotelsTotal.toLocaleString()}</div>
+                    <div class="budget-stat-label">🏨 מלונות</div>
+                </div>
+                <div class="budget-stat">
+                    <div class="budget-stat-value" style="color: var(--accent);">$${dailyTotal.toLocaleString()}</div>
+                    <div class="budget-stat-label">📊 הוצאות יומיות</div>
+                </div>
+                <div class="budget-stat">
+                    <div class="budget-stat-value" style="color: ${BUDGET_LIMIT - grandTotal >= 0 ? 'var(--success)' : 'var(--danger)'};">$${(BUDGET_LIMIT - grandTotal).toLocaleString()}</div>
+                    <div class="budget-stat-label">💳 נותר</div>
+                </div>
+            `;
+
+            // Fixed
+            document.getElementById('budget-fixed').innerHTML = fixedExpenses.map(e => `
+                <div class="budget-expense">
+                    <div class="budget-expense-icon">${e.icon}</div>
+                    <div class="budget-expense-info">
+                        <div class="budget-expense-desc">${e.desc}</div>
+                    </div>
+                    <div class="budget-expense-amount">$${e.amount.toLocaleString()}</div>
+                </div>
+            `).join('');
+
+            // Daily expenses
+            const expEl = document.getElementById('budget-expenses');
+            if (expenses.length === 0) {
+                expEl.innerHTML = '<div class="text-sm text-muted" style="text-align:center; padding: 20px;">עדיין לא נוספו הוצאות יומיות</div>';
+            } else {
+                expEl.innerHTML = expenses.slice().reverse().map((e, idx) => {
+                    const realIdx = expenses.length - 1 - idx;
+                    const whoLabel = e.who === 'shared' ? 'משותף' : e.who;
+                    return `<div class="budget-expense">
+                        <div class="budget-expense-icon">${catIcons[e.cat] || '📦'}</div>
+                        <div class="budget-expense-info">
+                            <div class="budget-expense-desc">${escapeHtml(e.desc)}</div>
+                            <div class="budget-expense-meta">${e.date} · ${catNames[e.cat] || e.cat} · ${whoLabel}</div>
+                        </div>
+                        <div class="budget-expense-amount">$${e.amount.toLocaleString()}</div>
+                        <button class="budget-expense-delete" onclick="deleteExpense(${realIdx})">✕</button>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        function addExpense() {
+            const desc = document.getElementById('budget-desc-input').value.trim();
+            const amount = parseFloat(document.getElementById('budget-amount-input').value);
+            const cat = document.getElementById('budget-cat-input').value;
+            const who = document.getElementById('budget-who-input').value;
+            if (!desc || !amount || amount <= 0) return;
+
+            const expenses = loadExpenses();
+            const today = new Date();
+            const dateStr = today.getDate() + '/' + (today.getMonth() + 1);
+            expenses.push({ desc, amount, cat, who, date: dateStr });
+            saveExpenses(expenses);
+            renderBudget();
+            document.getElementById('budget-desc-input').value = '';
+            document.getElementById('budget-amount-input').value = '';
+        }
+
+        function deleteExpense(idx) {
+            const expenses = loadExpenses();
+            expenses.splice(idx, 1);
+            saveExpenses(expenses);
+            renderBudget();
+        }
+
+        document.getElementById('budget-add-btn').addEventListener('click', addExpense);
+        document.getElementById('budget-amount-input').addEventListener('keypress', e => { if (e.key === 'Enter') addExpense(); });
+
+        renderBudget();
+
+        // ==================== CURRENCY CONVERTER ====================
+
+        const CURRENCY_SYMBOLS = { USD: '$', ILS: '₪', PHP: '₱' };
+        const CURRENCY_NAMES = { USD: 'דולר', ILS: 'שקל', PHP: 'פזו פיליפיני' };
+        let exchangeRates = null;
+        let ratesLastUpdated = null;
+
+        async function fetchRates() {
+            try {
+                const res = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await res.json();
+                if (data.result === 'success') {
+                    exchangeRates = data.rates;
+                    ratesLastUpdated = data.time_last_update_utc;
+                    initConverterUI();
+                } else {
+                    showConverterError();
+                }
+            } catch (e) {
+                showConverterError();
+            }
+        }
+
+        function showConverterError() {
+            document.getElementById('converter-loading').innerHTML =
+                '<div style="color:var(--danger);">לא הצלחנו לטעון שערים. בדוק חיבור אינטרנט.</div>' +
+                '<button onclick="fetchRates()" style="margin-top:10px;padding:8px 20px;border:none;border-radius:8px;background:var(--primary);color:white;font-family:Heebo;cursor:pointer;">נסה שוב</button>';
+        }
+
+        function initConverterUI() {
+            document.getElementById('converter-loading').style.display = 'none';
+            document.getElementById('converter-ui').style.display = 'block';
+
+            const fromEl = document.getElementById('conv-from');
+            const toEl = document.getElementById('conv-to');
+            const amountEl = document.getElementById('conv-amount');
+
+            updateQuickAmounts();
+            updateRateInfo();
+
+            amountEl.addEventListener('input', convert);
+            fromEl.addEventListener('change', () => { updateQuickAmounts(); convert(); });
+            toEl.addEventListener('change', () => { convert(); });
+
+            document.getElementById('conv-swap').addEventListener('click', () => {
+                const tmp = fromEl.value;
+                fromEl.value = toEl.value;
+                toEl.value = tmp;
+                updateQuickAmounts();
+                convert();
+            });
+        }
+
+        function updateQuickAmounts() {
+            const from = document.getElementById('conv-from').value;
+            const quickContainer = document.getElementById('conv-quick');
+            let amounts;
+            if (from === 'USD') amounts = [10, 50, 100, 500];
+            else if (from === 'ILS') amounts = [50, 100, 500, 1000];
+            else amounts = [500, 1000, 5000, 10000];
+
+            quickContainer.innerHTML = amounts.map(a =>
+                `<button class="converter-quick-btn" onclick="document.getElementById('conv-amount').value=${a};convert();">${CURRENCY_SYMBOLS[from]}${a.toLocaleString()}</button>`
+            ).join('');
+        }
+
+        function convert() {
+            const from = document.getElementById('conv-from').value;
+            const to = document.getElementById('conv-to').value;
+            const amount = parseFloat(document.getElementById('conv-amount').value);
+            const outputEl = document.getElementById('conv-output');
+            const resultEl = document.getElementById('conv-result');
+
+            if (!amount || isNaN(amount) || !exchangeRates) {
+                outputEl.textContent = '—';
+                resultEl.style.display = 'none';
+                return;
+            }
+
+            const amountInUSD = amount / exchangeRates[from];
+            const result = amountInUSD * exchangeRates[to];
+            const rounded = Math.round(result * 100) / 100;
+
+            outputEl.textContent = CURRENCY_SYMBOLS[to] + rounded.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            const rate = (exchangeRates[to] / exchangeRates[from]);
+            resultEl.style.display = 'block';
+            document.getElementById('conv-result-amount').textContent =
+                `${CURRENCY_SYMBOLS[from]}1 = ${CURRENCY_SYMBOLS[to]}${rate.toFixed(4)}`;
+            document.getElementById('conv-result-label').textContent =
+                `${CURRENCY_NAMES[from]} ל${CURRENCY_NAMES[to]}`;
+        }
+
+        function updateRateInfo() {
+            if (!ratesLastUpdated) return;
+            const d = new Date(ratesLastUpdated);
+            const formatted = d.toLocaleDateString('he-IL') + ' ' + d.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('conv-rate-info').textContent = `שערים עודכנו: ${formatted}`;
+        }
+
+        fetchRates();
+    </script>
+</body>
+</html>
