@@ -1,0 +1,6 @@
+*.xlsx
+*.csv
+serve.py
+serve.sh
+server.py
+.claude/
