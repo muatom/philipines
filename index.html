@@ -436,11 +436,11 @@
         tasks:     { gid: '714932989' },
         links:     { gid: '2130634285' },
         emergency: { gid: '476610190' },
+        packing:   { gid: '414706764' },
     };
     const TRIP_START = new Date('2026-04-05T15:40:00+02:00');
     const BUDGET_LIMIT = 15000;
     const CACHE_KEY = 'ph-trip-cache-v2';
-    const PACK_KEY = 'ph-trip-packing-v1';
     const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzU1HaG0zdzaNNbhSXBnwTjEZ1ZgunpIdyvP1g107vVhag7biVLygglNOMIKsusSHrXzA/exec';
     const APPS_SCRIPT_URL = localStorage.getItem('ph-apps-script-url') || DEFAULT_APPS_SCRIPT_URL;
 
@@ -613,8 +613,7 @@
     function renderBudget() {
         const fixedExpenses = buildFixedExpenses();
         const sheetExpenses = DB.expenses || [];
-        const localExpenses = JSON.parse(localStorage.getItem('ph-pending-expenses') || '[]');
-        const allDaily = [...sheetExpenses.map(e => ({ desc: e['Description']||'', amount: parsePriceNum(e['Amount']), currency: e['Currency']||'ILS', cat: e['Category']||'', who: e['Who']||'', date: e['Date']||'', fromSheet: true })), ...localExpenses];
+        const allDaily = sheetExpenses.map(e => ({ desc: e['Description']||'', amount: parsePriceNum(e['Amount']), currency: e['Currency']||'ILS', cat: e['Category']||'', who: e['Who']||'', date: e['Date']||'' }));
         const flightsILS = fixedExpenses.filter(e => e.cat === 'flight').reduce((s, e) => s + convertToILS(e.amount, e.currency), 0);
         const hotelsILS = fixedExpenses.filter(e => e.cat === 'hotel').reduce((s, e) => s + convertToILS(e.amount, e.currency), 0);
         const dailyILS = allDaily.reduce((s, e) => s + convertToILS(e.amount, e.currency), 0);
@@ -631,7 +630,7 @@
         document.getElementById('budget-fixed').innerHTML = fixedExpenses.map(e => `<div class="budget-expense"><div class="budget-expense-icon">${e.icon}</div><div class="budget-expense-info"><div class="budget-expense-desc">${esc(e.desc)}</div></div><div class="budget-expense-amount">${fmtMoney(e.amount,e.currency)}</div></div>`).join('');
         const expEl = document.getElementById('budget-expenses');
         if (!allDaily.length) { expEl.innerHTML = '<div class="text-sm text-muted" style="text-align:center;padding:16px;">אין הוצאות יומיות עדיין</div>'; }
-        else { expEl.innerHTML = allDaily.map((e, i) => `<div class="budget-expense"><div class="budget-expense-icon">${catIcons[e.cat]||'📦'}</div><div class="budget-expense-info"><div class="budget-expense-desc">${esc(e.desc)}</div><div class="budget-expense-meta">${esc(e.date)} · ${esc(e.who)}${!e.fromSheet?' · ⏳ ממתין':''}  </div></div><div class="budget-expense-amount">${fmtMoney(e.amount,e.currency)}</div>${!e.fromSheet?`<button class="budget-expense-delete" onclick="deleteLocalExpense(${i-sheetExpenses.length})">✕</button>`:''}</div>`).join(''); }
+        else { expEl.innerHTML = allDaily.map(e => `<div class="budget-expense"><div class="budget-expense-icon">${catIcons[e.cat]||'📦'}</div><div class="budget-expense-info"><div class="budget-expense-desc">${esc(e.desc)}</div><div class="budget-expense-meta">${esc(e.date)} · ${esc(e.who)}</div></div><div class="budget-expense-amount">${fmtMoney(e.amount,e.currency)}</div></div>`).join(''); }
     }
 
     async function addExpense() {
@@ -643,12 +642,10 @@
         try {
             await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'addExpense', data: expense }) });
             setTimeout(async () => { try { DB.expenses = await fetchTab('expenses'); saveCache(); renderBudget(); } catch(e){} }, 2000);
-        } catch(e) { savePendingExpense(expense); }
+        } catch(e) { alert('שגיאה בשמירת ההוצאה. נסה שוב.'); }
         document.getElementById('budget-desc-input').value = ''; document.getElementById('budget-amount-input').value = '';
         renderBudget();
     }
-    function savePendingExpense(exp) { const p = JSON.parse(localStorage.getItem('ph-pending-expenses')||'[]'); p.push({desc:exp.Description,amount:exp.Amount,currency:exp.Currency,cat:exp.Category,who:exp.Who,date:exp.Date}); localStorage.setItem('ph-pending-expenses',JSON.stringify(p)); }
-    function deleteLocalExpense(idx) { const p = JSON.parse(localStorage.getItem('ph-pending-expenses')||'[]'); if(idx>=0&&idx<p.length){p.splice(idx,1);localStorage.setItem('ph-pending-expenses',JSON.stringify(p));} renderBudget(); }
     document.getElementById('budget-add-btn').addEventListener('click', addExpense);
     document.getElementById('budget-amount-input').addEventListener('keypress', e => { if (e.key === 'Enter') addExpense(); });
 
@@ -746,24 +743,43 @@
         }); });
     }
 
-    // ==================== PACKING (local) ====================
-    const packingData = {
-        tom: [{cat:'📄 מסמכים',items:['דרכון + צילום','ביטוח נסיעות (מודפס)','אישורי הזמנות מלונות','כרטיסי טיסה (מודפסים)','רישיון נהיגה בינלאומי']},{cat:'👕 ביגוד',items:['חולצות קצרות ×5','מכנסיים קצרות ×3','מכנסיים ארוכות ×1','בגד ים ×2','תחתונים ×8','גרביים ×3','חולצה ארוכה / קפוצ\'ון דק']},{cat:'👟 נעליים',items:['סנדלים / כפכפים','נעלי מים','נעלי ספורט']},{cat:'🔌 אלקטרוניקה',items:['טלפון + מטען','מטען נייד (Power Bank)','אוזניות','מצלמה + כרטיס זיכרון','מתאם חשמל אוניברסלי','eSIM (להתקין מראש)']},{cat:'🧴 טואלטיקה',items:['קרם הגנה SPF50+','דאודורנט','משחת שיניים + מברשת','סכין גילוח','שמפו (מיני)','מגבת מיקרופייבר']},{cat:'💊 בריאות',items:['תרופות אישיות','אקמול / נורופן','פלסטרים','ספריי נגד יתושים','כדורים לבחילה','אלקוג\'ל']},{cat:'🏖️ חוף',items:['משקפי שמש','כובע','Dry Bag','נרתיק עמיד למים לטלפון','מסכת שנורקל']}],
-        dani: [{cat:'📄 מסמכים',items:['דרכון + צילום','ביטוח נסיעות (מודפס)','אישורי הזמנות','כרטיסי טיסה']},{cat:'👗 ביגוד',items:['שמלות קלות ×3','חולצות ×4','מכנסיים קצרות ×2','חצאית / מכנסיים ארוכות ×1','בגד ים ×2','Cover-up','תחתונים ×8','חזייה ×3','חולצה ארוכה / סוודר דק']},{cat:'👟 נעליים',items:['סנדלים / כפכפים','נעלי מים','נעלי ספורט']},{cat:'🔌 אלקטרוניקה',items:['טלפון + מטען','מטען נייד','אוזניות']},{cat:'🧴 טואלטיקה',items:['קרם הגנה SPF50+','קרם לחות','דאודורנט','משחת שיניים + מברשת','שמפו + מרכך (מיני)','מברשת / גומיות לשיער','מייקאפ בסיסי']},{cat:'💊 בריאות',items:['תרופות אישיות','אקמול / נורופן','פלסטרים','ספריי נגד יתושים','כדורים לבחילה','מוצרי היגיינה אישית']},{cat:'🏖️ חוף',items:['משקפי שמש','כובע','מסכת שנורקל']}],
-        shared: [{cat:'🏥 עזרה ראשונה',items:['ערכת עזרה ראשונה','תרופות נגד שלשול','מלח להשרייה (ORS)','פלסטרים עמידים למים','תחבושות']},{cat:'🔧 ציוד משותף',items:['מפצל / שקע חשמל','מתאם חשמל (Type A/B)','שקיות זיפלוק','כביסה - סבון + חבל','שקית כביסה','מנעול מזוודה']},{cat:'✈️ לטיסה',items:['כרית צוואר','מסכת שינה','אטמי אוזניים','חטיפים לטיסה','בקבוק מים (ריק)']},{cat:'🎒 נוחות',items:['תיק יום קטן','עט (לטפסים)','כסף מזומן (פסו)','כרטיסי אשראי']}]
-    };
+    // ==================== PACKING (from Sheet) ====================
     let currentPackWho = 'tom';
-    function loadPackState() { try{return JSON.parse(localStorage.getItem(PACK_KEY))||{}}catch(e){return{}} }
-    function savePackState(s) { localStorage.setItem(PACK_KEY, JSON.stringify(s)); }
-    function getPackKey(w,c,i) { return `${w}:${c}:${i}`; }
     function renderPacking() {
-        const state=loadPackState(), data=packingData[currentPackWho]; let totalItems=0,packedItems=0;
-        Object.entries(packingData).forEach(([w,cats])=>{cats.forEach(c=>c.items.forEach(i=>{totalItems++;if(state[getPackKey(w,c.cat,i)])packedItems++;}));});
-        let tabTotal=0,tabPacked=0; data.forEach(c=>c.items.forEach(i=>{tabTotal++;if(state[getPackKey(currentPackWho,c.cat,i)])tabPacked++;}));
+        const data = DB.packing;
+        if (!data || !data.length) {
+            document.getElementById('pack-summary').innerHTML = '';
+            document.getElementById('pack-list').innerHTML = '<div class="text-sm text-muted" style="text-align:center;padding:20px;">טוען ציוד...</div>';
+            return;
+        }
+        const whoMap = { tom: 'Tom', dani: 'Dani', shared: 'Shared' };
+        const wantedWho = whoMap[currentPackWho] || 'Tom';
+        const totalItems = data.length;
+        const packedItems = data.filter(r => (r['Packed']||'').toUpperCase() === 'TRUE').length;
+        const tabItems = data.map((r, i) => ({ ...r, _row: i + 2 })).filter(r => (r['Who']||'') === wantedWho);
+        const tabTotal = tabItems.length;
+        const tabPacked = tabItems.filter(r => (r['Packed']||'').toUpperCase() === 'TRUE').length;
         document.getElementById('pack-summary').innerHTML = `<div class="pack-summary-card"><div class="pack-summary-num">${packedItems}/${totalItems}</div><div class="pack-summary-label">סה"כ ארוז</div></div><div class="pack-summary-card"><div class="pack-summary-num">${tabPacked}/${tabTotal}</div><div class="pack-summary-label">${currentPackWho==='shared'?'משותף':currentPackWho==='tom'?'Tom':'Dani'}</div></div><div class="pack-summary-card"><div class="pack-summary-num">${totalItems-packedItems}</div><div class="pack-summary-label">נותר לארוז</div></div>`;
-        document.getElementById('pack-list').innerHTML = data.map(c=>{const cp=c.items.filter(i=>state[getPackKey(currentPackWho,c.cat,i)]).length;return `<div class="pack-category"><div class="pack-category-header"><h3>${c.cat}</h3><span class="pack-category-count">${cp}/${c.items.length}</span></div><div class="pack-category-items">${c.items.map(i=>{const k=getPackKey(currentPackWho,c.cat,i);return `<div class="pack-item ${state[k]?'done':''}" onclick="togglePack('${esc(k)}')"><div class="pack-item-check"></div><div class="pack-item-text">${esc(i)}</div></div>`;}).join('')}</div></div>`;}).join('');
+        const cats = {};
+        tabItems.forEach(r => { const c = r['Category'] || 'אחר'; if (!cats[c]) cats[c] = []; cats[c].push(r); });
+        document.getElementById('pack-list').innerHTML = Object.entries(cats).map(([cat, items]) => {
+            const cp = items.filter(r => (r['Packed']||'').toUpperCase() === 'TRUE').length;
+            return `<div class="pack-category"><div class="pack-category-header"><h3>${esc(cat)}</h3><span class="pack-category-count">${cp}/${items.length}</span></div><div class="pack-category-items">${items.map(r => {
+                const done = (r['Packed']||'').toUpperCase() === 'TRUE';
+                return `<div class="pack-item ${done?'done':''}" onclick="togglePack(${r._row})"><div class="pack-item-check"></div><div class="pack-item-text">${esc(r['Item'])}</div></div>`;
+            }).join('')}</div></div>`;
+        }).join('') + lastUpdatedHTML();
     }
-    function togglePack(k){const s=loadPackState();s[k]=!s[k];savePackState(s);renderPacking();}
+    async function togglePack(row) {
+        const idx = row - 2;
+        if (DB.packing && DB.packing[idx]) {
+            const cur = (DB.packing[idx]['Packed']||'').toUpperCase() === 'TRUE';
+            DB.packing[idx]['Packed'] = cur ? 'FALSE' : 'TRUE';
+            renderPacking();
+            saveCache();
+        }
+        try { await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'togglePacking',data:{row:row}}) }); } catch(e){}
+    }
     document.querySelectorAll('.pack-tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.pack-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');currentPackWho=t.dataset.who;renderPacking();});});
 
     // ==================== CURRENCY CONVERTER ====================
@@ -776,7 +792,7 @@
     function updateRateInfo(){if(!ratesLastUpdated)return;const d=new Date(ratesLastUpdated);document.getElementById('conv-rate-info').textContent=`שערים עודכנו: ${d.toLocaleDateString('he-IL')} ${d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}`;}
 
     // ==================== INIT ====================
-    async function init(){renderItinerary();renderPacking();const hadCache=loadCache();if(hadCache){renderFlights();renderHotels();renderEmergency();renderLinks();renderTasks();renderBudget();}fetchRates();const success=await fetchAllData();if(success||hadCache){renderFlights();renderHotels();renderEmergency();renderLinks();renderTasks();renderBudget();}}
+    async function init(){renderItinerary();const hadCache=loadCache();if(hadCache){renderFlights();renderHotels();renderEmergency();renderLinks();renderTasks();renderBudget();renderPacking();}fetchRates();const success=await fetchAllData();if(success||hadCache){renderFlights();renderHotels();renderEmergency();renderLinks();renderTasks();renderBudget();renderPacking();}}
     init();
     </script>
 </body>

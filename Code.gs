@@ -5,6 +5,7 @@
  * - addExpense: Append a row to the "expenses" tab
  * - toggleTask: Update the Done column for a task
  * - addTask: Append a new task row
+ * - togglePacking: Toggle the Packed column for a packing item
  *
  * DEPLOYMENT INSTRUCTIONS:
  * 1. Open your Google Sheet
@@ -35,6 +36,8 @@ function doPost(e) {
         return toggleTask(data);
       case 'addTask':
         return addTask(data);
+      case 'togglePacking':
+        return togglePacking(data);
       default:
         return jsonResponse({ error: 'Unknown action: ' + action }, 400);
     }
@@ -94,6 +97,22 @@ function addTask(data) {
 
   sheet.appendRow(row);
   return jsonResponse({ success: true, message: 'Task added' });
+}
+
+function togglePacking(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('packing');
+  if (!sheet) return jsonResponse({ error: 'Sheet "packing" not found' }, 404);
+
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+
+  const packedCol = 3; // Column C = "Packed"
+  const currentValue = String(sheet.getRange(row, packedCol).getValue()).toUpperCase();
+  const newValue = currentValue === 'TRUE' ? 'FALSE' : 'TRUE';
+  sheet.getRange(row, packedCol).setValue(newValue);
+
+  return jsonResponse({ success: true, row: row, packed: newValue });
 }
 
 function jsonResponse(data, code) {
