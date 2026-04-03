@@ -451,6 +451,9 @@
     let exchangeRates = null;
     let ratesLastUpdated = null;
     let dataFetchedAt = null;
+    const writeCooldowns = {};
+    function setCooldown(tab) { writeCooldowns[tab] = Date.now(); }
+    function isInCooldown(tab) { return writeCooldowns[tab] && (Date.now() - writeCooldowns[tab] < 120000); }
 
     // ==================== CSV PARSER ====================
     function parseCSV(text) {
@@ -495,9 +498,11 @@
 
     async function fetchAllData() {
         const names = Object.keys(TABS);
-        const results = await Promise.allSettled(names.map(n => fetchTab(n)));
+        const fetchNames = names.filter(n => !isInCooldown(n));
+        if (!fetchNames.length) return false;
+        const results = await Promise.allSettled(fetchNames.map(n => fetchTab(n)));
         let anySuccess = false;
-        results.forEach((r, i) => { if (r.status === 'fulfilled') { DB[names[i]] = r.value; anySuccess = true; } });
+        results.forEach((r, i) => { if (r.status === 'fulfilled') { DB[fetchNames[i]] = r.value; anySuccess = true; } });
         if (anySuccess) { dataFetchedAt = Date.now(); saveCache(); }
         return anySuccess;
     }
@@ -643,12 +648,12 @@
         const expense = { Date: today, Description: desc, Amount: amount, Currency: currency, Category: cat, Who: who };
         if (!DB.expenses) DB.expenses = [];
         DB.expenses.push(expense);
+        setCooldown('expenses');
         saveCache();
         document.getElementById('budget-desc-input').value = ''; document.getElementById('budget-amount-input').value = '';
         renderBudget();
         try {
             await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addExpense', data: expense }) });
-            [3000, 8000, 15000].forEach(delay => setTimeout(async () => { try { DB.expenses = await fetchTab('expenses'); saveCache(); renderBudget(); } catch(e){} }, delay));
         } catch(e) { alert('שגיאה בשמירת ההוצאה. נסה שוב.'); }
     }
     document.getElementById('budget-add-btn').addEventListener('click', addExpense);
@@ -677,6 +682,7 @@
             const cur = (DB.tasks[idx]['Done']||'').toUpperCase() === 'TRUE';
             const newDone = !cur;
             DB.tasks[idx]['Done'] = newDone ? 'TRUE' : 'FALSE';
+            setCooldown('tasks');
             saveCache();
             renderTasks();
             fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'toggleTask',data:{row:idx+2,done:newDone}}) }).catch(e=>{});
@@ -690,12 +696,12 @@
         const input = document.getElementById('todo-input'), text = input.value.trim(); if (!text) return;
         if (!DB.tasks) DB.tasks = [];
         DB.tasks.push({ Task: text, Done: 'FALSE', 'Due Date': '' });
+        setCooldown('tasks');
         saveCache();
         input.value = '';
         renderTasks();
         try {
             await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'addTask',data:{Task:text,Done:'FALSE','Due Date':''}}) });
-            [3000, 8000, 15000].forEach(delay => setTimeout(async () => { try { DB.tasks = await fetchTab('tasks'); saveCache(); renderTasks(); } catch(e){} }, delay));
         } catch(e) { saveLocalTask(text); }
     }
     function saveLocalTask(text) { const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'); lt.push({id:Date.now(),text,done:false,fromSheet:false}); localStorage.setItem('ph-local-tasks',JSON.stringify(lt)); }
@@ -786,6 +792,7 @@
         if (DB.packing && DB.packing[idx]) {
             const cur = (DB.packing[idx]['Packed']||'').toUpperCase() === 'TRUE';
             DB.packing[idx]['Packed'] = cur ? 'FALSE' : 'TRUE';
+            setCooldown('packing');
             renderPacking();
             saveCache();
         }
