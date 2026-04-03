@@ -640,8 +640,8 @@
         const today = new Date().toLocaleDateString('en-GB');
         const expense = { Date: today, Description: desc, Amount: amount, Currency: currency, Category: cat, Who: who };
         try {
-            await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'addExpense', data: expense }) });
-            setTimeout(async () => { try { DB.expenses = await fetchTab('expenses'); saveCache(); renderBudget(); } catch(e){} }, 2000);
+            await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addExpense', data: expense }) });
+            setTimeout(async () => { try { DB.expenses = await fetchTab('expenses'); saveCache(); renderBudget(); } catch(e){} }, 3000);
         } catch(e) { alert('שגיאה בשמירת ההוצאה. נסה שוב.'); }
         document.getElementById('budget-desc-input').value = ''; document.getElementById('budget-amount-input').value = '';
         renderBudget();
@@ -672,7 +672,7 @@
     async function toggleTask(idx, fromSheet) {
         if (fromSheet && idx < tasks.length) {
             tasks[idx].done = !tasks[idx].done;
-            try { await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'toggleTask',data:{row:idx+2,done:tasks[idx].done}}) }); } catch(e){}
+            try { await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'toggleTask',data:{row:idx+2,done:tasks[idx].done}}) }); } catch(e){}
         } else {
             const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'), li = idx - tasks.length;
             if (li>=0&&li<lt.length) { lt[li].done=!lt[li].done; localStorage.setItem('ph-local-tasks',JSON.stringify(lt)); }
@@ -682,7 +682,7 @@
     async function addTask() {
         const input = document.getElementById('todo-input'), text = input.value.trim(); if (!text) return;
         try {
-            await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'addTask',data:{Task:text,Done:'FALSE','Due Date':''}}) });
+            await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'addTask',data:{Task:text,Done:'FALSE','Due Date':''}}) });
             setTimeout(async () => { try { DB.tasks = await fetchTab('tasks'); saveCache(); tasks=[]; renderTasks(); } catch(e){} }, 2000);
         } catch(e) { saveLocalTask(text); }
         input.value = ''; renderTasks();
@@ -778,7 +778,7 @@
             renderPacking();
             saveCache();
         }
-        try { await fetch(APPS_SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'togglePacking',data:{row:row}}) }); } catch(e){}
+        try { await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'togglePacking',data:{row:row}}) }); } catch(e){}
     }
     document.querySelectorAll('.pack-tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.pack-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');currentPackWho=t.dataset.who;renderPacking();});});
 
