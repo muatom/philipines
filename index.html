@@ -641,12 +641,15 @@
         if (!desc || !amount) return;
         const today = new Date().toLocaleDateString('en-GB');
         const expense = { Date: today, Description: desc, Amount: amount, Currency: currency, Category: cat, Who: who };
+        if (!DB.expenses) DB.expenses = [];
+        DB.expenses.push(expense);
+        saveCache();
+        document.getElementById('budget-desc-input').value = ''; document.getElementById('budget-amount-input').value = '';
+        renderBudget();
         try {
             await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addExpense', data: expense }) });
             [3000, 8000, 15000].forEach(delay => setTimeout(async () => { try { DB.expenses = await fetchTab('expenses'); saveCache(); renderBudget(); } catch(e){} }, delay));
         } catch(e) { alert('שגיאה בשמירת ההוצאה. נסה שוב.'); }
-        document.getElementById('budget-desc-input').value = ''; document.getElementById('budget-amount-input').value = '';
-        renderBudget();
     }
     document.getElementById('budget-add-btn').addEventListener('click', addExpense);
     document.getElementById('budget-amount-input').addEventListener('keypress', e => { if (e.key === 'Enter') addExpense(); });
@@ -669,23 +672,31 @@
             return `<div class="todo-item ${t.done?'done':''}" data-id="${i}"><div class="todo-checkbox" onclick="toggleTask(${i},${t.fromSheet?'true':'false'})"></div><div class="todo-text">${esc(t.text)}</div>${dueHTML}${!t.fromSheet?`<button class="todo-delete" onclick="deleteLocalTask(${i-tasks.length})">✕</button>`:''}</div>`;
         }).join('');
     }
-    async function toggleTask(idx, fromSheet) {
-        if (fromSheet && idx < tasks.length) {
-            tasks[idx].done = !tasks[idx].done;
-            try { await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'toggleTask',data:{row:idx+2,done:tasks[idx].done}}) }); } catch(e){}
+    function toggleTask(idx, fromSheet) {
+        if (fromSheet && DB.tasks && DB.tasks[idx]) {
+            const cur = (DB.tasks[idx]['Done']||'').toUpperCase() === 'TRUE';
+            const newDone = !cur;
+            DB.tasks[idx]['Done'] = newDone ? 'TRUE' : 'FALSE';
+            saveCache();
+            renderTasks();
+            fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'toggleTask',data:{row:idx+2,done:newDone}}) }).catch(e=>{});
         } else {
             const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'), li = idx - tasks.length;
             if (li>=0&&li<lt.length) { lt[li].done=!lt[li].done; localStorage.setItem('ph-local-tasks',JSON.stringify(lt)); }
+            renderTasks();
         }
-        renderTasks();
     }
     async function addTask() {
         const input = document.getElementById('todo-input'), text = input.value.trim(); if (!text) return;
+        if (!DB.tasks) DB.tasks = [];
+        DB.tasks.push({ Task: text, Done: 'FALSE', 'Due Date': '' });
+        saveCache();
+        input.value = '';
+        renderTasks();
         try {
             await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'addTask',data:{Task:text,Done:'FALSE','Due Date':''}}) });
             [3000, 8000, 15000].forEach(delay => setTimeout(async () => { try { DB.tasks = await fetchTab('tasks'); saveCache(); renderTasks(); } catch(e){} }, delay));
         } catch(e) { saveLocalTask(text); }
-        input.value = ''; renderTasks();
     }
     function saveLocalTask(text) { const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'); lt.push({id:Date.now(),text,done:false,fromSheet:false}); localStorage.setItem('ph-local-tasks',JSON.stringify(lt)); }
     function deleteLocalTask(idx) { const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'); if(idx>=0&&idx<lt.length){lt.splice(idx,1);localStorage.setItem('ph-local-tasks',JSON.stringify(lt));} renderTasks(); }
