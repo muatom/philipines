@@ -2,25 +2,25 @@
  * Google Apps Script - Philippines Trip API
  *
  * This script handles write operations to the Google Sheet:
- * - addExpense: Append a row to the "expenses" tab
+ * - addExpense: Append a row to the "expenses" tab (11 columns)
+ * - editExpense: Update an existing expense row
+ * - deleteExpense: Delete an expense row
  * - toggleTask: Update the Done column for a task
  * - addTask: Append a new task row
  * - togglePacking: Toggle the Packed column for a packing item
+ *
+ * EXPENSE SHEET COLUMNS (A-K):
+ * A=Date, B=Description, C=Amount, D=Currency, E=Category, F=Who,
+ * G=Type, H=ILS_Amount, I=USD_Amount, J=PHP_Amount, K=Exchange_Rate
  *
  * DEPLOYMENT INSTRUCTIONS:
  * 1. Open your Google Sheet
  * 2. Go to Extensions > Apps Script
  * 3. Delete any existing code in Code.gs
  * 4. Paste this entire file
- * 5. Click Deploy > New deployment
- * 6. Select type: "Web app"
- * 7. Set "Execute as": Me
- * 8. Set "Who has access": Anyone
- * 9. Click Deploy and authorize
- * 10. Copy the Web App URL
- * 11. In the travel app, open browser console and run:
- *     localStorage.setItem('ph-apps-script-url', 'YOUR_URL_HERE')
- *     Then refresh the page.
+ * 5. Click Deploy > Manage deployments > Edit (pencil icon)
+ * 6. Set version to "New version"
+ * 7. Click Deploy
  */
 
 function doPost(e) {
@@ -32,6 +32,10 @@ function doPost(e) {
     switch (action) {
       case 'addExpense':
         return addExpense(data);
+      case 'editExpense':
+        return editExpense(data);
+      case 'deleteExpense':
+        return deleteExpense(data);
       case 'toggleTask':
         return toggleTask(data);
       case 'addTask':
@@ -62,10 +66,53 @@ function addExpense(data) {
     data.Currency || 'ILS',
     data.Category || '',
     data.Who || 'Both',
+    data.Type || 'on',
+    data.ILS_Amount || 0,
+    data.USD_Amount || 0,
+    data.PHP_Amount || 0,
+    data.Exchange_Rate || '',
   ];
 
   sheet.appendRow(row);
   return jsonResponse({ success: true, message: 'Expense added' });
+}
+
+function editExpense(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('expenses');
+  if (!sheet) return jsonResponse({ error: 'Sheet "expenses" not found' }, 404);
+
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+
+  const values = [
+    data.Date || '',
+    data.Description || '',
+    data.Amount || 0,
+    data.Currency || 'ILS',
+    data.Category || '',
+    data.Who || 'Both',
+    data.Type || 'on',
+    data.ILS_Amount || 0,
+    data.USD_Amount || 0,
+    data.PHP_Amount || 0,
+    data.Exchange_Rate || '',
+  ];
+
+  sheet.getRange(row, 1, 1, values.length).setValues([values]);
+  return jsonResponse({ success: true, message: 'Expense updated', row: row });
+}
+
+function deleteExpense(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('expenses');
+  if (!sheet) return jsonResponse({ error: 'Sheet "expenses" not found' }, 404);
+
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+
+  sheet.deleteRow(row);
+  return jsonResponse({ success: true, message: 'Expense deleted', row: row });
 }
 
 function toggleTask(data) {
@@ -73,10 +120,10 @@ function toggleTask(data) {
   const sheet = ss.getSheetByName('tasks');
   if (!sheet) return jsonResponse({ error: 'Sheet "tasks" not found' }, 404);
 
-  const row = data.row; // 1-indexed row number (2 = first data row after header)
+  const row = data.row;
   if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
 
-  const doneCol = 2; // Column B = "Done"
+  const doneCol = 2;
   const currentValue = sheet.getRange(row, doneCol).getValue();
   const newValue = data.done !== undefined ? (data.done ? 'TRUE' : 'FALSE') : (currentValue ? 'FALSE' : 'TRUE');
   sheet.getRange(row, doneCol).setValue(newValue);
@@ -107,7 +154,7 @@ function togglePacking(data) {
   const row = data.row;
   if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
 
-  const packedCol = 3; // Column C = "Packed"
+  const packedCol = 3;
   const currentValue = String(sheet.getRange(row, packedCol).getValue()).toUpperCase();
   const newValue = currentValue === 'TRUE' ? 'FALSE' : 'TRUE';
   sheet.getRange(row, packedCol).setValue(newValue);

@@ -245,32 +245,114 @@
         .pack-summary-num { font-size: 22px; font-weight: 700; color: var(--primary); }
         .pack-summary-label { font-size: 10px; color: var(--text-light); margin-top: 2px; }
 
-        .budget-hero { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: white; border-radius: var(--radius); padding: 20px; margin-bottom: 16px; text-align: center; }
-        .budget-hero-amount { font-size: 36px; font-weight: 800; margin: 4px 0; }
-        .budget-hero-label { font-size: 12px; opacity: 0.85; }
-        .budget-hero-bar { height: 8px; background: rgba(255,255,255,0.25); border-radius: 4px; margin-top: 14px; overflow: hidden; }
-        .budget-hero-fill { height: 100%; background: white; border-radius: 4px; transition: width 0.4s ease; }
-        .budget-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-        .budget-stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
-        .budget-stat-value { font-size: 18px; font-weight: 700; }
-        .budget-stat-label { font-size: 11px; color: var(--text-light); margin-top: 2px; }
-        .budget-add-wrap { display: flex; gap: 6px; margin-bottom: 12px; }
-        .budget-add-wrap input, .budget-add-wrap select { padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 13px; background: var(--card); outline: none; direction: rtl; }
-        .budget-add-wrap input:focus, .budget-add-wrap select:focus { border-color: var(--primary); }
-        .budget-add-wrap .budget-desc { flex: 2; }
-        .budget-add-wrap .budget-amount { flex: 1; min-width: 70px; }
-        .budget-add-row2 { display: flex; gap: 6px; margin-bottom: 16px; }
-        .budget-add-row2 select { flex: 1; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 13px; background: var(--card); outline: none; direction: rtl; }
-        .budget-add-row2 select:focus { border-color: var(--primary); }
-        .budget-expense { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--card); border-radius: var(--radius-sm); margin-bottom: 6px; border: 1px solid var(--border); }
-        .budget-expense-icon { font-size: 18px; width: 32px; text-align: center; }
-        .budget-expense-info { flex: 1; }
-        .budget-expense-desc { font-size: 14px; font-weight: 500; }
-        .budget-expense-meta { font-size: 11px; color: var(--text-light); margin-top: 1px; }
-        .budget-expense-amount { font-size: 15px; font-weight: 700; white-space: nowrap; }
-        .budget-expense-delete { background: none; border: none; color: var(--text-light); font-size: 16px; cursor: pointer; padding: 4px; opacity: 0.3; }
-        .budget-expense-delete:active { opacity: 1; color: var(--danger); }
-        .budget-section-title { font-size: 14px; font-weight: 600; margin: 16px 0 8px; color: var(--text-light); }
+        /* ===== BUDGET DASHBOARD ===== */
+        .budget-progress-card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .budget-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .budget-progress-title { font-size: 13px; font-weight: 600; color: var(--text-light); }
+        .budget-progress-gear { background: none; border: none; font-size: 16px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
+        .budget-progress-gear:active { background: var(--border); }
+        .budget-progress-amounts { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+        .budget-progress-spent { font-size: 28px; font-weight: 800; color: var(--text); }
+        .budget-progress-limit { font-size: 14px; color: var(--text-light); font-weight: 500; }
+        .budget-progress-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
+        .budget-progress-fill { height: 100%; border-radius: 5px; transition: width 0.5s ease, background 0.3s; }
+        .budget-progress-fill.green { background: linear-gradient(90deg, #10b981, #34d399); }
+        .budget-progress-fill.orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .budget-progress-fill.red { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .budget-progress-pct { font-size: 11px; color: var(--text-light); text-align: left; }
+        .budget-warning { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 12px; font-size: 13px; color: var(--danger); font-weight: 600; text-align: center; display: none; }
+
+        /* Summary cards */
+        .budget-summary-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .budget-summary-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 10px; text-align: center; }
+        .budget-summary-label { font-size: 10px; color: var(--text-light); font-weight: 500; margin-bottom: 4px; }
+        .budget-summary-value { font-size: 17px; font-weight: 700; }
+        .budget-summary-sub { font-size: 10px; color: var(--text-light); margin-top: 2px; line-height: 1.4; }
+
+        /* Category chart */
+        .budget-chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+        .budget-chart-title { font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 12px; }
+        .budget-chart-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 10px; background: var(--border); }
+        .budget-chart-segment { height: 100%; transition: width 0.4s ease; min-width: 2px; }
+        .budget-chart-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+        .budget-chart-item { display: flex; align-items: center; gap: 5px; font-size: 11px; }
+        .budget-chart-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+        .budget-chart-item-amount { font-weight: 600; color: var(--text); }
+        .budget-chart-item-pct { color: var(--text-light); }
+
+        /* Add expense form */
+        .budget-form-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+        .budget-form-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .budget-form-cancel { background: none; border: none; color: var(--danger); font-size: 13px; font-weight: 500; cursor: pointer; display: none; padding: 4px 8px; font-family: inherit; }
+        .budget-form-row { display: flex; gap: 8px; margin-bottom: 10px; }
+        .budget-form-row input, .budget-form-row select {
+            flex: 1; padding: 11px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+            font-family: inherit; font-size: 14px; background: var(--card); outline: none; direction: rtl;
+            transition: border-color 0.2s; min-width: 0;
+        }
+        .budget-form-row input:focus, .budget-form-row select:focus { border-color: var(--primary); }
+        .budget-form-row .amount-input { font-size: 18px; font-weight: 600; text-align: center; flex: 1.5; }
+        .budget-form-row .currency-select { flex: 0 0 90px; font-weight: 600; text-align: center; }
+        .budget-form-row .desc-input { flex: 1; }
+        .budget-form-row .date-input { flex: 0 0 140px; direction: ltr; }
+        .budget-form-conversion { font-size: 12px; color: var(--text-light); text-align: center; padding: 4px 0 8px; min-height: 20px; }
+        .budget-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+        .budget-cat-btn { padding: 8px 4px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card); font-family: inherit; font-size: 11px; cursor: pointer; text-align: center; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .budget-cat-btn.active { border-color: var(--primary); background: rgba(14,165,233,0.06); color: var(--primary); font-weight: 600; }
+        .budget-cat-btn:active { transform: scale(0.96); }
+        .budget-cat-icon { font-size: 18px; }
+        .budget-who-row { display: flex; gap: 6px; margin-bottom: 12px; }
+        .budget-who-btn { flex: 1; padding: 9px 8px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; text-align: center; transition: all 0.15s; color: var(--text-light); }
+        .budget-who-btn.active { border-color: var(--primary); background: rgba(14,165,233,0.06); color: var(--primary); font-weight: 600; }
+        .budget-submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: white; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
+        .budget-submit-btn:active { opacity: 0.9; transform: scale(0.99); }
+        .budget-submit-btn.editing { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+
+        /* Toast */
+        .budget-toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transition: all 0.3s ease; pointer-events: none; font-family: inherit; }
+        .budget-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Expense list */
+        .budget-section-title { font-size: 14px; font-weight: 600; margin: 16px 0 8px; color: var(--text-light); display: flex; align-items: center; justify-content: space-between; }
+        .expense-filters { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .expense-filters::-webkit-scrollbar { display: none; }
+        .expense-filter-btn { flex: 0 0 auto; padding: 6px 12px; border-radius: 16px; border: 1.5px solid var(--border); background: var(--card); font-family: inherit; font-size: 12px; font-weight: 500; color: var(--text-light); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .expense-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .expense-card { background: var(--card); border-radius: var(--radius-sm); margin-bottom: 6px; border: 1px solid var(--border); overflow: hidden; transition: box-shadow 0.2s; }
+        .expense-card:active { box-shadow: var(--shadow-md); }
+        .expense-card-main { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; }
+        .expense-card-icon { font-size: 20px; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+        .expense-card-info { flex: 1; min-width: 0; }
+        .expense-card-desc { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .expense-card-meta { font-size: 11px; color: var(--text-light); margin-top: 2px; display: flex; gap: 6px; align-items: center; }
+        .expense-card-tag { font-size: 9px; padding: 1px 6px; border-radius: 4px; font-weight: 600; background: rgba(14,165,233,0.08); color: var(--primary); }
+        .expense-card-amounts { text-align: left; }
+        .expense-card-primary { font-size: 15px; font-weight: 700; white-space: nowrap; }
+        .expense-card-secondary { font-size: 10px; color: var(--text-light); margin-top: 1px; white-space: nowrap; }
+        .expense-card-detail { display: none; padding: 0 14px 12px; border-top: 1px dashed var(--border); margin-top: 0; }
+        .expense-card-detail.open { display: block; padding-top: 10px; }
+        .expense-card-currencies { display: flex; gap: 12px; margin-bottom: 10px; direction: ltr; }
+        .expense-card-curr { text-align: center; flex: 1; }
+        .expense-card-curr-val { font-size: 14px; font-weight: 600; }
+        .expense-card-curr-label { font-size: 10px; color: var(--text-light); }
+        .expense-card-actions { display: flex; gap: 8px; }
+        .expense-card-actions button { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .expense-card-actions .edit-btn:active { background: rgba(14,165,233,0.08); border-color: var(--primary); color: var(--primary); }
+        .expense-card-actions .delete-btn:active { background: rgba(239,68,68,0.08); border-color: var(--danger); color: var(--danger); }
+        .expense-card.pre-trip { border-right: 3px solid var(--primary); }
+
+        /* Budget settings modal */
+        .budget-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+        .budget-modal-overlay.open { display: flex; }
+        .budget-modal { background: var(--card); border-radius: var(--radius); padding: 24px; max-width: 340px; width: 100%; box-shadow: var(--shadow-lg); }
+        .budget-modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+        .budget-modal input { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 20px; font-weight: 600; text-align: center; outline: none; background: var(--bg); direction: ltr; margin-bottom: 16px; }
+        .budget-modal input:focus { border-color: var(--primary); }
+        .budget-modal-btns { display: flex; gap: 8px; }
+        .budget-modal-btns button { flex: 1; padding: 11px; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .budget-modal-save { background: var(--primary); color: white; }
+        .budget-modal-cancel { background: var(--border); color: var(--text); }
 
         .converter-card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
         .converter-input-group { display: flex; gap: 10px; margin-bottom: 14px; align-items: stretch; }
@@ -307,8 +389,17 @@
             .pack-tabs { background: #334155; }
             .pack-tab.active { background: #1e293b; }
             .pack-item-check { background: #1e293b; }
-            .budget-add-wrap input, .budget-add-wrap select, .budget-add-row2 select { background: #1e293b; color: var(--text); }
-            .budget-hero { background: linear-gradient(135deg, #0369a1, #0891b2); }
+            .budget-form-row input, .budget-form-row select { background: #1e293b; color: var(--text); }
+            .budget-cat-btn { background: #1e293b; }
+            .budget-who-btn { background: #1e293b; }
+            .expense-card { background: #1e293b; }
+            .expense-card-detail { border-top-color: #334155; }
+            .expense-card-actions button { background: #1e293b; border-color: #334155; }
+            .budget-modal { background: #1e293b; }
+            .budget-modal input { background: #0f172a; }
+            .budget-modal-cancel { background: #334155; }
+            .budget-chart-card { background: #1e293b; }
+            .expense-filter-btn { background: #1e293b; }
             .converter-select, .converter-input { background: #1e293b; color: var(--text); border-color: #334155; }
             .converter-result { background: #0f172a; }
         }
@@ -343,28 +434,85 @@
 
     <div class="section" id="sec-budget">
         <div class="section-title"><span class="emoji">💰</span> תקציב הטיול</div>
-        <div class="budget-hero">
-            <div class="budget-hero-label">סה"כ הוצאות</div>
-            <div class="budget-hero-amount" id="budget-total">₪0</div>
-            <div class="budget-hero-label" id="budget-remaining"></div>
-            <div class="budget-hero-bar"><div class="budget-hero-fill" id="budget-bar" style="width:0%"></div></div>
+
+        <!-- Budget Progress Bar (on-trip only) -->
+        <div class="budget-progress-card">
+            <div class="budget-progress-header">
+                <span class="budget-progress-title">תקציב הוצאות שוטפות</span>
+                <button class="budget-progress-gear" onclick="openBudgetModal()">&#9881;</button>
+            </div>
+            <div class="budget-progress-amounts">
+                <span class="budget-progress-spent" id="budget-spent">₪0</span>
+                <span class="budget-progress-limit" id="budget-limit-display">/ ₪15,000</span>
+            </div>
+            <div class="budget-progress-bar"><div class="budget-progress-fill green" id="budget-bar"></div></div>
+            <div class="budget-progress-pct" id="budget-pct">0%</div>
         </div>
-        <div class="budget-breakdown" id="budget-breakdown"></div>
-        <div class="budget-section-title">הוסף הוצאה</div>
-        <div class="budget-add-wrap">
-            <input type="text" class="budget-desc" id="budget-desc-input" placeholder="תיאור..." />
-            <input type="number" class="budget-amount" id="budget-amount-input" placeholder="סכום" inputmode="decimal" />
+        <div class="budget-warning" id="budget-warning">&#9888; שימו לב! התקציב מתקרב לגבול</div>
+
+        <!-- Summary Cards -->
+        <div class="budget-summary-row" id="budget-summary-row"></div>
+
+        <!-- Category Breakdown Chart -->
+        <div class="budget-chart-card" id="budget-chart-card" style="display:none;">
+            <div class="budget-chart-title">פילוח לפי קטגוריה (שוטפות)</div>
+            <div class="budget-chart-bar" id="budget-chart-bar"></div>
+            <div class="budget-chart-legend" id="budget-chart-legend"></div>
         </div>
-        <div class="budget-add-row2">
-            <select id="budget-currency-input"><option value="ILS">₪ ILS</option><option value="USD">$ USD</option><option value="PHP">₱ PHP</option></select>
-            <select id="budget-cat-input"><option value="אוכל">🍽️ אוכל</option><option value="תחבורה">🚕 תחבורה</option><option value="אטרקציות">🏄 אטרקציות</option><option value="קניות">🛍️ קניות</option><option value="לינה">🏨 לינה</option></select>
-            <select id="budget-who-input"><option value="Both">משותף</option><option value="Tom">Tom</option><option value="Daniella">Dani</option></select>
-            <button class="todo-add-btn" id="budget-add-btn" style="padding:10px 16px;">הוסף</button>
+
+        <!-- Add/Edit Expense Form -->
+        <div class="budget-form-card">
+            <div class="budget-form-title">
+                <span id="budget-form-label">הוסף הוצאה</span>
+                <button class="budget-form-cancel" id="budget-form-cancel" onclick="cancelEditExpense()">&#10005; ביטול</button>
+            </div>
+            <div class="budget-form-row">
+                <input type="number" class="amount-input" id="exp-amount" placeholder="סכום" inputmode="decimal" />
+                <select class="currency-select" id="exp-currency">
+                    <option value="PHP">&#8369; PHP</option>
+                    <option value="USD">$ USD</option>
+                    <option value="ILS">&#8362; ILS</option>
+                </select>
+            </div>
+            <div class="budget-form-conversion" id="exp-conversion"></div>
+            <div class="budget-form-row">
+                <input type="text" class="desc-input" id="exp-desc" placeholder="תיאור ההוצאה..." />
+                <input type="date" class="date-input" id="exp-date" />
+            </div>
+            <div class="budget-cat-grid" id="exp-cats"></div>
+            <div class="budget-who-row">
+                <button class="budget-who-btn active" data-who="Both" onclick="selectWho(this)">&#128107; משותף</button>
+                <button class="budget-who-btn" data-who="Tom" onclick="selectWho(this)">&#128100; Tom</button>
+                <button class="budget-who-btn" data-who="Daniella" onclick="selectWho(this)">&#128100; Dani</button>
+            </div>
+            <button class="budget-submit-btn" id="exp-submit" onclick="submitExpense()">&#10133; הוסף הוצאה</button>
         </div>
-        <div class="budget-section-title">הוצאות קבועות (טיסות + מלונות)</div>
-        <div id="budget-fixed"></div>
-        <div class="budget-section-title">הוצאות יומיות</div>
+
+        <!-- Expense Filters -->
+        <div class="budget-section-title">
+            <span id="expense-list-title">הוצאות</span>
+            <span id="expense-count" style="font-size:12px;font-weight:400;"></span>
+        </div>
+        <div class="expense-filters" id="expense-filters"></div>
+
+        <!-- Expense List -->
         <div id="budget-expenses"><div class="loading-wrap"><div class="spinner"></div><div>טוען הוצאות...</div></div></div>
+
+        <!-- Toast -->
+        <div class="budget-toast" id="budget-toast"></div>
+    </div>
+
+    <!-- Budget Settings Modal -->
+    <div class="budget-modal-overlay" id="budget-modal">
+        <div class="budget-modal">
+            <h3>&#9881; הגדרת תקציב</h3>
+            <div style="font-size:13px;color:var(--text-light);margin-bottom:12px;">תקציב להוצאות שוטפות (בשקלים)</div>
+            <input type="number" id="budget-modal-input" inputmode="numeric" />
+            <div class="budget-modal-btns">
+                <button class="budget-modal-save" onclick="saveBudgetSetting()">שמור</button>
+                <button class="budget-modal-cancel" onclick="closeBudgetModal()">ביטול</button>
+            </div>
+        </div>
     </div>
 
     <div class="section" id="sec-packing">
@@ -441,7 +589,7 @@
         packing:   { gid: '414706764' },
     };
     const TRIP_START = new Date('2026-04-05T15:40:00+02:00');
-    const BUDGET_LIMIT = 15000;
+    let BUDGET_LIMIT = parseInt(localStorage.getItem('ph-budget-limit')) || 15000;
     const CACHE_KEY = 'ph-trip-cache-v2';
     const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzU1HaG0zdzaNNbhSXBnwTjEZ1ZgunpIdyvP1g107vVhag7biVLygglNOMIKsusSHrXzA/exec';
     const APPS_SCRIPT_URL = localStorage.getItem('ph-apps-script-url') || DEFAULT_APPS_SCRIPT_URL;
@@ -609,55 +757,398 @@
         el.innerHTML = html + lastUpdatedHTML();
     }
 
-    // ==================== RENDER: BUDGET ====================
-    function buildFixedExpenses() {
-        const fixed = [];
-        if (DB.flights) DB.flights.forEach(f => { const p = parsePriceNum(f['Price']); if (p && f['Route']) fixed.push({ desc: f['Route'], amount: p, currency: 'USD', cat: 'flight', icon: '✈️' }); });
-        if (DB.hotels) DB.hotels.forEach(h => { const t = parsePriceNum(h['Total Price']); if (t) fixed.push({ desc: `${h['Hotel Name']} (${h['Nights']}L)`, amount: t, currency: 'ILS', cat: 'hotel', icon: '🏨' }); });
-        return fixed;
+    // ==================== EXPENSE MANAGEMENT ====================
+    const PRE_TRIP_CATS = ['לינה', 'טיסות', 'ביורוקרטיה'];
+    const ON_TRIP_CATS = ['אוכל', 'תחבורה', 'אטרקציות', 'קניות'];
+    const ALL_CATS = [
+        { id: 'אוכל', icon: '🍜', label: 'אוכל', color: '#f59e0b' },
+        { id: 'תחבורה', icon: '🚕', label: 'תחבורה', color: '#4a9eed' },
+        { id: 'אטרקציות', icon: '🏝️', label: 'אטרקציות', color: '#22c55e' },
+        { id: 'קניות', icon: '🛍️', label: 'קניות', color: '#8b5cf6' },
+        { id: 'לינה', icon: '🏨', label: 'לינה', color: '#0ea5e9' },
+        { id: 'טיסות', icon: '✈️', label: 'טיסות', color: '#06b6d4' },
+        { id: 'ביורוקרטיה', icon: '📋', label: 'ביורוקרטיה', color: '#64748b' },
+    ];
+    const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
+    let expenseFilter = 'all';
+    let editingExpenseIdx = null;
+    let selectedCat = 'אוכל';
+    let selectedWho = 'Both';
+
+    function getExpenseType(cat) { return PRE_TRIP_CATS.includes(cat) ? 'pre' : 'on'; }
+
+    function convertFromILS(amountILS, toCurrency) {
+        if (!exchangeRates || toCurrency === 'ILS') return amountILS;
+        return amountILS / (exchangeRates['ILS'] || 1) * (exchangeRates[toCurrency] || 1);
     }
 
-    function renderBudget() {
-        const fixedExpenses = buildFixedExpenses();
-        const sheetExpenses = DB.expenses || [];
-        const allDaily = sheetExpenses.map(e => ({ desc: e['Description']||'', amount: parsePriceNum(e['Amount']), currency: e['Currency']||'ILS', cat: e['Category']||'', who: e['Who']||'', date: e['Date']||'' }));
-        const flightsILS = fixedExpenses.filter(e => e.cat === 'flight').reduce((s, e) => s + convertToILS(e.amount, e.currency), 0);
-        const hotelsILS = fixedExpenses.filter(e => e.cat === 'hotel').reduce((s, e) => s + convertToILS(e.amount, e.currency), 0);
-        const dailyILS = allDaily.reduce((s, e) => s + convertToILS(e.amount, e.currency), 0);
-        const grandTotal = flightsILS + hotelsILS + dailyILS;
-        document.getElementById('budget-total').textContent = fmtMoney(grandTotal, 'ILS');
-        document.getElementById('budget-remaining').textContent = `תקציב: ${fmtMoney(BUDGET_LIMIT, 'ILS')} | נותר: ${fmtMoney(BUDGET_LIMIT - grandTotal, 'ILS')}`;
-        document.getElementById('budget-bar').style.width = Math.min(100, (grandTotal / BUDGET_LIMIT * 100)) + '%';
-        const catIcons = { 'אוכל': '🍽️', 'תחבורה': '🚕', 'אטרקציות': '🏄', 'קניות': '🛍️', 'לינה': '🏨' };
-        document.getElementById('budget-breakdown').innerHTML = `
-            <div class="budget-stat"><div class="budget-stat-value" style="color:var(--primary);">${fmtMoney(flightsILS,'ILS')}</div><div class="budget-stat-label">✈️ טיסות</div></div>
-            <div class="budget-stat"><div class="budget-stat-value" style="color:var(--primary);">${fmtMoney(hotelsILS,'ILS')}</div><div class="budget-stat-label">🏨 מלונות</div></div>
-            <div class="budget-stat"><div class="budget-stat-value" style="color:var(--accent);">${fmtMoney(dailyILS,'ILS')}</div><div class="budget-stat-label">📊 הוצאות יומיות</div></div>
-            <div class="budget-stat"><div class="budget-stat-value" style="color:${BUDGET_LIMIT-grandTotal>=0?'var(--success)':'var(--danger)'};">${fmtMoney(BUDGET_LIMIT-grandTotal,'ILS')}</div><div class="budget-stat-label">💵 נותר</div></div>`;
-        document.getElementById('budget-fixed').innerHTML = fixedExpenses.map(e => `<div class="budget-expense"><div class="budget-expense-icon">${e.icon}</div><div class="budget-expense-info"><div class="budget-expense-desc">${esc(e.desc)}</div></div><div class="budget-expense-amount">${fmtMoney(e.amount,e.currency)}</div></div>`).join('');
-        const expEl = document.getElementById('budget-expenses');
-        if (!allDaily.length) { expEl.innerHTML = '<div class="text-sm text-muted" style="text-align:center;padding:16px;">אין הוצאות יומיות עדיין</div>'; }
-        else { expEl.innerHTML = allDaily.map(e => `<div class="budget-expense"><div class="budget-expense-icon">${catIcons[e.cat]||'📦'}</div><div class="budget-expense-info"><div class="budget-expense-desc">${esc(e.desc)}</div><div class="budget-expense-meta">${esc(e.date)} · ${esc(e.who)}</div></div><div class="budget-expense-amount">${fmtMoney(e.amount,e.currency)}</div></div>`).join(''); }
+    function lockRates(amount, currency) {
+        if (!exchangeRates) {
+            const fb = { ILS_Amount: 0, USD_Amount: 0, PHP_Amount: 0, Exchange_Rate: '' };
+            if (currency === 'ILS') fb.ILS_Amount = amount;
+            else if (currency === 'USD') fb.USD_Amount = amount;
+            else if (currency === 'PHP') fb.PHP_Amount = amount;
+            return fb;
+        }
+        const inUSD = amount / (exchangeRates[currency] || 1);
+        return {
+            ILS_Amount: Math.round(inUSD * (exchangeRates['ILS'] || 1) * 100) / 100,
+            USD_Amount: Math.round(inUSD * 100) / 100,
+            PHP_Amount: Math.round(inUSD * (exchangeRates['PHP'] || 1) * 100) / 100,
+            Exchange_Rate: JSON.stringify({ USD: exchangeRates['USD'], ILS: exchangeRates['ILS'], PHP: exchangeRates['PHP'] }),
+        };
     }
 
-    async function addExpense() {
-        const desc = document.getElementById('budget-desc-input').value.trim(), amount = parseFloat(document.getElementById('budget-amount-input').value);
-        const currency = document.getElementById('budget-currency-input').value, cat = document.getElementById('budget-cat-input').value, who = document.getElementById('budget-who-input').value;
-        if (!desc || !amount) return;
-        const today = new Date().toLocaleDateString('en-GB');
-        const expense = { Date: today, Description: desc, Amount: amount, Currency: currency, Category: cat, Who: who };
+    function parseExpense(e, idx) {
+        const amount = parsePriceNum(e['Amount']);
+        const currency = e['Currency'] || 'ILS';
+        const cat = e['Category'] || '';
+        const type = e['Type'] || getExpenseType(cat);
+        let ilsAmt = parsePriceNum(e['ILS_Amount']);
+        let usdAmt = parsePriceNum(e['USD_Amount']);
+        let phpAmt = parsePriceNum(e['PHP_Amount']);
+        if (!ilsAmt && amount) ilsAmt = convertToILS(amount, currency);
+        if (!usdAmt && amount) usdAmt = convertFromILS(convertToILS(amount, currency), 'USD');
+        if (!phpAmt && amount) phpAmt = convertFromILS(convertToILS(amount, currency), 'PHP');
+        return {
+            idx, desc: e['Description'] || '', amount, currency, cat, type,
+            who: e['Who'] || '', date: e['Date'] || '',
+            ils: ilsAmt, usd: usdAmt, php: phpAmt,
+        };
+    }
+
+    function parseDate(d) {
+        if (!d) return new Date(0);
+        const p = d.split('/');
+        return p.length === 3 ? new Date(`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`) : new Date(d);
+    }
+
+    function todayStr() {
+        const d = new Date();
+        return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('budget-toast');
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // ===== Budget settings modal =====
+    function openBudgetModal() {
+        document.getElementById('budget-modal-input').value = BUDGET_LIMIT;
+        document.getElementById('budget-modal').classList.add('open');
+    }
+    function closeBudgetModal() { document.getElementById('budget-modal').classList.remove('open'); }
+    function saveBudgetSetting() {
+        const val = parseInt(document.getElementById('budget-modal-input').value);
+        if (!val || val <= 0) return;
+        BUDGET_LIMIT = val;
+        localStorage.setItem('ph-budget-limit', val);
+        closeBudgetModal();
+        renderBudget();
+        showToast('התקציב עודכן');
+    }
+    document.getElementById('budget-modal').addEventListener('click', function(e) { if (e.target === this) closeBudgetModal(); });
+
+    // ===== Form setup =====
+    function initExpenseForm() {
+        // Categories grid
+        const grid = document.getElementById('exp-cats');
+        grid.innerHTML = ALL_CATS.map(c =>
+            `<button class="budget-cat-btn ${c.id === selectedCat ? 'active' : ''}" data-cat="${c.id}" onclick="selectCat(this)">
+                <span class="budget-cat-icon">${c.icon}</span>${c.label}
+            </button>`
+        ).join('');
+        // Date default
+        document.getElementById('exp-date').valueAsDate = new Date();
+        // Conversion preview listeners
+        document.getElementById('exp-amount').addEventListener('input', updateConvPreview);
+        document.getElementById('exp-currency').addEventListener('change', updateConvPreview);
+    }
+
+    function selectCat(btn) {
+        document.querySelectorAll('.budget-cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedCat = btn.dataset.cat;
+    }
+    function selectWho(btn) {
+        document.querySelectorAll('.budget-who-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedWho = btn.dataset.who;
+    }
+
+    function updateConvPreview() {
+        const amount = parseFloat(document.getElementById('exp-amount').value);
+        const currency = document.getElementById('exp-currency').value;
+        const el = document.getElementById('exp-conversion');
+        if (!amount || !exchangeRates) { el.textContent = ''; return; }
+        const locked = lockRates(amount, currency);
+        const parts = [];
+        if (currency !== 'ILS') parts.push(fmtMoney(locked.ILS_Amount, 'ILS'));
+        if (currency !== 'USD') parts.push(fmtMoney(locked.USD_Amount, 'USD'));
+        if (currency !== 'PHP') parts.push(fmtMoney(locked.PHP_Amount, 'PHP'));
+        el.textContent = '≈ ' + parts.join(' | ');
+    }
+
+    // ===== Add / Edit / Delete =====
+    async function submitExpense() {
+        const amount = parseFloat(document.getElementById('exp-amount').value);
+        const currency = document.getElementById('exp-currency').value;
+        const desc = document.getElementById('exp-desc').value.trim();
+        const dateVal = document.getElementById('exp-date').value;
+        if (!amount || amount <= 0) { document.getElementById('exp-amount').focus(); return; }
+        if (!desc) { document.getElementById('exp-desc').focus(); return; }
+        const dateFormatted = dateVal
+            ? new Date(dateVal).toLocaleDateString('en-GB')
+            : todayStr();
+        const type = getExpenseType(selectedCat);
+        const locked = lockRates(amount, currency);
+        const expense = {
+            Date: dateFormatted, Description: desc, Amount: amount,
+            Currency: currency, Category: selectedCat, Who: selectedWho,
+            Type: type, ...locked,
+        };
+
         if (!DB.expenses) DB.expenses = [];
-        DB.expenses.push(expense);
+
+        if (editingExpenseIdx !== null) {
+            // Edit mode
+            DB.expenses[editingExpenseIdx] = expense;
+            setCooldown('expenses');
+            saveCache();
+            cancelEditExpense();
+            renderBudget();
+            showToast('ההוצאה עודכנה');
+            try {
+                await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'editExpense', data: { ...expense, row: editingExpenseIdx + 2 } }) });
+            } catch(e) {}
+        } else {
+            // Add mode
+            DB.expenses.push(expense);
+            setCooldown('expenses');
+            saveCache();
+            resetForm();
+            renderBudget();
+            showToast('ההוצאה נוספה');
+            try {
+                await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addExpense', data: expense }) });
+            } catch(e) { showToast('שגיאה בשמירה'); }
+        }
+    }
+
+    function startEditExpense(idx) {
+        const e = DB.expenses[idx];
+        if (!e) return;
+        editingExpenseIdx = idx;
+        document.getElementById('exp-amount').value = parsePriceNum(e['Amount']);
+        document.getElementById('exp-currency').value = e['Currency'] || 'ILS';
+        document.getElementById('exp-desc').value = e['Description'] || '';
+        // Parse date
+        const ds = e['Date'] || '';
+        if (ds) {
+            const p = ds.split('/');
+            if (p.length === 3) document.getElementById('exp-date').value = `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+        }
+        // Set category
+        selectedCat = e['Category'] || 'אוכל';
+        document.querySelectorAll('.budget-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === selectedCat));
+        // Set who
+        selectedWho = e['Who'] || 'Both';
+        document.querySelectorAll('.budget-who-btn').forEach(b => b.classList.toggle('active', b.dataset.who === selectedWho));
+        // UI
+        document.getElementById('budget-form-label').textContent = 'עריכת הוצאה';
+        document.getElementById('budget-form-cancel').style.display = 'block';
+        document.getElementById('exp-submit').textContent = '✓ שמור שינויים';
+        document.getElementById('exp-submit').classList.add('editing');
+        updateConvPreview();
+        document.getElementById('exp-amount').focus();
+        document.querySelector('.budget-form-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function cancelEditExpense() {
+        editingExpenseIdx = null;
+        document.getElementById('budget-form-label').textContent = 'הוסף הוצאה';
+        document.getElementById('budget-form-cancel').style.display = 'none';
+        document.getElementById('exp-submit').textContent = '+ הוסף הוצאה';
+        document.getElementById('exp-submit').classList.remove('editing');
+        resetForm();
+    }
+
+    function resetForm() {
+        document.getElementById('exp-amount').value = '';
+        document.getElementById('exp-desc').value = '';
+        document.getElementById('exp-date').valueAsDate = new Date();
+        document.getElementById('exp-currency').value = 'PHP';
+        document.getElementById('exp-conversion').textContent = '';
+        selectedCat = 'אוכל';
+        selectedWho = 'Both';
+        document.querySelectorAll('.budget-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'אוכל'));
+        document.querySelectorAll('.budget-who-btn').forEach(b => b.classList.toggle('active', b.dataset.who === 'Both'));
+    }
+
+    async function deleteExpense(idx) {
+        if (!confirm('למחוק את ההוצאה הזו?')) return;
+        const row = idx + 2;
+        DB.expenses.splice(idx, 1);
         setCooldown('expenses');
         saveCache();
-        document.getElementById('budget-desc-input').value = ''; document.getElementById('budget-amount-input').value = '';
         renderBudget();
+        showToast('ההוצאה נמחקה');
         try {
-            await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addExpense', data: expense }) });
-        } catch(e) { alert('שגיאה בשמירת ההוצאה. נסה שוב.'); }
+            await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteExpense', data: { row } }) });
+        } catch(e) {}
     }
-    document.getElementById('budget-add-btn').addEventListener('click', addExpense);
-    document.getElementById('budget-amount-input').addEventListener('keypress', e => { if (e.key === 'Enter') addExpense(); });
+
+    function toggleExpenseDetail(el) {
+        const d = el.querySelector('.expense-card-detail');
+        if (d) d.classList.toggle('open');
+    }
+
+    function setExpenseFilter(cat) {
+        expenseFilter = cat;
+        document.querySelectorAll('.expense-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+        renderBudget();
+    }
+
+    // ===== Main Render =====
+    function renderBudget() {
+        const sheetExpenses = DB.expenses || [];
+        const all = sheetExpenses.map((e, i) => parseExpense(e, i));
+        const onTrip = all.filter(e => e.type === 'on');
+        const preTrip = all.filter(e => e.type === 'pre');
+
+        // Add flights and hotels as pre-trip
+        let flightsILS = 0, hotelsILS = 0;
+        if (DB.flights) DB.flights.forEach(f => { const p = parsePriceNum(f['Price']); if (p && f['Route']) flightsILS += convertToILS(p, 'USD'); });
+        if (DB.hotels) DB.hotels.forEach(h => { const t = parsePriceNum(h['Total Price']); if (t) hotelsILS += t; });
+        const preTripILS = preTrip.reduce((s, e) => s + e.ils, 0) + flightsILS + hotelsILS;
+
+        // On-trip totals
+        const onTripILS = onTrip.reduce((s, e) => s + e.ils, 0);
+        const onTripUSD = onTrip.reduce((s, e) => s + e.usd, 0);
+        const onTripPHP = onTrip.reduce((s, e) => s + e.php, 0);
+
+        // Today's expenses
+        const today = todayStr();
+        const todayILS = onTrip.filter(e => e.date === today).reduce((s, e) => s + e.ils, 0);
+
+        // Grand total
+        const grandILS = preTripILS + onTripILS;
+
+        // ===== Progress bar =====
+        const pct = BUDGET_LIMIT > 0 ? Math.min(100, (onTripILS / BUDGET_LIMIT * 100)) : 0;
+        document.getElementById('budget-spent').textContent = fmtMoney(onTripILS, 'ILS');
+        document.getElementById('budget-limit-display').textContent = `/ ${fmtMoney(BUDGET_LIMIT, 'ILS')}`;
+        const bar = document.getElementById('budget-bar');
+        bar.style.width = pct + '%';
+        bar.className = 'budget-progress-fill ' + (pct < 60 ? 'green' : pct < 85 ? 'orange' : 'red');
+        document.getElementById('budget-pct').textContent = Math.round(pct) + '%';
+        document.getElementById('budget-warning').style.display = pct >= 85 ? 'block' : 'none';
+
+        // ===== Summary cards =====
+        document.getElementById('budget-summary-row').innerHTML = `
+            <div class="budget-summary-card">
+                <div class="budget-summary-label">הוצאות היום</div>
+                <div class="budget-summary-value">${fmtMoney(todayILS, 'ILS')}</div>
+                <div class="budget-summary-sub">${fmtMoney(convertFromILS(todayILS, 'USD'), 'USD')}</div>
+            </div>
+            <div class="budget-summary-card">
+                <div class="budget-summary-label">סה"כ שוטפות</div>
+                <div class="budget-summary-value">${fmtMoney(onTripILS, 'ILS')}</div>
+                <div class="budget-summary-sub">${fmtMoney(onTripUSD, 'USD')} | ${fmtMoney(onTripPHP, 'PHP')}</div>
+            </div>
+            <div class="budget-summary-card">
+                <div class="budget-summary-label">עלות כוללת</div>
+                <div class="budget-summary-value" style="color:var(--primary);">${fmtMoney(grandILS, 'ILS')}</div>
+                <div class="budget-summary-sub">${fmtMoney(convertFromILS(grandILS, 'USD'), 'USD')}</div>
+            </div>`;
+
+        // ===== Category chart (on-trip only) =====
+        const chartCard = document.getElementById('budget-chart-card');
+        if (onTrip.length) {
+            chartCard.style.display = 'block';
+            const byCat = {};
+            onTrip.forEach(e => { byCat[e.cat] = (byCat[e.cat] || 0) + e.ils; });
+            const catEntries = Object.entries(byCat).sort((a,b) => b[1] - a[1]);
+            const barHTML = catEntries.map(([cat, amt]) => {
+                const c = CAT_MAP[cat];
+                const w = onTripILS > 0 ? (amt / onTripILS * 100) : 0;
+                return `<div class="budget-chart-segment" style="width:${w}%;background:${c ? c.color : '#94a3b8'};"></div>`;
+            }).join('');
+            document.getElementById('budget-chart-bar').innerHTML = barHTML;
+            document.getElementById('budget-chart-legend').innerHTML = catEntries.map(([cat, amt]) => {
+                const c = CAT_MAP[cat];
+                const p = onTripILS > 0 ? Math.round(amt / onTripILS * 100) : 0;
+                return `<div class="budget-chart-item"><div class="budget-chart-dot" style="background:${c ? c.color : '#94a3b8'}"></div>${c ? c.icon : ''} <span class="budget-chart-item-amount">${fmtMoney(amt,'ILS')}</span> <span class="budget-chart-item-pct">(${p}%)</span></div>`;
+            }).join('');
+        } else {
+            chartCard.style.display = 'none';
+        }
+
+        // ===== Filters =====
+        const filtersEl = document.getElementById('expense-filters');
+        const activeCats = [...new Set(all.map(e => e.cat))];
+        filtersEl.innerHTML = `<button class="expense-filter-btn ${expenseFilter==='all'?'active':''}" data-cat="all" onclick="setExpenseFilter('all')">הכל</button>` +
+            `<button class="expense-filter-btn ${expenseFilter==='on'?'active':''}" data-cat="on" onclick="setExpenseFilter('on')">שוטפות</button>` +
+            `<button class="expense-filter-btn ${expenseFilter==='pre'?'active':''}" data-cat="pre" onclick="setExpenseFilter('pre')">מוקדמות</button>` +
+            activeCats.map(cat => {
+                const c = CAT_MAP[cat];
+                return `<button class="expense-filter-btn ${expenseFilter===cat?'active':''}" data-cat="${cat}" onclick="setExpenseFilter('${cat}')">${c ? c.icon+' ' : ''}${cat}</button>`;
+            }).join('');
+
+        // ===== Expense list =====
+        let filtered = all;
+        if (expenseFilter === 'on') filtered = onTrip;
+        else if (expenseFilter === 'pre') filtered = preTrip;
+        else if (expenseFilter !== 'all') filtered = all.filter(e => e.cat === expenseFilter);
+
+        filtered.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+
+        document.getElementById('expense-count').textContent = `(${filtered.length})`;
+        const expEl = document.getElementById('budget-expenses');
+
+        if (!filtered.length) {
+            expEl.innerHTML = '<div class="text-sm text-muted" style="text-align:center;padding:20px;">אין הוצאות</div>';
+        } else {
+            expEl.innerHTML = filtered.map(e => {
+                const c = CAT_MAP[e.cat];
+                const iconBg = c ? c.color + '15' : 'rgba(148,163,184,0.1)';
+                const secondaryCurrencies = ['ILS','USD','PHP'].filter(cur => cur !== e.currency);
+                const secAmounts = secondaryCurrencies.map(cur => fmtMoney(cur === 'ILS' ? e.ils : cur === 'USD' ? e.usd : e.php, cur)).join(' | ');
+                const isPre = e.type === 'pre';
+                const whoLabel = e.who === 'Both' ? 'משותף' : e.who;
+                return `<div class="expense-card ${isPre ? 'pre-trip' : ''}">
+                    <div class="expense-card-main" onclick="toggleExpenseDetail(this.parentElement)">
+                        <div class="expense-card-icon" style="background:${iconBg}">${c ? c.icon : '📦'}</div>
+                        <div class="expense-card-info">
+                            <div class="expense-card-desc">${esc(e.desc)}</div>
+                            <div class="expense-card-meta">
+                                <span>${esc(e.date)}</span>
+                                <span>${esc(whoLabel)}</span>
+                                ${isPre ? '<span class="expense-card-tag">מוקדמת</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="expense-card-amounts">
+                            <div class="expense-card-primary">${fmtMoney(e.amount, e.currency)}</div>
+                            <div class="expense-card-secondary">${secAmounts}</div>
+                        </div>
+                    </div>
+                    <div class="expense-card-detail">
+                        <div class="expense-card-currencies">
+                            <div class="expense-card-curr"><div class="expense-card-curr-val">${fmtMoney(e.ils,'ILS')}</div><div class="expense-card-curr-label">ILS</div></div>
+                            <div class="expense-card-curr"><div class="expense-card-curr-val">${fmtMoney(e.usd,'USD')}</div><div class="expense-card-curr-label">USD</div></div>
+                            <div class="expense-card-curr"><div class="expense-card-curr-val">${fmtMoney(e.php,'PHP')}</div><div class="expense-card-curr-label">PHP</div></div>
+                        </div>
+                        <div class="expense-card-actions">
+                            <button class="edit-btn" onclick="event.stopPropagation();startEditExpense(${e.idx})">&#9998; ערוך</button>
+                            <button class="delete-btn" onclick="event.stopPropagation();deleteExpense(${e.idx})">&#128465; מחק</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+    }
 
     // ==================== RENDER: TASKS ====================
     let tasks = [];
@@ -824,7 +1315,7 @@
     setInterval(() => refreshData(false), 60000);
 
     // ==================== INIT ====================
-    async function init(){renderItinerary();const hadCache=loadCache();if(hadCache){renderAll();}fetchRates();const success=await fetchAllData();if(success||hadCache){renderAll();}}
+    async function init(){renderItinerary();initExpenseForm();const hadCache=loadCache();if(hadCache){renderAll();}fetchRates();const success=await fetchAllData();if(success||hadCache){renderAll();}}
     init();
     </script>
 </body>
