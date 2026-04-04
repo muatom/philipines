@@ -379,12 +379,37 @@ a{color:var(--blue);text-decoration:none}
 .modal-cancel{background:var(--gray-6);color:var(--blue)}
 
 /* ========== MISC ========== */
-.empty{text-align:center;padding:40px 20px;color:var(--text-3);font-size:15px;line-height:1.6}
-.empty-icon{font-size:48px;margin-bottom:12px;opacity:.3}
+.empty{text-align:center;padding:48px 24px;color:var(--text-3);font-size:14px;line-height:1.6}
+.empty-icon{font-size:52px;margin-bottom:14px;opacity:.5;display:block}
 .spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--gray-5);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading{text-align:center;padding:80px 20px;color:var(--text-3)}
 .loading div{margin-top:12px;font-size:14px}
+
+/* ========== CELEBRATION ========== */
+.celebrate{text-align:center;padding:24px 20px;background:linear-gradient(135deg,rgba(52,199,89,.1),rgba(0,122,255,.08));border-radius:var(--r-l);margin:12px 0;animation:celebrate .6s var(--ease)}
+.celebrate-emoji{font-size:48px;animation:bounce 1s ease-in-out infinite alternate;display:inline-block}
+.celebrate-txt{font-size:15px;font-weight:600;color:var(--green);margin-top:8px}
+@keyframes celebrate{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes bounce{from{transform:translateY(0) rotate(-6deg)}to{transform:translateY(-6px) rotate(6deg)}}
+
+/* ========== TAP FEEDBACK ========== */
+.cat-btn:active,.seg-btn:active,.fil-btn:active,.pack-tab:active,.sb-item:active{transform:scale(.96);transition:transform .1s ease}
+.mk-card:active,.exp-card:active,.task-item:active,.pack-item:active,.link-card:active,.fl-card:active,.ht-card:active,.note-card:active,.emg-card:active,.card:active{transform:scale(.99);transition:transform .1s ease}
+.btn-primary,.btn-secondary,.btn-destructive{transition:transform .15s var(--ease),opacity .15s,background .2s}
+.fab:hover{transform:scale(1.05)}
+
+/* ========== SMOOTH SCROLL ========== */
+html{scroll-behavior:smooth}
+
+/* ========== GRADIENT CARD ACCENTS ========== */
+.bgt-card{background:linear-gradient(135deg,var(--card) 0%,var(--card-2) 100%)}
+.task-prog{background:linear-gradient(135deg,var(--card) 0%,var(--card-2) 100%)}
+.pack-summary{background:linear-gradient(135deg,var(--card) 0%,var(--card-2) 100%)}
+
+/* ========== PULL REFRESH HINT (subtle) ========== */
+.refreshing{animation:spinSlow 1s linear infinite}
+@keyframes spinSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -393,7 +418,7 @@ a{color:var(--blue);text-decoration:none}
 <div class="app-hdr">
     <button class="hdr-btn hdr-back" id="hdr-back" onclick="goBack()">&#8594;</button>
     <div class="hdr-title" id="hdr-title">🇵🇭 הטיול של תום ודני</div>
-    <button class="hdr-btn hdr-refresh" onclick="refreshData(true)" title="רענן">↻</button>
+    <button class="hdr-btn hdr-refresh" onclick="refreshData(true)" title="רענון">↻</button>
     <button class="hdr-btn hdr-menu" onclick="toggleSidebar()">☰</button>
 </div>
 
@@ -453,7 +478,7 @@ a{color:var(--blue);text-decoration:none}
         <input type="number" id="bgt-modal-inp" inputmode="numeric"/>
         <div class="modal-btns">
             <button class="modal-cancel" onclick="closeBgtModal()">ביטול</button>
-            <button class="modal-save" onclick="saveBudget()">שמור</button>
+            <button class="modal-save" onclick="saveBudget()">שמירה</button>
         </div>
     </div>
 </div>
@@ -716,7 +741,7 @@ function renderApp(){
         else if(currentView==='section')renderSection(currentSection);
         updateHeader();updateNav();
         main.classList.remove('fading');
-        window.scrollTo(0,0);
+        window.scrollTo({top:0,behavior:'smooth'});
     },120);
 }
 function updateHeader(){
@@ -745,9 +770,14 @@ function renderMarketplace(){
     const diff=tripStart-now;
     const days=Math.floor(diff/(1000*60*60*24)),hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
     let countdownText='';
-    if(beforeTrip){countdownText=days>0?`✈️ עוד ${days} ימים לטיול`:`✈️ עוד ${hours} שעות לטיול`;}
-    else if(now>new Date(DESTS[DESTS.length-1].end)){countdownText='🎉 הטיול הסתיים';}
-    else{countdownText=`🌴 נהנים מ${cur.name}`;}
+    if(beforeTrip){
+        if(days>7) countdownText=`✈️ עוד ${days} ימים לטיול`;
+        else if(days>0) countdownText=`✈️ עוד ${days} ימים! כבר ממש קרוב`;
+        else if(hours>0) countdownText=`✈️ עוד ${hours} שעות! מתחילים להתרגש`;
+        else countdownText=`✈️ ממש עוד רגע! טיסה טובה 🍀`;
+    }
+    else if(now>new Date(DESTS[DESTS.length-1].end)){countdownText='🎉 הטיול הסתיים · זיכרונות לכל החיים';}
+    else{countdownText=`🌴 אתם בפיליפינים! · ${cur.name}`;}
 
     const others=DESTS.filter(d=>d.id!==cur.id);
     const heroBadge=beforeTrip?'היעד הראשון':now>=new Date(cur.start)&&now<new Date(cur.end)?'עכשיו':'היעד הבא';
@@ -764,8 +794,8 @@ function renderMarketplace(){
 
     main.innerHTML=`
     <div class="mk-hdr">
-        <h1>שלום, תום 👋</h1>
-        <div class="sub">הטיול לפיליפינים בקרוב</div>
+        <h1>הטיול לפיליפינים</h1>
+        <div class="sub">תום ודניאלה · אפריל 2026</div>
     </div>
     ${countdownText?`<div class="mk-countdown">${countdownText}</div>`:''}
     <div class="mk-hero" onclick="goToSpace('${cur.id}')">
@@ -857,7 +887,7 @@ function renderSpace(destId){
                     <div class="ht-date"><div class="ht-date-lbl">צ'ק-אאוט</div><div class="ht-date-val">${esc(co)}</div></div>
                 </div>
                 <div class="ht-meta">${n} לילות${total?' · ₪'+total.toLocaleString():''}</div>
-                ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפה בהזמנה</a>`:''}
+                ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפייה בהזמנה</a>`:''}
             </div>`;
         });
         html+=`</div>`;
@@ -881,8 +911,8 @@ function renderSpace(destId){
                 <button class="note-del" onclick="deleteNoteItem(${n._row},'${destId}')">✕</button>
             </div>`;
         }).join('');
-    } else { html+=`<div class="empty"><div class="empty-icon">🌟</div>אין המלצות עדיין<br>הוסיפו את הראשונה!</div>`; }
-    html+=`<button class="btn-secondary" onclick="openNoteSheet('${destId}')" style="margin-top:12px">+ הוסף המלצה</button></div>`;
+    } else { html+=`<div class="empty"><div class="empty-icon">✨</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">עדיין לא הוספתם המלצות</div>מסעדות, אטרקציות, ביקורים חובה<br>הכל במקום אחד כדי לא לשכוח</div>`; }
+    html+=`<button class="btn-secondary" onclick="openNoteSheet('${destId}')" style="margin-top:12px">+ הוספת המלצה</button></div>`;
 
     // Local budget
     html+=`<div class="section-subtitle">💰 הוצאות ב${esc(dest.name)}</div><div class="section" style="padding-top:0">`;
@@ -898,7 +928,7 @@ function renderSpace(destId){
             </div>`;
         }).join('');
         html+=`</div>`;
-    } else { html+=`<div class="empty"><div class="empty-icon">💰</div>אין הוצאות עדיין ביעד הזה</div>`; }
+    } else { html+=`<div class="empty"><div class="empty-icon">💰</div>אין הוצאות ביעד הזה עדיין<br><span style="font-size:12px">כל הוצאה שתתווסף בתאריכים האלה תופיע כאן</span></div>`; }
     html+=`</div>`;
     main.innerHTML=html;
 }
@@ -921,7 +951,7 @@ function renderSection(name){
 function renderFlightsSection(){
     const main=document.getElementById('main');
     const data=DB.flights;
-    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">✈️ טיסות</div><div class="empty"><div class="empty-icon">✈️</div>לא נמצאו טיסות</div></div>';return;}
+    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">✈️ טיסות</div><div class="empty"><div class="empty-icon">✈️</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין טיסות עדיין</div>הטיסות יופיעו כאן אוטומטית</div></div>';return;}
     let route='',num=0,total=0,html='<div class="section"><div class="section-title">✈️ כל הטיסות</div>';
     data.forEach(f=>{
         if(f['Route']){route=f['Route'];num++;}
@@ -940,7 +970,7 @@ function renderFlightsSection(){
                 <div class="fl-detail"><div class="fl-detail-lbl">תאריך</div><div class="fl-detail-val">${esc(dd)}</div></div>
                 <div class="fl-detail"><div class="fl-detail-lbl">מזוודות</div><div class="fl-detail-val" style="font-size:11px">${esc(f['Allowed Baggage']||'—')}</div></div>
             </div>
-            ${ticket?`<a href="${esc(ticket)}" class="ht-link" target="_blank">🎫 צפה בכרטיס</a>`:''}
+            ${ticket?`<a href="${esc(ticket)}" class="ht-link" target="_blank">🎫 צפייה בכרטיס</a>`:''}
         </div>`;
     });
     html+=`<div class="card" style="text-align:center"><div style="font-size:13px;color:var(--text-3);font-weight:500">סה"כ טיסות</div><div style="font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-.5px;margin-top:4px">$${total.toLocaleString()}</div></div></div>`;
@@ -951,7 +981,7 @@ function renderFlightsSection(){
 function renderHotelsSection(){
     const main=document.getElementById('main');
     const data=DB.hotels;
-    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">🏨 מלונות</div><div class="empty"><div class="empty-icon">🏨</div>לא נמצאו מלונות</div></div>';return;}
+    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">🏨 מלונות</div><div class="empty"><div class="empty-icon">🏨</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין מלונות עדיין</div>המלונות יופיעו כאן אוטומטית</div></div>';return;}
     let totalILS=0,html='<div class="section"><div class="section-title">🏨 כל המלונות</div>';
     data.forEach(h=>{
         const loc=h['Location']||'',name=h['Hotel Name']||'',ci=formatDate(h['Check-in']||''),co=formatDate(h['Check-out']||''),n=h['Nights']||'',ppn=parsePriceNum(h['Price Per Night']),total=parsePriceNum(h['Total Price']),url=h['Booking URL']||'',pay=h['Payment Status']||'',cancel=h['Cancellation']||'';
@@ -969,7 +999,7 @@ function renderHotelsSection(){
                 <div class="fl-detail"><div class="fl-detail-lbl">תשלום</div><div class="fl-detail-val" style="color:${pay.toLowerCase()==='paid'?'var(--green)':'var(--orange)'}">${pay.toLowerCase()==='paid'?'שולם':esc(pay)}</div></div>
             </div>
             ${cancel&&cancel!=='-'?`<div style="font-size:12px;color:var(--text-3);margin-top:8px">ביטול: ${esc(cancel)}</div>`:''}
-            ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפה בהזמנה</a>`:''}
+            ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפייה בהזמנה</a>`:''}
         </div>`;
     });
     html+=`<div class="card" style="text-align:center"><div style="font-size:13px;color:var(--text-3);font-weight:500">סה"כ לינה</div><div style="font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-.5px;margin-top:4px">₪${totalILS.toLocaleString()}</div></div></div>`;
@@ -987,13 +1017,13 @@ function renderExpensesSection(){
             <div class="bgt-bar"><div class="bgt-fill" id="bs-bar"></div></div>
             <div class="bgt-pct" id="bs-pct">0%</div>
         </div>
-        <div class="bgt-warn" id="bs-warn">⚠ התקציב מתקרב לגבול</div>
+        <div class="bgt-warn" id="bs-warn">⚠ התקציב מתקרב לגבול שלו</div>
         <div class="bgt-summary" id="bs-summary"></div>
         <div class="bgt-chart" id="bs-chart" style="display:none"><div class="bgt-chart-title">פילוח לפי קטגוריה</div><div class="bgt-chart-bar" id="bs-chartbar"></div><div class="bgt-chart-legend" id="bs-legend"></div></div>
         <div class="filters" id="bs-filters"></div>
         <div id="bs-list"></div>
     </div>
-    <button class="fab" onclick="openExpenseSheet()">+</button>`;
+    <button class="fab" onclick="openExpenseSheet()" title="הוצאה חדשה">+</button>`;
     renderBudgetData();
 }
 function renderBudgetData(){
@@ -1038,7 +1068,7 @@ function renderBudgetData(){
     filtered.sort((a,b)=>{const pd=s=>{const p=s.split('/');return p.length===3?new Date(`${p[2]}-${p[1]}-${p[0]}`):new Date(s);};return pd(b.date)-pd(a.date);});
     const list=document.getElementById('bs-list');
     if(!list)return;
-    if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">💰</div>אין הוצאות</div>';return;}
+    if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">💰</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין הוצאות עדיין</div>הוצאה ראשונה מתחילה בכפתור ה+</div>';return;}
     list.innerHTML=`<div class="exp-list">`+filtered.map(e=>{
         const c=CAT_MAP[e.cat],bg=c?c.color+'22':'var(--gray-6)';
         const sec=['ILS','USD','PHP'].filter(x=>x!==e.currency).map(x=>fmtMoney(x==='ILS'?e.ils:x==='USD'?e.usd:e.php,x)).join(' · ');
@@ -1049,7 +1079,7 @@ function renderBudgetData(){
             <div class="exp-amount"><div class="exp-primary">${fmtMoney(e.amount,e.currency)}</div><div class="exp-secondary">${sec}</div></div>
         </div>
         <div class="exp-detail"><div class="exp-currencies"><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.ils,'ILS')}</div><div class="exp-curr-lbl">ILS</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.usd,'USD')}</div><div class="exp-curr-lbl">USD</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.php,'PHP')}</div><div class="exp-curr-lbl">PHP</div></div></div>
-            <div class="exp-actions"><button class="edit" onclick="event.stopPropagation();openExpenseSheet(${e.idx})">ערוך</button><button class="del" onclick="event.stopPropagation();deleteExp(${e.idx})">מחק</button></div>
+            <div class="exp-actions"><button class="edit" onclick="event.stopPropagation();openExpenseSheet(${e.idx})">עריכה</button><button class="del" onclick="event.stopPropagation();deleteExp(${e.idx})">מחיקה</button></div>
         </div>`;
     }).join('')+`</div>`;
 }
@@ -1061,7 +1091,13 @@ function openExpenseSheet(editIdx){
     editExpIdx=editIdx;
     const e=editIdx!==null?DB.expenses[editIdx]:null;
     selCat=e?(e['Category']||'אוכל'):'אוכל';
-    selWho=e?(e['Who']||'Both'):'Both';
+    // Remember last "Who" selection
+    const lastWho=localStorage.getItem('ph-last-who')||'Both';
+    selWho=e?(e['Who']||'Both'):lastWho;
+    // Smart currency default: PHP during trip, ILS before
+    const now=new Date(),tripStarted=now>=new Date(DESTS[0].start),tripEnded=now>new Date(DESTS[DESTS.length-1].end);
+    const lastCur=localStorage.getItem('ph-last-cur')||(tripStarted&&!tripEnded?'PHP':'ILS');
+    const defCur=e?(e['Currency']||'ILS'):lastCur;
     const today=new Date().toISOString().split('T')[0];
     let dateVal=today;
     if(e&&e['Date']){const p=e['Date'].split('/');if(p.length===3)dateVal=`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
@@ -1069,9 +1105,9 @@ function openExpenseSheet(editIdx){
         <div class="input-row">
             <input type="number" class="input amt" id="ea-amt" placeholder="0" inputmode="decimal" value="${e?parsePriceNum(e['Amount']):''}">
             <select class="input cur" id="ea-cur">
-                <option value="PHP" ${e&&e['Currency']==='PHP'?'selected':''}>₱ PHP</option>
-                <option value="USD" ${e&&e['Currency']==='USD'?'selected':''}>$ USD</option>
-                <option value="ILS" ${e&&(!e['Currency']||e['Currency']==='ILS')?'selected':''}>₪ ILS</option>
+                <option value="PHP" ${defCur==='PHP'?'selected':''}>₱ PHP</option>
+                <option value="USD" ${defCur==='USD'?'selected':''}>$ USD</option>
+                <option value="ILS" ${defCur==='ILS'?'selected':''}>₪ ILS</option>
             </select>
         </div>
         <div class="conv-hint" id="ea-conv"></div>
@@ -1085,8 +1121,8 @@ function openExpenseSheet(editIdx){
             <button type="button" class="seg-btn ${selWho==='Tom'?'active':''}" onclick="pickWho(this,'Tom')">👤 תום</button>
             <button type="button" class="seg-btn ${selWho==='Daniella'?'active':''}" onclick="pickWho(this,'Daniella')">👤 דני</button>
         </div>
-        <button class="btn-primary" onclick="submitExp()">${e?'שמור שינויים':'+ הוסף הוצאה'}</button>
-        ${e?'<button class="btn-destructive" onclick="deleteExp('+editIdx+');closeSheet()">מחק הוצאה</button>':''}
+        <button class="btn-primary" onclick="submitExp()">${e?'שמירת שינויים':'+ הוספת הוצאה'}</button>
+        ${e?'<button class="btn-destructive" onclick="deleteExp('+editIdx+');closeSheet()">מחיקת הוצאה</button>':''}
     `;
     openSheet(e?'עריכת הוצאה':'הוצאה חדשה',html);
     setTimeout(()=>{
@@ -1107,7 +1143,9 @@ function updateExpConv(){
 }
 async function submitExp(){
     const a=parseFloat(document.getElementById('ea-amt').value),c=document.getElementById('ea-cur').value,desc=document.getElementById('ea-desc').value.trim(),dt=document.getElementById('ea-date').value;
-    if(!a||a<=0||!desc){showToast('יש למלא סכום ותיאור','⚠️');return;}
+    if(!a||a<=0||!desc){showToast('נדרש סכום ותיאור','⚠️');return;}
+    // Remember last selections
+    try{localStorage.setItem('ph-last-who',selWho);localStorage.setItem('ph-last-cur',c);}catch(err){}
     const dateF=dt?new Date(dt).toLocaleDateString('en-GB'):todayStr();
     const type=getExpType(selCat),locked=lockRates(a,c);
     const exp={Date:dateF,Description:desc,Amount:a,Currency:c,Category:selCat,Who:selWho,Type:type,...locked,Origin_Cur:c};
@@ -1146,14 +1184,14 @@ function renderTasksSection(){
         ${allT.length?`<div class="task-list">${allT.map((t,i)=>{
             let dueH='';if(t.due){const ov=new Date(t.due)<new Date()&&!t.done;dueH=`<span class="task-due ${ov?'over':''}">${esc(formatDate(t.due))}</span>`;}
             return`<div class="task-item ${t.done?'done':''}"><div class="task-chk" onclick="toggleTaskItem(${i},${t.fromSheet})"></div><div class="task-text">${esc(t.text)}</div>${dueH}${!t.fromSheet?`<button class="task-del" onclick="delLocalTask(${i-tasks.length})">✕</button>`:''}</div>`;
-        }).join('')}</div>`:'<div class="empty"><div class="empty-icon">✅</div>אין משימות עדיין<br>הוסיפו משימות לטיול</div>'}
+        }).join('')}${total>0&&done===total?'<div class="celebrate"><div class="celebrate-emoji">🎉</div><div class="celebrate-txt">כל הכבוד! סיימתם את כל המשימות</div></div>':''}</div>`:'<div class="empty"><div class="empty-icon">📝</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">רשימת המשימות ריקה</div>תזכרו להביא שיקים, לעשות ויזה,<br>להזמין כרטיסים והכל יהיה כאן</div>'}
     </div>
-    <button class="fab" onclick="openTaskSheet()">+</button>`;
+    <button class="fab" onclick="openTaskSheet()" title="משימה חדשה">+</button>`;
 }
 function openTaskSheet(){
     const html=`
-        <input type="text" class="input" id="task-inp" placeholder="תיאור המשימה..." autocomplete="off">
-        <button class="btn-primary" onclick="addTaskItem()">+ הוסף משימה</button>
+        <input type="text" class="input" id="task-inp" placeholder="מה צריך לעשות לפני הטיול?" autocomplete="off">
+        <button class="btn-primary" onclick="addTaskItem()">+ הוספת משימה</button>
     `;
     openSheet('משימה חדשה',html);
     setTimeout(()=>{
@@ -1199,7 +1237,7 @@ function getOrderedCatKeys(catObj){
 function renderPackingSection(){
     const main=document.getElementById('main');
     const data=DB.packing;
-    if(!data){main.innerHTML='<div class="section"><div class="section-title">🎒 ציוד</div><div class="loading"><div class="spinner"></div><div>טוען ציוד...</div></div></div>';return;}
+    if(!data){main.innerHTML='<div class="section"><div class="section-title">🎒 ציוד</div><div class="loading"><div class="spinner"></div><div>טוענים ציוד...</div></div></div>';return;}
 
     const all=data.map((r,i)=>({...r,_row:i+2}));
     const totalI=all.length,packedI=all.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
@@ -1236,7 +1274,8 @@ function renderPackingSection(){
             <button class="pack-tab ${currentPackWho==='critical'?'active':''}" onclick="setPackWho('critical')">🔴 קריטי (${critC})</button>
         </div>
 
-        ${orderedKeys.length===0?'<div class="empty"><div class="empty-icon">🎒</div>אין פריטים בסינון הנוכחי</div>':''}
+        ${orderedKeys.length===0?'<div class="empty"><div class="empty-icon">🧳</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין פריטים בסינון הנוכחי</div>נסו לבחור סינון אחר למעלה</div>':''}
+        ${allDone&&totalI>0?'<div class="celebrate"><div class="celebrate-emoji">🎉</div><div class="celebrate-txt">הכל ארוז! מוכנים להמריא</div></div>':''}
         ${orderedKeys.map((cat,ci)=>{
             const items=cats[cat];
             const cp=items.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
@@ -1260,14 +1299,14 @@ function renderPackingSection(){
                     <div class="pack-txt" onclick="togglePackItem(${r._row})">${esc(r['Item'])}</div>
                     <span class="pack-who ${packWhoClass(who)}">${packWhoLabel(who)}</span>
                     <div class="pack-actions">
-                        <button onclick="openPackSheet(${r._row})" title="ערוך">✏️</button>
-                        <button onclick="deletePackItem(${r._row},'${esc(r['Item']).replace(/'/g,"\\'")}')" title="מחק">🗑️</button>
+                        <button onclick="openPackSheet(${r._row})" title="עריכה">✏️</button>
+                        <button onclick="deletePackItem(${r._row},'${esc(r['Item']).replace(/'/g,"\\'")}')" title="מחיקה">🗑️</button>
                     </div>
                 </div>`;
             }).join('')}</div>`;
         }).join('')}
     </div>
-    <button class="fab" onclick="openPackSheet()">+</button>`;
+    <button class="fab" onclick="openPackSheet()" title="פריט חדש">+</button>`;
 }
 
 function setPackWho(w){currentPackWho=w;renderPackingSection();}
@@ -1312,20 +1351,20 @@ function openPackSheet(row){
             <button type="button" class="seg-btn ${packSelWho==='Dani'?'active':''}" onclick="pickPackWho(this,'Dani')">👩 דני</button>
             <button type="button" class="seg-btn ${packSelWho==='Shared'?'active':''}" onclick="pickPackWho(this,'Shared')">👫 משותף</button>
         </div>
-        <button type="button" class="btn-secondary ${packSelCrit?'':''}" id="pack-crit-btn" onclick="togglePackCrit()" style="background:${packSelCrit?'rgba(255,59,48,.1)':'var(--gray-6)'};color:${packSelCrit?'var(--red)':'var(--blue)'}">${packSelCrit?'🔴':'⚪'} ${packSelCrit?'פריט קריטי':'סמן כקריטי'}</button>
-        <button class="btn-primary" onclick="submitPackItem()">${isEdit?'שמור שינויים':'+ הוסף פריט'}</button>
-        ${isEdit?`<button class="btn-destructive" onclick="deletePackItem(${row},'${esc(name).replace(/'/g,"\\'")}');closeSheet()">מחק פריט</button>`:''}
+        <button type="button" class="btn-secondary ${packSelCrit?'':''}" id="pack-crit-btn" onclick="togglePackCrit()" style="background:${packSelCrit?'rgba(255,59,48,.1)':'var(--gray-6)'};color:${packSelCrit?'var(--red)':'var(--blue)'}">${packSelCrit?'🔴':'⚪'} ${packSelCrit?'פריט קריטי':'סימון כקריטי'}</button>
+        <button class="btn-primary" onclick="submitPackItem()">${isEdit?'שמירת שינויים':'+ הוספת פריט'}</button>
+        ${isEdit?`<button class="btn-destructive" onclick="deletePackItem(${row},'${esc(name).replace(/'/g,"\\'")}');closeSheet()">מחיקת פריט</button>`:''}
     `;
     openSheet(isEdit?'עריכת פריט':'פריט חדש',html);
     setTimeout(()=>{const i=document.getElementById('pack-name-inp');if(i&&!isEdit)i.focus();},250);
 }
 function pickPackCat(btn,id){packSelCat=id;document.querySelectorAll('#pack-cat-grid .cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 function pickPackWho(btn,w){packSelWho=w;document.querySelectorAll('#sheet-body .seg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function togglePackCrit(){packSelCrit=!packSelCrit;const btn=document.getElementById('pack-crit-btn');if(btn){btn.textContent=(packSelCrit?'🔴':'⚪')+' '+(packSelCrit?'פריט קריטי':'סמן כקריטי');btn.style.background=packSelCrit?'rgba(255,59,48,.1)':'var(--gray-6)';btn.style.color=packSelCrit?'var(--red)':'var(--blue)';}}
+function togglePackCrit(){packSelCrit=!packSelCrit;const btn=document.getElementById('pack-crit-btn');if(btn){btn.textContent=(packSelCrit?'🔴':'⚪')+' '+(packSelCrit?'פריט קריטי':'סימון כקריטי');btn.style.background=packSelCrit?'rgba(255,59,48,.1)':'var(--gray-6)';btn.style.color=packSelCrit?'var(--red)':'var(--blue)';}}
 
 async function submitPackItem(){
     const name=(document.getElementById('pack-name-inp')?.value||'').trim();
-    if(!name){showToast('יש להזין שם פריט','⚠️');return;}
+    if(!name){showToast('נדרש שם פריט','⚠️');return;}
     const who=packSelWho==='Dani'?'Dani':packSelWho;
     const critVal=packSelCrit?'TRUE':'FALSE';
     if(editPackRow){
@@ -1368,12 +1407,12 @@ async function deletePackItem(row,name){
 const CSYM={USD:'$',ILS:'₪',PHP:'₱'},CNAME={USD:'דולר',ILS:'שקל',PHP:'פזו'};
 function renderConverterSection(){
     const main=document.getElementById('main');
-    if(!exchangeRates){main.innerHTML='<div class="section"><div class="section-title">💱 המרת מטבעות</div><div class="loading"><div class="spinner"></div><div>טוען שערים...</div></div></div>';return;}
+    if(!exchangeRates){main.innerHTML='<div class="section"><div class="section-title">💱 המרת מטבעות</div><div class="loading"><div class="spinner"></div><div>טוענים שערים...</div></div></div>';return;}
     main.innerHTML=`<div class="section"><div class="section-title">💱 המרת מטבעות</div>
         <div class="conv-card">
             <div class="conv-display">
                 <div class="conv-amount" id="cv-amt-display">$0</div>
-                <div class="conv-label" id="cv-lbl">הכניסו סכום להמרה</div>
+                <div class="conv-label" id="cv-lbl">הזנת סכום להמרה</div>
             </div>
             <div class="conv-from">
                 <input type="number" class="conv-inp" id="cv-amt" placeholder="0" inputmode="decimal">
@@ -1401,7 +1440,7 @@ function updateQuickAmt(){
 function doConv(){
     const from=document.getElementById('cv-from').value,to=document.getElementById('cv-to').value,amt=parseFloat(document.getElementById('cv-amt').value);
     const o=document.getElementById('cv-out'),disp=document.getElementById('cv-amt-display'),lbl=document.getElementById('cv-lbl');
-    if(!amt||!exchangeRates){o.textContent='—';disp.textContent=CSYM[to]+'0';lbl.textContent='הכניסו סכום להמרה';return;}
+    if(!amt||!exchangeRates){o.textContent='—';disp.textContent=CSYM[to]+'0';lbl.textContent='הזנת סכום להמרה';return;}
     const res=(amt/exchangeRates[from])*exchangeRates[to];
     const resFmt=CSYM[to]+(Math.round(res*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
     o.textContent=resFmt;disp.textContent=resFmt;
@@ -1414,7 +1453,7 @@ function swapConv(){const f=document.getElementById('cv-from'),t=document.getEle
 function renderEmergencySection(){
     const main=document.getElementById('main');
     const data=DB.emergency;
-    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">🆘 חירום</div><div class="empty"><div class="empty-icon">🆘</div>לא נמצא מידע חירום</div></div>';return;}
+    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">🆘 חירום</div><div class="empty"><div class="empty-icon">🆘</div>אין מידע חירום כרגע</div></div>';return;}
     main.innerHTML='<div class="section"><div class="section-title">🆘 חירום</div>'+data.map(e=>`<div class="emg-card"><div class="emg-title">${esc(e['Name'])}</div>${e['Phone']?`<a href="tel:${esc(e['Phone'])}" class="emg-phone">📞 ${esc(e['Phone'])}</a>`:''}${e['Address']?`<div class="emg-info">${esc(e['Address'])}</div>`:''}${e['Notes']?`<div class="emg-info">${esc(e['Notes'])}</div>`:''}</div>`).join('')+'</div>';
 }
 
@@ -1430,7 +1469,7 @@ function renderLinksSection(){
 
     main.innerHTML=`<div class="section">
         <div class="section-title">🔗 קישורים</div>
-        ${all.length===0?'<div class="empty"><div class="empty-icon">🔗</div>אין קישורים עדיין<br>הוסיפו קישורים חשובים כמו<br>פוליסת ביטוח, אישורי הזמנות ומסמכי טיול</div>':''}
+        ${all.length===0?'<div class="empty"><div class="empty-icon">🔗</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין קישורים עדיין</div>פוליסת ביטוח, אישורי הזמנות,<br>מסמכי טיול - הכל בהישג יד</div>':''}
         ${Object.entries(groups).map(([icon,items])=>{
             const label=catLabel[icon]||'אחר';
             return`<div class="link-cat-hdr">${icon} ${esc(label)} · ${items.length}</div>
@@ -1441,13 +1480,13 @@ function renderLinksSection(){
                     ${l['Description']?`<div class="link-desc">${esc(l['Description'])}</div>`:''}
                 </div>
                 <div class="link-actions" onclick="event.stopPropagation()">
-                    <button onclick="openLinkSheet(${l._row})" title="ערוך">✏️</button>
-                    <button onclick="deleteLinkItem(${l._row},'${esc(l['Name']).replace(/'/g,"\\'")}')" title="מחק">🗑️</button>
+                    <button onclick="openLinkSheet(${l._row})" title="עריכה">✏️</button>
+                    <button onclick="deleteLinkItem(${l._row},'${esc(l['Name']).replace(/'/g,"\\'")}')" title="מחיקה">🗑️</button>
                 </div>
             </div>`).join('')}</div>`;
         }).join('')}
     </div>
-    <button class="fab" onclick="openLinkSheet()">+</button>`;
+    <button class="fab" onclick="openLinkSheet()" title="קישור חדש">+</button>`;
 }
 
 function openLinkSheet(row){
@@ -1457,12 +1496,12 @@ function openLinkSheet(row){
     linkSelIcon=l?(l['Icon']||'📦'):'📦';
     const html=`
         <input type="text" class="input" id="link-name-inp" placeholder="שם הקישור" value="${l?esc(l['Name']||''):''}" autocomplete="off" style="margin-bottom:10px">
-        <input type="url" class="input" id="link-url-inp" placeholder="הדביקו קישור..." value="${l?esc(l['URL']||''):''}" autocomplete="off" dir="ltr" style="margin-bottom:10px">
+        <input type="url" class="input" id="link-url-inp" placeholder="https://..." value="${l?esc(l['URL']||''):''}" autocomplete="off" dir="ltr" style="margin-bottom:10px">
         <input type="text" class="input" id="link-desc-inp" placeholder="תיאור קצר (אופציונלי)" value="${l?esc(l['Description']||''):''}" autocomplete="off">
         <div class="form-label">קטגוריה</div>
         <div class="cat-grid" id="link-cat-grid">${LINK_CATS.map(c=>`<button type="button" class="cat-btn ${linkSelIcon===c.id?'active':''}" onclick="pickLinkIcon(this,'${c.id}')"><span class="cat-ic">${c.id}</span>${c.label}</button>`).join('')}</div>
-        <button class="btn-primary" onclick="submitLink()">${isEdit?'שמור שינויים':'+ הוסף קישור'}</button>
-        ${isEdit?`<button class="btn-destructive" onclick="deleteLinkItem(${row},'${esc(l['Name']).replace(/'/g,"\\'")}');closeSheet()">מחק קישור</button>`:''}
+        <button class="btn-primary" onclick="submitLink()">${isEdit?'שמירת שינויים':'+ הוספת קישור'}</button>
+        ${isEdit?`<button class="btn-destructive" onclick="deleteLinkItem(${row},'${esc(l['Name']).replace(/'/g,"\\'")}');closeSheet()">מחיקת קישור</button>`:''}
     `;
     openSheet(isEdit?'עריכת קישור':'קישור חדש',html);
     setTimeout(()=>{const i=document.getElementById('link-name-inp');if(i&&!isEdit)i.focus();},250);
@@ -1473,7 +1512,7 @@ async function submitLink(){
     const name=(document.getElementById('link-name-inp')?.value||'').trim();
     const url=(document.getElementById('link-url-inp')?.value||'').trim();
     const desc=(document.getElementById('link-desc-inp')?.value||'').trim();
-    if(!name||!url){showToast('יש להזין שם וקישור','⚠️');return;}
+    if(!name||!url){showToast('נדרש שם וקישור','⚠️');return;}
     if(editLinkRow){
         const idx=editLinkRow-2;
         if(DB.links&&DB.links[idx]){
@@ -1511,9 +1550,9 @@ function openNoteSheet(destId){
             <button type="button" class="seg-btn" onclick="pickNoteCat(this,'Note')">📝 הערה</button>
         </div>
         <input type="text" class="input" id="note-title" placeholder="שם ההמלצה" style="margin-top:14px;margin-bottom:10px">
-        <input type="url" class="input" id="note-link" placeholder="קישור (Maps / אתר)" dir="ltr" style="margin-bottom:10px">
+        <input type="url" class="input" id="note-link" placeholder="קישור Maps או אתר" dir="ltr" style="margin-bottom:10px">
         <input type="text" class="input" id="note-desc" placeholder="תיאור קצר (אופציונלי)">
-        <button class="btn-primary" onclick="addNoteItem('${destId}')">+ הוסף המלצה</button>
+        <button class="btn-primary" onclick="addNoteItem('${destId}')">+ הוספת המלצה</button>
     `;
     openSheet('המלצה חדשה',html);
     setTimeout(()=>{const i=document.getElementById('note-title');if(i)i.focus();},250);
@@ -1542,13 +1581,18 @@ async function deleteNoteItem(row,destId){
 
 // ==================== SYNC & REFRESH ====================
 async function refreshData(showIndicator){
+    const refreshBtn=document.querySelector('.hdr-refresh');
+    if(showIndicator&&refreshBtn)refreshBtn.classList.add('refreshing');
     const success=await fetchAllData();
     if(success){
         if(currentView==='home')renderMarketplace();
         else if(currentView==='space')renderSpace(currentSpaceId);
         else if(currentView==='section')renderSection(currentSection);
     }
-    if(showIndicator)showToast('הנתונים עודכנו','↻');
+    if(showIndicator){
+        if(refreshBtn)setTimeout(()=>refreshBtn.classList.remove('refreshing'),400);
+        showToast('הנתונים עודכנו','↻');
+    }
     return success;
 }
 setInterval(()=>refreshData(false),60000);
@@ -1563,7 +1607,7 @@ async function fetchRates(){
 async function init(){
     const hadCache=loadCache();
     if(hadCache)renderMarketplace();
-    else document.getElementById('main').innerHTML='<div class="loading" style="padding-top:80px"><div class="spinner"></div><div>טוען את הטיול...</div></div>';
+    else document.getElementById('main').innerHTML='<div class="loading" style="padding-top:80px"><div class="spinner"></div><div>טוענים את הטיול...</div></div>';
     await Promise.all([fetchRates(),fetchWeather()]);
     const success=await fetchAllData();
     if(success||hadCache){renderApp();}
