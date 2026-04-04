@@ -249,6 +249,13 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-h
 .pack-edit-sel{padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:11px;background:var(--card);outline:none}
 .pack-edit-save{padding:8px 14px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
 .pack-edit-cancel{padding:8px 14px;background:var(--border);color:var(--text);border:none;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer}
+.pack-item.critical{border-right:3px solid var(--err)}
+.pack-critical-dot{font-size:10px;flex:0 0 auto;line-height:1}
+.pack-crit-toggle{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.pack-crit-toggle.active{border-color:var(--err);background:rgba(239,68,68,.06);color:var(--err);font-weight:600}
+.pack-cat-reorder{display:flex;gap:2px;margin-right:auto;margin-left:8px}
+.pack-cat-reorder button{background:none;border:none;font-size:10px;color:var(--text-m);cursor:pointer;padding:2px 4px;border-radius:4px;line-height:1;transition:color .15s}
+.pack-cat-reorder button:active{color:var(--pri)}
 /* ===== CONVERTER ===== */
 .conv-card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh);border:1px solid var(--border)}
 .conv-row{display:flex;gap:8px;margin-bottom:10px}
@@ -491,13 +498,15 @@ const ALL_CATS = [
 const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
 let expFilter = 'all', editExpIdx = null, selCat = 'אוכל', selWho = 'Both';
 let currentPackWho = 'all';
-let packSelCat = 'שונות', packSelWho = 'Shared', editPackRow = null;
+let packSelCat = 'שונות', packSelWho = 'Shared', packSelCrit = false, editPackRow = null;
 const PACK_CATS = [
     {id:'ביגוד',icon:'👕'},{id:'טואלטיקה',icon:'🧴'},{id:'אלקטרוניקה',icon:'🔌'},
-    {id:'מסמכים',icon:'📄'},{id:'תרופות',icon:'💊'},{id:'שונות',icon:'📦'}
+    {id:'מסמכים',icon:'📄'},{id:'תרופות',icon:'💊'},{id:'ציוד ספורט',icon:'🏄'},{id:'שונות',icon:'📦'}
 ];
 const PACK_CAT_MAP = {}; PACK_CATS.forEach(c=>PACK_CAT_MAP[c.id]=c);
 const collapsedCats = {};
+function getPackCatOrder(){try{return JSON.parse(localStorage.getItem('packing-category-order'))||null;}catch(e){return null;}}
+function savePackCatOrder(order){try{localStorage.setItem('packing-category-order',JSON.stringify(order));}catch(e){}}
 
 // ==================== CSV PARSER ====================
 function parseCSV(text) {
@@ -1049,7 +1058,17 @@ function delLocalTask(idx){const lt=JSON.parse(localStorage.getItem('ph-local-ta
 function packCatIcon(cat){const c=PACK_CAT_MAP[cat];return c?c.icon:'📦';}
 function packWhoLabel(w){return w==='Tom'?'Tom':w==='Dani'||w==='Daniella'?'Daniella':'משותף';}
 function packWhoClass(w){return w==='Tom'?'tom':w==='Dani'||w==='Daniella'?'dani':'shared';}
-function packWhoSheetVal(w){return w==='tom'?'Tom':w==='dani'?'Dani':'Shared';}
+function isCritical(r){return (r['Critical']||'').toUpperCase()==='TRUE';}
+
+function getOrderedCatKeys(catObj){
+    const saved=getPackCatOrder();
+    const keys=Object.keys(catObj);
+    if(!saved)return keys;
+    const ordered=[];
+    saved.forEach(k=>{if(keys.includes(k))ordered.push(k);});
+    keys.forEach(k=>{if(!ordered.includes(k))ordered.push(k);});
+    return ordered;
+}
 
 function renderPackingSection(){
     const main=document.getElementById('main');
@@ -1060,19 +1079,26 @@ function renderPackingSection(){
     const all=data.map((r,i)=>({...r,_row:i+2}));
     const totalI=all.length, packedI=all.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
 
-    // count per who tab
-    const tomC=all.filter(r=>r['Who']==='Tom').length, daniC=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella').length, sharedC=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella').length;
+    // counts
+    const tomC=all.filter(r=>r['Who']==='Tom').length;
+    const daniC=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella').length;
+    const sharedC=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella').length;
+    const critC=all.filter(r=>isCritical(r)).length;
 
     // filter
     let filtered=all;
     if(currentPackWho==='tom') filtered=all.filter(r=>r['Who']==='Tom');
     else if(currentPackWho==='dani') filtered=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella');
     else if(currentPackWho==='shared') filtered=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella');
+    else if(currentPackWho==='critical') filtered=all.filter(r=>isCritical(r));
 
-    // group by category (preserve PACK_CATS order, then extras)
+    // group by category
     const cats={};
     PACK_CATS.forEach(c=>{const items=filtered.filter(r=>(r['Category']||'שונות')===c.id);if(items.length)cats[c.id]=items;});
     filtered.forEach(r=>{const c=r['Category']||'שונות';if(!PACK_CAT_MAP[c]){if(!cats[c])cats[c]=[];cats[c].push(r);}});
+
+    // apply saved order
+    const orderedKeys=getOrderedCatKeys(cats);
 
     // summary
     const allDone=totalI>0&&packedI===totalI;
@@ -1093,6 +1119,7 @@ function renderPackingSection(){
                 <button class="pack-sel-btn ${packSelWho==='Tom'?'active':''}" onclick="packSelWho='Tom';renderPackingSection()">👨 Tom</button>
                 <button class="pack-sel-btn ${packSelWho==='Dani'?'active':''}" onclick="packSelWho='Dani';renderPackingSection()">👩 Daniella</button>
                 <button class="pack-sel-btn ${packSelWho==='Shared'?'active':''}" onclick="packSelWho='Shared';renderPackingSection()">👫 משותף</button>
+                <button class="pack-crit-toggle ${packSelCrit?'active':''}" onclick="packSelCrit=!packSelCrit;renderPackingSection()">⚠️ קריטי</button>
             </div>
         </div>
 
@@ -1101,35 +1128,45 @@ function renderPackingSection(){
             <button class="pack-tab ${currentPackWho==='tom'?'active':''}" onclick="setPackWho('tom')">👨 Tom (${tomC})</button>
             <button class="pack-tab ${currentPackWho==='dani'?'active':''}" onclick="setPackWho('dani')">👩 Daniella (${daniC})</button>
             <button class="pack-tab ${currentPackWho==='shared'?'active':''}" onclick="setPackWho('shared')">👫 משותף (${sharedC})</button>
+            <button class="pack-tab ${currentPackWho==='critical'?'active':''}" onclick="setPackWho('critical')">🔴 קריטי (${critC})</button>
         </div>
 
-        ${Object.keys(cats).length===0?'<div class="empty">אין פריטים בסינון הנוכחי</div>':''}
-        ${Object.entries(cats).map(([cat,items])=>{
+        ${orderedKeys.length===0?'<div class="empty">אין פריטים בסינון הנוכחי</div>':''}
+        ${orderedKeys.map((cat,ci)=>{
+            const items=cats[cat];
             const cp=items.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
             const icon=packCatIcon(cat);
             const isCollapsed=!!collapsedCats[cat];
-            return`<div class="pack-cat-hdr ${isCollapsed?'collapsed':''}" onclick="togglePackCat('${esc(cat)}')">
-                <h3>${icon} ${esc(cat)} — <span style="font-weight:400;color:var(--text-l)">${cp}/${items.length}</span></h3>
-                <span class="chevron">▼</span>
+            return`<div class="pack-cat-hdr ${isCollapsed?'collapsed':''}">
+                <h3 onclick="togglePackCat('${esc(cat)}')">${icon} ${esc(cat)} — <span style="font-weight:400;color:var(--text-l)">${cp}/${items.length}</span></h3>
+                <div class="pack-cat-reorder">
+                    <button onclick="event.stopPropagation();movePackCat('${esc(cat)}',-1)" title="הזז למעלה" ${ci===0?'disabled style="opacity:.2"':''}>▲</button>
+                    <button onclick="event.stopPropagation();movePackCat('${esc(cat)}',1)" title="הזז למטה" ${ci===orderedKeys.length-1?'disabled style="opacity:.2"':''}>▼</button>
+                </div>
+                <span class="chevron" onclick="togglePackCat('${esc(cat)}')">▼</span>
             </div>
             <div class="pack-cat-items ${isCollapsed?'collapsed':''}">${items.map(r=>{
                 const done=(r['Packed']||'').toUpperCase()==='TRUE';
                 const who=r['Who']||'Shared';
+                const crit=isCritical(r);
                 const isEditing=editPackRow===r._row;
                 if(isEditing){
                     return`<div class="pack-edit-row" id="pack-edit-${r._row}">
                         <input class="pack-edit-inp" id="pe-name-${r._row}" value="${esc(r['Item'])}">
                         <select class="pack-edit-sel" id="pe-cat-${r._row}">${PACK_CATS.map(c=>`<option value="${c.id}" ${(r['Category']||'שונות')===c.id?'selected':''}>${c.icon} ${c.id}</option>`).join('')}</select>
                         <select class="pack-edit-sel" id="pe-who-${r._row}"><option value="Tom" ${who==='Tom'?'selected':''}>👨 Tom</option><option value="Dani" ${who==='Dani'||who==='Daniella'?'selected':''}>👩 Daniella</option><option value="Shared" ${who!=='Tom'&&who!=='Dani'&&who!=='Daniella'?'selected':''}>👫 משותף</option></select>
+                        <button class="pack-crit-toggle ${crit?'active':''}" id="pe-crit-${r._row}" onclick="this.classList.toggle('active')">⚠️ קריטי</button>
                         <button class="pack-edit-save" onclick="savePackEdit(${r._row})">שמור</button>
                         <button class="pack-edit-cancel" onclick="editPackRow=null;renderPackingSection()">ביטול</button>
                     </div>`;
                 }
-                return`<div class="pack-item ${done?'done':''}" id="pack-row-${r._row}">
+                return`<div class="pack-item ${done?'done':''} ${crit?'critical':''}" id="pack-row-${r._row}">
                     <div class="pack-chk" onclick="togglePackItem(${r._row})"></div>
+                    ${crit?'<span class="pack-critical-dot">🔴</span>':''}
                     <div class="pack-txt" onclick="togglePackItem(${r._row})">${esc(r['Item'])}</div>
                     <span class="pack-who-badge ${packWhoClass(who)}">${packWhoLabel(who)}</span>
                     <div class="pack-item-actions">
+                        <button class="pack-act-btn" onclick="toggleCriticalItem(${r._row})" title="${crit?'הסר קריטי':'סמן קריטי'}">${crit?'🔴':'⚪'}</button>
                         <button class="pack-act-btn" onclick="startEditPack(${r._row})" title="ערוך">✏️</button>
                         <button class="pack-act-btn" onclick="deletePackItem(${r._row},'${esc(r['Item'])}')" title="מחק">🗑️</button>
                     </div>
@@ -1137,29 +1174,50 @@ function renderPackingSection(){
             }).join('')}</div>`;
         }).join('')}
     </div>`;
-    // focus input if no items (inviting feel)
     const inp=document.getElementById('pack-inp');
     if(inp && !data.length) inp.focus();
-    // enter key to add
     if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')addPackItem();});
 }
 
 function setPackWho(w){currentPackWho=w;renderPackingSection();}
 function togglePackCat(cat){collapsedCats[cat]=!collapsedCats[cat];renderPackingSection();}
 
+function movePackCat(cat,dir){
+    const saved=getPackCatOrder();
+    // build current order from rendered keys
+    const data=DB.packing||[];
+    const all=data.map((r,i)=>({...r,_row:i+2}));
+    let filtered=all;
+    if(currentPackWho==='tom') filtered=all.filter(r=>r['Who']==='Tom');
+    else if(currentPackWho==='dani') filtered=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella');
+    else if(currentPackWho==='shared') filtered=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella');
+    else if(currentPackWho==='critical') filtered=all.filter(r=>isCritical(r));
+    const cats={};
+    PACK_CATS.forEach(c=>{if(filtered.some(r=>(r['Category']||'שונות')===c.id))cats[c.id]=true;});
+    filtered.forEach(r=>{const c=r['Category']||'שונות';if(!PACK_CAT_MAP[c])cats[c]=true;});
+    const keys=getOrderedCatKeys(cats);
+    const idx=keys.indexOf(cat);
+    if(idx<0)return;
+    const swapIdx=idx+dir;
+    if(swapIdx<0||swapIdx>=keys.length)return;
+    [keys[idx],keys[swapIdx]]=[keys[swapIdx],keys[idx]];
+    savePackCatOrder(keys);
+    renderPackingSection();
+}
+
 async function addPackItem(){
     const inp=document.getElementById('pack-inp');
     const name=(inp?inp.value:'').trim();
     if(!name){inp&&inp.focus();return;}
-    // optimistic
+    const who=packSelWho==='Dani'?'Dani':packSelWho;
+    const critVal=packSelCrit?'TRUE':'FALSE';
     if(!DB.packing)DB.packing=[];
-    DB.packing.push({Item:name,Category:packSelCat,Packed:'FALSE',Who:packSelWho==='Dani'?'Dani':packSelWho});
+    DB.packing.push({Item:name,Category:packSelCat,Packed:'FALSE',Who:who,Critical:critVal});
     setCooldown('packing');saveCache();
     renderPackingSection();
     showToast('פריט נוסף ✓');
-    // highlight new item
-    setTimeout(()=>{const items=document.querySelectorAll('.pack-item');if(items.length){const last=items[items.length-1];last.classList.add('new-item');}},50);
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addPackingItem',data:{Item:name,Category:packSelCat,Who:packSelWho==='Dani'?'Dani':packSelWho}})});}catch(e){}
+    setTimeout(()=>{const items=document.querySelectorAll('.pack-item');if(items.length){items[items.length-1].classList.add('new-item');}},50);
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addPackingItem',data:{Item:name,Category:packSelCat,Who:who,Critical:critVal}})});}catch(e){}
 }
 
 async function togglePackItem(row){
@@ -1170,25 +1228,35 @@ async function togglePackItem(row){
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'togglePacking',data:{row}})});}catch(e){}
 }
 
+async function toggleCriticalItem(row){
+    const idx=row-2;if(DB.packing&&DB.packing[idx]){
+        const cur=isCritical(DB.packing[idx]);DB.packing[idx]['Critical']=cur?'FALSE':'TRUE';
+        setCooldown('packing');renderPackingSection();saveCache();
+    }
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'toggleCritical',data:{row}})});}catch(e){}
+}
+
 function startEditPack(row){editPackRow=row;renderPackingSection();const inp=document.getElementById('pe-name-'+row);if(inp)inp.focus();}
 
 async function savePackEdit(row){
     const name=(document.getElementById('pe-name-'+row)?.value||'').trim();
     const cat=document.getElementById('pe-cat-'+row)?.value||'שונות';
     const who=document.getElementById('pe-who-'+row)?.value||'Shared';
+    const critEl=document.getElementById('pe-crit-'+row);
+    const crit=critEl?critEl.classList.contains('active'):false;
     if(!name){showToast('יש להזין שם פריט');return;}
     const idx=row-2;
     if(DB.packing&&DB.packing[idx]){
         DB.packing[idx]['Item']=name;DB.packing[idx]['Category']=cat;DB.packing[idx]['Who']=who;
+        DB.packing[idx]['Critical']=crit?'TRUE':'FALSE';
         setCooldown('packing');saveCache();
     }
     editPackRow=null;renderPackingSection();showToast('פריט עודכן ✓');
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editPackingItem',data:{row,Item:name,Category:cat,Who:who}})});}catch(e){}
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editPackingItem',data:{row,Item:name,Category:cat,Who:who,Critical:crit}})});}catch(e){}
 }
 
 async function deletePackItem(row,name){
     if(!confirm(`למחוק את "${name}"?`))return;
-    // animate out
     const el=document.getElementById('pack-row-'+row);
     if(el){el.classList.add('removing');await new Promise(r=>setTimeout(r,300));}
     const idx=row-2;

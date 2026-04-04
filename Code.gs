@@ -5,6 +5,9 @@
  * A=Date, B=Description, C=Amount, D=Currency, E=Category, F=Who,
  * G=Type, H=ILS_Amount, I=USD_Amount, J=PHP_Amount, K=Exchange_Rate, L=Origin_Cur
  *
+ * PACKING SHEET COLUMNS (A-E):
+ * A=Item, B=Category, C=Packed, D=Who, E=Critical
+ *
  * DESTINATION_NOTES SHEET COLUMNS (A-G):
  * A=ID, B=DestinationID, C=Category, D=Title, E=Link, F=Description, G=Done
  *
@@ -26,6 +29,7 @@ function doPost(e) {
       case 'addPackingItem': return addPackingItem(data);
       case 'editPackingItem': return editPackingItem(data);
       case 'deletePackingItem': return deletePackingItem(data);
+      case 'toggleCritical': return toggleCritical(data);
       case 'addNote': return addNote(data);
       case 'toggleNote': return toggleNote(data);
       case 'deleteNote': return deleteNote(data);
@@ -129,6 +133,7 @@ function addPackingItem(data) {
     data.Category || 'שונות',
     'FALSE',
     data.Who || 'Shared',
+    data.Critical || 'FALSE',
   ];
   sheet.appendRow(row);
   return jsonResponse({ success: true, message: 'Packing item added' });
@@ -143,6 +148,9 @@ function editPackingItem(data) {
   sheet.getRange(row, 1).setValue(data.Item || '');
   sheet.getRange(row, 2).setValue(data.Category || 'שונות');
   sheet.getRange(row, 4).setValue(data.Who || 'Shared');
+  if (data.Critical !== undefined) {
+    sheet.getRange(row, 5).setValue(data.Critical ? 'TRUE' : 'FALSE');
+  }
   return jsonResponse({ success: true, message: 'Packing item updated', row: row });
 }
 
@@ -154,6 +162,17 @@ function deletePackingItem(data) {
   if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
   sheet.deleteRow(row);
   return jsonResponse({ success: true, message: 'Packing item deleted', row: row });
+}
+
+function toggleCritical(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('packing');
+  if (!sheet) return jsonResponse({ error: 'Sheet "packing" not found' }, 404);
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+  const currentValue = String(sheet.getRange(row, 5).getValue()).toUpperCase();
+  sheet.getRange(row, 5).setValue(currentValue === 'TRUE' ? 'FALSE' : 'TRUE');
+  return jsonResponse({ success: true, row: row });
 }
 
 // ========== DESTINATION NOTES ==========
