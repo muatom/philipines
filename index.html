@@ -2,397 +2,458 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F2F2F7">
 <title>הפיליפינים 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--pri:#0d9488;--pri-d:#0f766e;--pri-l:#5eead4;--acc:#f97316;--acc-l:#fdba74;--bg:#f5f5f4;--card:#fff;--text:#1c1917;--text-l:#78716c;--text-m:#a8a29e;--border:#e7e5e4;--ok:#10b981;--err:#ef4444;--warn:#f59e0b;--sh:0 1px 3px rgba(0,0,0,.08);--sh-md:0 4px 12px rgba(0,0,0,.08);--sh-lg:0 8px 24px rgba(0,0,0,.12);--r:16px;--rs:10px;--hdr:56px;--nav:64px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-/* ===== APP HEADER ===== */
-.app-hdr{position:fixed;top:0;left:0;right:0;height:var(--hdr);background:var(--card);display:flex;align-items:center;padding:0 16px;z-index:50;border-bottom:1px solid var(--border);gap:12px}
-.hdr-back{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;color:var(--text);display:none;font-family:inherit;line-height:1}
-.hdr-title{flex:1;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hdr-menu{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;color:var(--text)}
-.hdr-refresh{background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:var(--text-l)}
-/* ===== MAIN ===== */
-.main{padding-top:var(--hdr);padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom));min-height:100vh;transition:opacity .15s ease}
-.main.fading{opacity:0}
-/* ===== BOTTOM NAV ===== */
-.bnav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);padding-bottom:env(safe-area-inset-bottom);background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:50;box-shadow:0 -2px 8px rgba(0,0,0,.04)}
-.bnav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border:none;background:none;font-family:inherit;font-size:10px;color:var(--text-l);cursor:pointer;border-radius:var(--rs);transition:.2s;min-width:48px}
-.bnav-item .bi{font-size:22px;line-height:1}
-.bnav-item.active{color:var(--pri);background:rgba(13,148,136,.06)}
-/* ===== SIDEBAR ===== */
-.sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px)}
-.sb-overlay.open{opacity:1;pointer-events:auto}
-.sidebar{position:fixed;top:0;right:-280px;width:280px;height:100%;background:var(--card);z-index:100;transition:right .3s cubic-bezier(.4,0,.2,1);box-shadow:var(--sh-lg);display:flex;flex-direction:column}
-.sidebar.open{right:0}
-.sb-hdr{padding:24px 20px 16px;background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff}
-.sb-hdr h2{font-size:18px;font-weight:700}
-.sb-hdr p{font-size:12px;opacity:.8;margin-top:2px}
-.sb-items{flex:1;overflow-y:auto;padding:8px 0}
-.sb-item{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;font-family:inherit;text-align:right}
-.sb-item:active{background:rgba(13,148,136,.06)}
-.sb-item .si{font-size:20px;width:28px;text-align:center}
-.sb-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-/* ===== MARKETPLACE ===== */
-.mk-countdown{text-align:center;padding:12px 16px;font-size:13px;color:var(--pri-d);font-weight:600;background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(13,148,136,.02))}
-.mk-hero{margin:12px 16px;border-radius:var(--r);overflow:hidden;position:relative;height:220px;cursor:pointer;box-shadow:var(--sh-md)}
-.mk-hero-img{width:100%;height:100%;object-fit:cover}
-.mk-hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
-.mk-hero-badge{display:inline-flex;align-items:center;gap:4px;background:var(--acc);color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-bottom:8px;align-self:flex-start}
-.mk-hero-name{font-size:28px;font-weight:800;color:#fff}
-.mk-hero-dates{font-size:13px;color:rgba(255,255,255,.85);margin-top:2px}
-.mk-hero-weather{font-size:13px;color:rgba(255,255,255,.9);margin-top:4px}
-.mk-hero-cta{font-size:12px;color:var(--pri-l);font-weight:600;margin-top:8px}
-.mk-section-title{font-size:15px;font-weight:700;padding:16px 16px 10px;color:var(--text)}
-.mk-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 16px 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.mk-scroll::-webkit-scrollbar{display:none}
-.mk-card{flex:0 0 140px;height:180px;border-radius:var(--rs);overflow:hidden;position:relative;cursor:pointer;box-shadow:var(--sh)}
-.mk-card-img{width:100%;height:100%;object-fit:cover}
-.mk-card-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,.05) 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px}
-.mk-card-name{font-size:15px;font-weight:700;color:#fff}
-.mk-card-dates{font-size:10px;color:rgba(255,255,255,.8);margin-top:2px}
-.mk-card-weather{font-size:11px;color:rgba(255,255,255,.9);margin-top:3px}
-.mk-card.current{outline:2px solid var(--acc);outline-offset:2px}
-.mk-budget{margin:0 16px 16px;background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--sh);border:1px solid var(--border)}
-.mk-budget-title{font-size:13px;font-weight:600;color:var(--text-l);margin-bottom:10px}
-.mk-budget-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.mk-budget-stat{text-align:center}
-.mk-budget-val{font-size:17px;font-weight:700}
-.mk-budget-lbl{font-size:10px;color:var(--text-l);margin-top:2px}
-/* ===== DESTINATION SPACE ===== */
-.sp-banner{position:relative;height:200px;overflow:hidden}
-.sp-banner-img{width:100%;height:100%;object-fit:cover}
-.sp-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6) 0%,rgba(0,0,0,.1) 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
-.sp-banner-name{font-size:28px;font-weight:800;color:#fff}
-.sp-banner-info{font-size:13px;color:rgba(255,255,255,.85);margin-top:4px}
-.sp-banner-weather{font-size:14px;color:#fff;margin-top:6px}
-.sp-section{padding:16px}
-.sp-section-title{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-/* ===== GENERIC CARDS & LISTS ===== */
-.g-card{background:var(--card);border-radius:var(--rs);padding:14px;margin-bottom:8px;box-shadow:var(--sh);border:1px solid var(--border)}
-.g-card-title{font-size:14px;font-weight:600}
-.g-card-sub{font-size:12px;color:var(--text-l);margin-top:2px}
-.g-card-meta{display:flex;gap:8px;margin-top:8px;font-size:11px;color:var(--text-l)}
-.g-card-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
-.section-view{padding:16px}
-.section-view-title{font-size:20px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-/* ===== FLIGHT CARD ===== */
-.fl-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh);border:1px solid var(--border)}
-.fl-route{display:flex;align-items:center;justify-content:space-between;margin:10px 0}
-.fl-point{text-align:center}
-.fl-code{font-size:24px;font-weight:800}
-.fl-time{font-size:13px;font-weight:600;color:var(--pri-d);margin-top:2px}
-.fl-line{flex:1;display:flex;align-items:center;justify-content:center;padding:0 12px;position:relative}
-.fl-line::before{content:'';position:absolute;top:50%;left:12px;right:12px;height:2px;background:linear-gradient(to left,var(--pri),var(--border));border-radius:1px}
-.fl-line .plane{font-size:18px;position:relative;z-index:1;background:var(--card);padding:0 4px;transform:scaleX(-1)}
-.fl-details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:10px;border-top:1px solid var(--border);margin-top:8px}
-.fl-detail{text-align:center}
-.fl-detail-lbl{font-size:10px;color:var(--text-l);text-transform:uppercase}
-.fl-detail-val{font-size:13px;font-weight:600;margin-top:1px}
-/* ===== HOTEL CARD ===== */
-.ht-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh);border:1px solid var(--border)}
-.ht-dates{display:flex;gap:10px;margin:10px 0}
-.ht-date{flex:1;background:var(--bg);border-radius:var(--rs);padding:8px 10px;text-align:center}
-.ht-date-lbl{font-size:10px;color:var(--text-l)}
-.ht-date-val{font-size:13px;font-weight:600;margin-top:2px}
-.ht-link{display:inline-flex;align-items:center;gap:4px;color:var(--pri);font-size:12px;font-weight:500;text-decoration:none;padding:6px 12px;background:rgba(13,148,136,.06);border-radius:8px;margin-top:6px}
-/* ===== NOTES (DANI'S PICKS) ===== */
-.note-card{display:flex;align-items:flex-start;gap:10px;background:var(--card);border-radius:var(--rs);padding:12px 14px;margin-bottom:6px;border:1px solid var(--border);box-shadow:var(--sh)}
-.note-check{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;flex:0 0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;margin-top:2px}
-.note-card.done .note-check{background:var(--ok);border-color:var(--ok)}
-.note-card.done .note-check::after{content:'';width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
-.note-card.done .note-info{opacity:.45;text-decoration:line-through}
-.note-icon{font-size:20px;flex:0 0 auto}
-.note-info{flex:1;min-width:0}
-.note-title{font-size:13px;font-weight:600}
-.note-title a{color:var(--pri);text-decoration:none}
-.note-desc{font-size:11px;color:var(--text-l);margin-top:2px}
-.note-del{background:none;border:none;color:var(--text-m);font-size:16px;cursor:pointer;padding:2px;opacity:.5}
-.note-del:active{opacity:1;color:var(--err)}
-/* ===== BUDGET SECTION ===== */
-.bgt-progress{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--border)}
-.bgt-progress-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.bgt-progress-title{font-size:13px;font-weight:600;color:var(--text-l)}
-.bgt-gear{background:none;border:none;font-size:16px;cursor:pointer;padding:2px}
-.bgt-amounts{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
-.bgt-spent{font-size:26px;font-weight:800}
-.bgt-limit{font-size:13px;color:var(--text-l)}
-.bgt-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
-.bgt-fill{height:100%;border-radius:4px;transition:width .4s}
-.bgt-fill.g{background:linear-gradient(90deg,#10b981,#34d399)}.bgt-fill.o{background:linear-gradient(90deg,#f59e0b,#fbbf24)}.bgt-fill.r{background:linear-gradient(90deg,#ef4444,#f87171)}
-.bgt-pct{font-size:11px;color:var(--text-l);text-align:left;margin-top:4px}
-.bgt-warn{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rs);padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--err);font-weight:600;text-align:center;display:none}
-.bgt-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
-.bgt-sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center}
-.bgt-sum-lbl{font-size:10px;color:var(--text-l);margin-bottom:3px}
-.bgt-sum-val{font-size:16px;font-weight:700}
-.bgt-sum-sub{font-size:10px;color:var(--text-l);margin-top:2px}
-.bgt-chart{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px}
-.bgt-chart-title{font-size:12px;color:var(--text-l);font-weight:600;margin-bottom:8px}
-.bgt-chart-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--border);margin-bottom:8px}
-.bgt-chart-seg{height:100%;min-width:2px}
-.bgt-chart-legend{display:flex;flex-wrap:wrap;gap:4px 12px}
-.bgt-chart-item{display:flex;align-items:center;gap:4px;font-size:10px}
-.bgt-chart-dot{width:7px;height:7px;border-radius:50%}
-/* ===== FORM COMPONENTS ===== */
-.frm-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
-.frm-title{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
-.frm-cancel{background:none;border:none;color:var(--err);font-size:12px;cursor:pointer;font-family:inherit;display:none}
-.frm-row{display:flex;gap:8px;margin-bottom:8px}
-.frm-row input,.frm-row select{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl;transition:border-color .2s;min-width:0}
-.frm-row input:focus,.frm-row select:focus{border-color:var(--pri)}
-.frm-row .amt{font-size:18px;font-weight:600;text-align:center;flex:1.5}
-.frm-row .cur{flex:0 0 85px;font-weight:600;text-align:center}
-.frm-row .dt{flex:0 0 135px;direction:ltr}
-.frm-conv{font-size:11px;color:var(--text-l);text-align:center;padding:2px 0 6px;min-height:16px}
-.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
-.cat-btn{padding:7px 4px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card);font-family:inherit;font-size:10px;cursor:pointer;text-align:center;transition:.15s;display:flex;flex-direction:column;align-items:center;gap:1px}
-.cat-btn.active{border-color:var(--pri);background:rgba(13,148,136,.05);color:var(--pri);font-weight:600}
-.cat-btn .ci{font-size:16px}
-.who-row{display:flex;gap:6px;margin-bottom:10px}
-.who-btn{flex:1;padding:8px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;text-align:center;transition:.15s;color:var(--text-l)}
-.who-btn.active{border-color:var(--pri);background:rgba(13,148,136,.05);color:var(--pri);font-weight:600}
-.submit-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
-.submit-btn:active{opacity:.9}
-.submit-btn.editing{background:linear-gradient(135deg,var(--acc),var(--acc-l))}
-/* ===== EXPENSE CARD ===== */
-.exp-card{background:var(--card);border-radius:var(--rs);margin-bottom:6px;border:1px solid var(--border);overflow:hidden}
-.exp-card.pre{border-right:3px solid var(--pri)}
-.exp-main{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}
-.exp-icon{font-size:18px;width:34px;height:34px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.exp-info{flex:1;min-width:0}
-.exp-desc{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.exp-meta{font-size:10px;color:var(--text-l);margin-top:1px;display:flex;gap:4px}
-.exp-tag{font-size:9px;padding:1px 5px;border-radius:4px;font-weight:600;background:rgba(13,148,136,.08);color:var(--pri)}
-.exp-amounts{text-align:left}
-.exp-primary{font-size:14px;font-weight:700;white-space:nowrap}
-.exp-secondary{font-size:9px;color:var(--text-l);white-space:nowrap}
-.exp-detail{display:none;padding:0 14px 10px;border-top:1px dashed var(--border)}
-.exp-detail.open{display:block;padding-top:8px}
-.exp-currencies{display:flex;gap:10px;margin-bottom:8px;direction:ltr}
-.exp-curr{text-align:center;flex:1}
-.exp-curr-val{font-size:13px;font-weight:600}
-.exp-curr-lbl{font-size:9px;color:var(--text-l)}
-.exp-actions{display:flex;gap:6px}
-.exp-actions button{flex:1;padding:7px;border:1px solid var(--border);border-radius:6px;background:var(--card);font-family:inherit;font-size:11px;cursor:pointer}
-/* ===== FILTER PILLS ===== */
-.filters{display:flex;gap:5px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.filters::-webkit-scrollbar{display:none}
-.fil-btn{flex:0 0 auto;padding:5px 10px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);font-family:inherit;font-size:11px;font-weight:500;color:var(--text-l);cursor:pointer;transition:.2s;white-space:nowrap}
-.fil-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
-/* ===== TASKS ===== */
-.todo-wrap{display:flex;gap:8px;margin-bottom:14px}
-.todo-inp{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl}
-.todo-inp:focus{border-color:var(--pri)}
-.todo-add{padding:11px 16px;background:var(--pri);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
-.todo-prog{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:12px;color:var(--text-l)}
-.todo-bar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.todo-bar-fill{height:100%;background:linear-gradient(to left,var(--ok),#34d399);border-radius:3px;transition:width .3s}
-.todo-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--rs);margin-bottom:6px;border:1px solid var(--border)}
-.todo-item.done{opacity:.45}
-.todo-item.done .todo-text{text-decoration:line-through}
-.todo-chk{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto;transition:.2s;background:var(--card)}
-.todo-item.done .todo-chk{background:var(--ok);border-color:var(--ok)}
-.todo-chk::after{content:'';display:none;width:5px;height:9px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
-.todo-item.done .todo-chk::after{display:block}
-.todo-text{flex:1;font-size:13px}
-.todo-due{font-size:10px;color:var(--text-l)}.todo-due.overdue{color:var(--err);font-weight:600}
-.todo-del{background:none;border:none;color:var(--text-m);font-size:16px;cursor:pointer;padding:2px;opacity:.4}
-/* ===== PACKING ===== */
-.pack-summary{text-align:center;padding:12px;font-size:14px;font-weight:600;color:var(--pri-d);background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(13,148,136,.02));border-radius:var(--rs);margin-bottom:12px}
-.pack-summary.done{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(16,185,129,.02));color:var(--ok)}
-.pack-add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px}
-.pack-add-row{display:flex;gap:8px;margin-bottom:10px}
-.pack-add-inp{flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:14px;background:var(--card);outline:none;direction:rtl;min-width:0}
-.pack-add-inp:focus{border-color:var(--pri)}
-.pack-add-btn{padding:12px 18px;background:linear-gradient(135deg,var(--ok),#34d399);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
-.pack-add-btn:active{opacity:.85}
-.pack-sel-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
-.pack-sel-btn{padding:6px 8px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:10px;cursor:pointer;text-align:center;transition:.15s;display:flex;align-items:center;gap:3px;white-space:nowrap}
-.pack-sel-btn.active{border-color:var(--pri);background:rgba(13,148,136,.06);color:var(--pri);font-weight:600}
-.pack-sel-label{font-size:10px;color:var(--text-l);font-weight:600;margin-bottom:4px}
-.pack-tabs{display:flex;gap:3px;margin-bottom:14px;background:var(--border);border-radius:10px;padding:3px}
-.pack-tab{flex:1;padding:8px 4px;border:none;border-radius:8px;background:none;font-family:inherit;font-size:11px;font-weight:500;color:var(--text-l);cursor:pointer;transition:.2s;white-space:nowrap}
-.pack-tab.active{background:var(--card);color:var(--text);box-shadow:var(--sh);font-weight:600}
-.pack-cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border-radius:var(--rs) var(--rs) 0 0;border:1px solid var(--border);border-bottom:none;cursor:pointer}
-.pack-cat-hdr h3{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
-.pack-cat-cnt{font-size:11px;color:var(--text-l);background:var(--bg);padding:2px 8px;border-radius:8px}
-.pack-cat-hdr .chevron{font-size:12px;color:var(--text-l);transition:transform .2s}
-.pack-cat-hdr.collapsed .chevron{transform:rotate(-90deg)}
-.pack-cat-items{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--rs) var(--rs);overflow:hidden;margin-bottom:10px;transition:max-height .25s ease}
-.pack-cat-items.collapsed{max-height:0 !important;border:none;margin-bottom:0}
-.pack-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;position:relative;transition:opacity .2s,background .15s}
-.pack-item:last-child{border-bottom:none}
-.pack-item.done{opacity:.45}
-.pack-item.done .pack-txt{text-decoration:line-through}
-.pack-item.removing{opacity:0;transform:translateX(-40px);transition:all .3s ease}
-.pack-item.new-item{animation:packSlideIn .3s ease}
-@keyframes packSlideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.pack-chk{width:22px;height:22px;border:2px solid var(--border);border-radius:5px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:.2s;cursor:pointer}
-.pack-item.done .pack-chk{background:var(--ok);border-color:var(--ok)}
-.pack-item.done .pack-chk::after{content:'';width:5px;height:9px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
-.pack-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pack-who-badge{font-size:9px;padding:2px 6px;border-radius:6px;font-weight:600;flex:0 0 auto;white-space:nowrap}
-.pack-who-badge.tom{background:rgba(59,130,246,.1);color:#3b82f6}
-.pack-who-badge.dani{background:rgba(236,72,153,.1);color:#ec4899}
-.pack-who-badge.shared{background:rgba(139,92,246,.1);color:#8b5cf6}
-.pack-item-actions{display:flex;gap:4px;flex:0 0 auto}
-.pack-act-btn{background:none;border:none;font-size:15px;cursor:pointer;padding:4px;border-radius:6px;transition:background .15s;line-height:1}
-.pack-act-btn:active{background:var(--border)}
-.pack-edit-row{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;background:rgba(13,148,136,.03);border-bottom:1px solid var(--border)}
-.pack-edit-inp{flex:1;min-width:120px;padding:8px 10px;border:1.5px solid var(--pri);border-radius:8px;font-family:inherit;font-size:13px;outline:none;direction:rtl;background:var(--card)}
-.pack-edit-sel{padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:11px;background:var(--card);outline:none}
-.pack-edit-save{padding:8px 14px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
-.pack-edit-cancel{padding:8px 14px;background:var(--border);color:var(--text);border:none;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer}
-.pack-item.critical{border-right:3px solid var(--err)}
-.pack-critical-dot{font-size:10px;flex:0 0 auto;line-height:1}
-.pack-crit-toggle{padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.pack-crit-toggle.active{border-color:var(--err);background:rgba(239,68,68,.06);color:var(--err);font-weight:600}
-.pack-cat-reorder{display:flex;gap:2px;margin-right:auto;margin-left:8px}
-.pack-cat-reorder button{background:none;border:none;font-size:10px;color:var(--text-m);cursor:pointer;padding:2px 4px;border-radius:4px;line-height:1;transition:color .15s}
-.pack-cat-reorder button:active{color:var(--pri)}
-/* ===== CONVERTER ===== */
-.conv-card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh);border:1px solid var(--border)}
-.conv-row{display:flex;gap:8px;margin-bottom:10px}
-.conv-inp{flex:1;padding:10px 12px;border:2px solid var(--border);border-radius:var(--rs);font-size:16px;font-family:inherit;font-weight:600;background:var(--bg);color:var(--text);direction:ltr;text-align:right;outline:none}
-.conv-inp:focus{border-color:var(--pri)}
-.conv-sel{padding:10px 12px;border:2px solid var(--border);border-radius:var(--rs);font-size:14px;font-family:inherit;font-weight:600;background:var(--bg);color:var(--text);cursor:pointer;min-width:90px;outline:none}
-.conv-swap{display:flex;justify-content:center;margin-bottom:10px}
-.conv-swap button{background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer}
-.conv-result{background:var(--bg);border-radius:var(--rs);padding:14px;text-align:center;margin-bottom:10px}
-.conv-result-amt{font-size:28px;font-weight:800;color:var(--pri);direction:ltr}
-.conv-result-lbl{font-size:12px;color:var(--text-l);margin-top:2px}
-.conv-quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.conv-quick-btn{flex:1;min-width:55px;padding:7px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;text-align:center}
-.conv-rate{font-size:11px;color:var(--text-l);text-align:center}
-/* ===== EMERGENCY ===== */
-.emg-card{background:var(--card);border-radius:var(--rs);padding:14px;margin-bottom:8px;border:1px solid var(--border);border-right:3px solid var(--err)}
-.emg-title{font-size:14px;font-weight:700;margin-bottom:3px}
-.emg-val{font-size:13px;color:var(--text-l);line-height:1.4}
-.emg-phone{display:inline-flex;align-items:center;gap:4px;color:var(--pri);font-weight:600;text-decoration:none;font-size:15px}
-/* ===== TOAST & MODAL ===== */
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--text);color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;z-index:200;opacity:0;transition:.3s;pointer-events:none;font-family:inherit}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-.modal-ov.open{display:flex}
-.modal{background:var(--card);border-radius:var(--r);padding:24px;max-width:320px;width:100%;box-shadow:var(--sh-lg)}
-.modal h3{font-size:17px;font-weight:700;margin-bottom:14px}
-.modal input{width:100%;padding:12px;border:2px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:18px;font-weight:600;text-align:center;outline:none;background:var(--bg);direction:ltr;margin-bottom:14px}
-.modal input:focus{border-color:var(--pri)}
-.modal-btns{display:flex;gap:8px}
-.modal-btns button{flex:1;padding:10px;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
-.modal-save{background:var(--pri);color:#fff}
-.modal-cancel-btn{background:var(--border);color:var(--text)}
-/* ===== LINKS ===== */
-.link-add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px}
-.link-add-inp{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl;margin-bottom:8px}
-.link-add-inp:focus{border-color:var(--pri)}
-.link-add-inp.url{direction:ltr;text-align:right;font-size:14px}
-.link-sel-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
-.link-sel-btn{padding:6px 8px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:10px;cursor:pointer;text-align:center;transition:.15s;display:flex;align-items:center;gap:3px;white-space:nowrap}
-.link-sel-btn.active{border-color:var(--pri);background:rgba(13,148,136,.06);color:var(--pri);font-weight:600}
-.link-cat-hdr{font-size:12px;font-weight:600;color:var(--text-l);padding:10px 0 6px;display:flex;align-items:center;gap:6px}
-.link-card{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border-radius:var(--rs);margin-bottom:8px;border:1px solid var(--border);box-shadow:var(--sh);text-decoration:none;color:inherit;cursor:pointer;transition:box-shadow .15s}
-.link-card:active{box-shadow:var(--sh-md)}
-.link-card-icon{width:42px;height:42px;background:rgba(13,148,136,.06);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:0 0 auto}
-.link-card-info{flex:1;min-width:0}
-.link-card-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:4px}
-.link-card-name .ext{font-size:11px;color:var(--text-m)}
-.link-card-desc{font-size:11px;color:var(--text-l);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.link-card-actions{display:flex;gap:4px;flex:0 0 auto}
-.link-card-actions button{background:none;border:none;font-size:15px;cursor:pointer;padding:4px;border-radius:6px;line-height:1}
-.link-card-actions button:active{background:var(--border)}
-.link-card.removing{opacity:0;transform:translateX(-40px);transition:all .3s ease}
-.link-card.new-item{animation:packSlideIn .3s ease}
-/* ===== NOTE ADD FORM ===== */
-.note-form{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-top:10px}
-.note-cat-row{display:flex;gap:5px;margin-bottom:8px}
-.note-cat-btn{flex:1;padding:7px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:11px;cursor:pointer;text-align:center;transition:.15s}
-.note-cat-btn.active{border-color:var(--pri);background:rgba(13,148,136,.05);color:var(--pri);font-weight:600}
-.note-inp{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl;margin-bottom:6px}
-.note-inp:focus{border-color:var(--pri)}
-/* ===== MISC ===== */
-.empty{text-align:center;padding:24px;color:var(--text-l);font-size:13px}
-.spinner{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--pri);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading{text-align:center;padding:40px;color:var(--text-l)}
-.last-upd{font-size:10px;color:var(--text-m);text-align:center;margin-top:10px}
-/* ===== DARK MODE ===== */
-@media(prefers-color-scheme:dark){
-:root{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--text-l:#94a3b8;--text-m:#64748b;--border:#334155}
-.app-hdr{background:#1e293b;border-bottom-color:#334155}
-.bnav{background:#1e293b;border-top-color:#334155}
-.sidebar{background:#1e293b}
-.frm-row input,.frm-row select,.todo-inp,.conv-inp,.conv-sel,.note-inp,.modal input{background:#0f172a;color:var(--text)}
-.cat-btn,.who-btn,.fil-btn,.note-cat-btn,.conv-quick-btn{background:#1e293b}
-.pack-tabs{background:#334155}.pack-tab.active{background:#1e293b}
-.pack-chk,.todo-chk,.note-check{background:#1e293b}
-.pack-add-inp,.pack-edit-inp,.pack-edit-sel{background:#0f172a;color:var(--text)}
-.pack-sel-btn{background:#1e293b}
-.link-add-inp{background:#0f172a;color:var(--text)}
-.link-sel-btn{background:#1e293b}
-.ht-date{background:#0f172a}
-.conv-result{background:#0f172a}
-.fl-line::before{background:linear-gradient(to left,var(--pri),#334155)}
-.modal{background:#1e293b}.modal-cancel-btn{background:#334155}
+/* ========== DESIGN TOKENS (Apple HIG) ========== */
+:root{
+    --blue:#007AFF;--blue-l:#5AC8FA;--green:#34C759;--orange:#FF9500;--red:#FF3B30;
+    --purple:#AF52DE;--pink:#FF2D55;--indigo:#5856D6;--teal:#30B0C7;--yellow:#FFCC00;
+    --gray:#8E8E93;--gray-2:#AEAEB2;--gray-3:#C7C7CC;--gray-4:#D1D1D6;--gray-5:#E5E5EA;--gray-6:#F2F2F7;
+    --bg:#F2F2F7;--card:#FFFFFF;--card-2:#F9F9FB;
+    --separator:rgba(60,60,67,.18);--separator-s:rgba(60,60,67,.08);
+    --text:#1C1C1E;--text-2:#3C3C43;--text-3:#8E8E93;--text-4:#C7C7CC;
+    --r-s:10px;--r-m:14px;--r-l:18px;--r-xl:24px;
+    --sh-1:0 1px 2px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.06);
+    --sh-2:0 2px 8px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.04);
+    --sh-3:0 8px 24px rgba(0,0,0,.12);
+    --sh-fab:0 6px 20px rgba(0,122,255,.4),0 2px 6px rgba(0,0,0,.12);
+    --hdr:52px;--nav:64px;
+    --ease:cubic-bezier(.32,.72,0,1);--ease-s:cubic-bezier(.4,0,.2,1);
 }
+@media(prefers-color-scheme:dark){
+    :root{
+        --bg:#000000;--card:#1C1C1E;--card-2:#2C2C2E;
+        --separator:rgba(84,84,88,.65);--separator-s:rgba(84,84,88,.35);
+        --text:#FFFFFF;--text-2:#EBEBF5;--text-3:#8E8E93;--text-4:#48484A;
+        --gray-6:#1C1C1E;--gray-5:#2C2C2E;--gray-4:#3A3A3C;
+    }
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.4}
+button,input,select,textarea{font-family:inherit;color:inherit}
+input,textarea,select{font-size:17px}
+a{color:var(--blue);text-decoration:none}
+
+/* ========== HEADER ========== */
+.app-hdr{position:fixed;top:0;left:0;right:0;height:calc(var(--hdr) + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);display:flex;align-items:center;padding-inline:16px;z-index:50;border-bottom:.5px solid var(--separator);gap:8px}
+@media(prefers-color-scheme:dark){.app-hdr{background:rgba(28,28,30,.82)}}
+.hdr-btn{background:none;border:none;font-size:17px;cursor:pointer;padding:8px;color:var(--blue);display:flex;align-items:center;gap:4px;font-weight:400;min-width:44px;height:44px}
+.hdr-back{display:none;font-size:22px;font-weight:600}
+.hdr-title{flex:1;font-size:17px;font-weight:600;text-align:center;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.hdr-menu{font-size:20px;color:var(--text)}
+.hdr-refresh{font-size:18px;color:var(--text-2)}
+
+/* ========== MAIN ========== */
+.main{padding-top:calc(var(--hdr) + env(safe-area-inset-top));padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 20px);min-height:100vh;transition:opacity .2s var(--ease-s)}
+.main.fading{opacity:0}
+
+/* ========== BOTTOM NAV (Glass) ========== */
+.bnav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border-top:.5px solid var(--separator);display:flex;justify-content:space-around;align-items:stretch;z-index:50}
+@media(prefers-color-scheme:dark){.bnav{background:rgba(28,28,30,.88)}}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;font-size:10px;color:var(--gray);cursor:pointer;transition:color .2s;padding:6px 2px;font-weight:500}
+.bnav-item .bi{font-size:22px;line-height:1;transition:transform .2s var(--ease)}
+.bnav-item:active .bi{transform:scale(.9)}
+.bnav-item.active{color:var(--blue)}
+
+/* ========== SIDEBAR ========== */
+.sb-ov{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:90;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
+.sb-ov.open{opacity:1;pointer-events:auto}
+.sidebar{position:fixed;top:0;right:-300px;width:286px;height:100%;background:var(--card);z-index:100;transition:right .35s var(--ease);box-shadow:var(--sh-3);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.sidebar.open{right:0}
+.sb-hdr{padding:24px 20px 20px;background:linear-gradient(135deg,#007AFF,#5856D6);color:#fff;position:relative}
+.sb-hdr h2{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.sb-hdr p{font-size:13px;opacity:.85;margin-top:4px}
+.sb-close{position:absolute;top:18px;left:18px;background:rgba(255,255,255,.22);backdrop-filter:blur(10px);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:600}
+.sb-items{flex:1;overflow-y:auto;padding:8px 0}
+.sb-item{display:flex;align-items:center;gap:14px;padding:14px 20px;font-size:16px;font-weight:500;color:var(--text);cursor:pointer;border:none;background:none;width:100%;text-align:right;transition:background .15s;min-height:56px}
+.sb-item:active{background:var(--gray-6)}
+.sb-item .si{font-size:20px;width:28px;text-align:center;color:var(--blue)}
+
+/* ========== GENERIC CARDS ========== */
+.card{background:var(--card);border-radius:var(--r-l);padding:16px;box-shadow:var(--sh-1);margin-bottom:12px}
+.card-group{background:var(--card);border-radius:var(--r-l);box-shadow:var(--sh-1);overflow:hidden;margin-bottom:12px}
+.card-group .row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:.5px solid var(--separator-s);cursor:pointer}
+.card-group .row:last-child{border-bottom:none}
+.card-group .row:active{background:var(--gray-6)}
+
+.section{padding:16px}
+.section-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:14px;color:var(--text)}
+.section-subtitle{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;margin:18px 16px 8px;padding-inline:4px}
+
+/* ========== MARKETPLACE ========== */
+.mk-hdr{padding:12px 20px 6px}
+.mk-hdr h1{font-size:30px;font-weight:800;letter-spacing:-.8px;color:var(--text)}
+.mk-hdr .sub{font-size:14px;color:var(--text-3);margin-top:2px}
+.mk-countdown{margin:12px 20px 0;padding:14px 16px;background:linear-gradient(135deg,rgba(0,122,255,.08),rgba(88,86,214,.08));border-radius:var(--r-m);font-size:14px;font-weight:600;color:var(--blue);text-align:center}
+.mk-hero{margin:16px 20px;border-radius:var(--r-xl);overflow:hidden;position:relative;height:260px;cursor:pointer;box-shadow:var(--sh-2);transition:transform .25s var(--ease)}
+.mk-hero:active{transform:scale(.985)}
+.mk-hero-img{width:100%;height:100%;object-fit:cover}
+.mk-hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.15) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:22px}
+.mk-hero-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.22);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:10px;align-self:flex-start;border:.5px solid rgba(255,255,255,.3)}
+.mk-hero-name{font-size:34px;font-weight:800;color:#fff;letter-spacing:-.6px;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.mk-hero-info{font-size:14px;color:rgba(255,255,255,.9);margin-top:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mk-hero-info .dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.6)}
+.mk-scroll-title{font-size:22px;font-weight:700;padding:20px 20px 12px;color:var(--text);letter-spacing:-.3px}
+.mk-scroll{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x mandatory}
+.mk-scroll::-webkit-scrollbar{display:none}
+.mk-card{flex:0 0 160px;height:200px;border-radius:var(--r-l);overflow:hidden;position:relative;cursor:pointer;box-shadow:var(--sh-1);scroll-snap-align:start;transition:transform .2s var(--ease)}
+.mk-card:active{transform:scale(.97)}
+.mk-card-img{width:100%;height:100%;object-fit:cover}
+.mk-card-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.05) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:14px}
+.mk-card-name{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.mk-card-info{font-size:11px;color:rgba(255,255,255,.85);margin-top:3px}
+.mk-budget{margin:20px;background:var(--card);border-radius:var(--r-l);padding:18px;box-shadow:var(--sh-1)}
+.mk-budget-title{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px}
+.mk-budget-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.mk-budget-stat{text-align:center}
+.mk-budget-val{font-size:20px;font-weight:700;letter-spacing:-.3px}
+.mk-budget-lbl{font-size:11px;color:var(--text-3);margin-top:3px;font-weight:500}
+
+/* ========== DESTINATION SPACE ========== */
+.sp-banner{position:relative;height:240px;overflow:hidden;margin:0 0 8px}
+.sp-banner-img{width:100%;height:100%;object-fit:cover}
+.sp-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.1) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px}
+.sp-banner-name{font-size:36px;font-weight:800;color:#fff;letter-spacing:-.7px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+.sp-banner-info{font-size:14px;color:rgba(255,255,255,.92);margin-top:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* ========== FLIGHT CARD ========== */
+.fl-card{background:var(--card);border-radius:var(--r-l);padding:18px;margin-bottom:12px;box-shadow:var(--sh-1)}
+.fl-route-info{font-size:12px;color:var(--text-3);font-weight:500;margin-bottom:6px}
+.fl-route{display:flex;align-items:center;justify-content:space-between;margin:8px 0 14px}
+.fl-point{text-align:center}
+.fl-code{font-size:28px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
+.fl-time{font-size:14px;font-weight:600;color:var(--blue);margin-top:2px}
+.fl-line{flex:1;display:flex;align-items:center;justify-content:center;padding:0 14px;position:relative}
+.fl-line::before{content:'';position:absolute;top:50%;left:14px;right:14px;height:2px;background:linear-gradient(to left,var(--blue),var(--gray-4));border-radius:1px}
+.fl-line .plane{font-size:20px;position:relative;z-index:1;background:var(--card);padding:0 6px;transform:scaleX(-1)}
+.fl-details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding-top:12px;border-top:.5px solid var(--separator-s)}
+.fl-detail{text-align:center}
+.fl-detail-lbl{font-size:11px;color:var(--text-3);font-weight:500}
+.fl-detail-val{font-size:14px;font-weight:600;margin-top:2px}
+.fl-price{text-align:center;font-size:17px;font-weight:700;color:var(--blue);margin-top:6px}
+
+/* ========== HOTEL CARD ========== */
+.ht-card{background:var(--card);border-radius:var(--r-l);padding:18px;margin-bottom:12px;box-shadow:var(--sh-1)}
+.ht-name{font-size:17px;font-weight:700;letter-spacing:-.2px;margin-bottom:10px}
+.ht-dates{display:flex;gap:10px;margin:12px 0}
+.ht-date{flex:1;background:var(--gray-6);border-radius:var(--r-s);padding:10px 12px;text-align:center}
+.ht-date-lbl{font-size:11px;color:var(--text-3);font-weight:500}
+.ht-date-val{font-size:15px;font-weight:600;margin-top:2px}
+.ht-meta{font-size:13px;color:var(--text-3);margin-top:4px}
+.ht-link{display:inline-flex;align-items:center;gap:5px;color:var(--blue);font-size:14px;font-weight:500;padding:10px 14px;background:rgba(0,122,255,.1);border-radius:var(--r-s);margin-top:10px;text-decoration:none}
+
+/* ========== NOTES (Dani's Picks) ========== */
+.note-card{display:flex;align-items:flex-start;gap:12px;background:var(--card);border-radius:var(--r-m);padding:14px 16px;margin-bottom:8px;box-shadow:var(--sh-1);transition:.2s}
+.note-check{width:24px;height:24px;border:2px solid var(--gray-4);border-radius:50%;flex:0 0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.25s var(--ease);margin-top:2px}
+.note-card.done .note-check{background:var(--green);border-color:var(--green);transform:scale(1.05)}
+.note-card.done .note-check::after{content:'';width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
+.note-card.done .note-info{opacity:.45}
+.note-card.done .note-title{text-decoration:line-through}
+.note-icon{font-size:22px;flex:0 0 auto;line-height:1}
+.note-info{flex:1;min-width:0}
+.note-title{font-size:15px;font-weight:600}
+.note-title a{color:var(--blue)}
+.note-desc{font-size:13px;color:var(--text-3);margin-top:3px;line-height:1.4}
+.note-del{background:none;border:none;color:var(--text-4);font-size:18px;cursor:pointer;padding:4px;line-height:1}
+.note-del:active{color:var(--red)}
+
+/* ========== BUDGET / PROGRESS ========== */
+.bgt-card{background:var(--card);border-radius:var(--r-l);padding:20px;margin-bottom:12px;box-shadow:var(--sh-1)}
+.bgt-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.bgt-title{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
+.bgt-gear{background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:var(--text-3)}
+.bgt-amount{display:flex;align-items:baseline;gap:6px;margin-bottom:12px}
+.bgt-spent{font-size:34px;font-weight:800;letter-spacing:-.8px}
+.bgt-limit{font-size:15px;color:var(--text-3);font-weight:500}
+.bgt-bar{height:6px;background:var(--gray-5);border-radius:3px;overflow:hidden}
+.bgt-fill{height:100%;border-radius:3px;transition:width .5s var(--ease);background:var(--green)}
+.bgt-fill.o{background:var(--orange)}.bgt-fill.r{background:var(--red)}
+.bgt-pct{font-size:12px;color:var(--text-3);text-align:left;margin-top:6px;font-weight:500}
+.bgt-warn{background:rgba(255,59,48,.1);border-radius:var(--r-s);padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--red);font-weight:600;text-align:center;display:none}
+
+.bgt-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.bgt-sum-card{background:var(--card);border-radius:var(--r-m);padding:12px 10px;text-align:center;box-shadow:var(--sh-1)}
+.bgt-sum-lbl{font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.bgt-sum-val{font-size:17px;font-weight:700;letter-spacing:-.3px;margin-top:4px}
+.bgt-sum-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+
+.bgt-chart{background:var(--card);border-radius:var(--r-l);padding:16px;margin-bottom:12px;box-shadow:var(--sh-1)}
+.bgt-chart-title{font-size:12px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.bgt-chart-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--gray-5);margin-bottom:10px}
+.bgt-chart-seg{height:100%;min-width:2px}
+.bgt-chart-legend{display:flex;flex-wrap:wrap;gap:6px 14px}
+.bgt-chart-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-2)}
+.bgt-chart-dot{width:8px;height:8px;border-radius:50%}
+
+/* ========== FORM COMPONENTS ========== */
+.form-label{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.3px;margin:14px 0 8px}
+.input{width:100%;padding:14px 16px;background:var(--gray-6);border:none;border-radius:var(--r-m);font-size:17px;outline:none;direction:rtl;transition:box-shadow .2s;color:var(--text)}
+.input:focus{box-shadow:0 0 0 3px rgba(0,122,255,.22)}
+.input-row{display:flex;gap:10px;margin-bottom:10px}
+.input.amt{font-size:22px;font-weight:700;text-align:center;flex:1;direction:ltr}
+.input.cur{flex:0 0 100px;font-weight:600;text-align:center;font-size:15px}
+.input.dt{direction:ltr;text-align:left;font-size:15px}
+.conv-hint{font-size:12px;color:var(--text-3);text-align:center;padding:4px 0 2px;min-height:18px;font-weight:500}
+
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.cat-btn{padding:12px 6px;border:none;border-radius:var(--r-m);background:var(--gray-6);font-size:11px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.15s;color:var(--text-2);font-weight:500}
+.cat-btn.active{background:var(--blue);color:#fff;font-weight:600}
+.cat-btn .cat-ic{font-size:22px;line-height:1}
+
+.seg{display:flex;gap:6px;background:var(--gray-6);border-radius:var(--r-m);padding:4px}
+.seg-btn{flex:1;padding:10px;border:none;border-radius:10px;background:none;font-size:13px;font-weight:500;cursor:pointer;color:var(--text-2);transition:.2s}
+.seg-btn.active{background:var(--card);color:var(--text);font-weight:600;box-shadow:var(--sh-1)}
+
+.btn-primary{width:100%;padding:15px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-m);font-size:16px;font-weight:600;cursor:pointer;transition:.2s;min-height:50px;margin-top:16px}
+.btn-primary:active{transform:scale(.98);opacity:.9}
+.btn-secondary{width:100%;padding:13px;background:var(--gray-6);color:var(--blue);border:none;border-radius:var(--r-m);font-size:15px;font-weight:500;cursor:pointer;margin-top:8px;min-height:46px}
+.btn-destructive{width:100%;padding:13px;background:rgba(255,59,48,.1);color:var(--red);border:none;border-radius:var(--r-m);font-size:15px;font-weight:500;cursor:pointer;margin-top:8px;min-height:46px}
+
+/* ========== BOTTOM SHEET ========== */
+.sheet-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:150;opacity:0;pointer-events:none;transition:opacity .35s var(--ease);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.sheet-ov.open{opacity:1;pointer-events:auto}
+.bottom-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:var(--r-xl) var(--r-xl) 0 0;z-index:200;transform:translateY(100%);transition:transform .4s var(--ease);max-height:92vh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -10px 40px rgba(0,0,0,.15)}
+.bottom-sheet.open{transform:translateY(0)}
+.sheet-handle{width:40px;height:5px;background:var(--gray-4);border-radius:3px;margin:10px auto 4px;cursor:grab}
+.sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 14px;border-bottom:.5px solid var(--separator-s)}
+.sheet-title{font-size:17px;font-weight:700;letter-spacing:-.2px;flex:1;text-align:center;padding:0 40px}
+.sheet-close{background:var(--gray-6);border:none;width:30px;height:30px;border-radius:50%;font-size:13px;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:600;position:absolute;left:16px;top:22px}
+.sheet-body{flex:1;overflow-y:auto;padding:18px 20px 28px;-webkit-overflow-scrolling:touch}
+
+/* ========== FAB ========== */
+.fab{position:fixed;bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 20px);left:20px;width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:30px;cursor:pointer;box-shadow:var(--sh-fab);display:flex;align-items:center;justify-content:center;z-index:40;transition:transform .25s var(--ease);font-weight:300;line-height:1}
+.fab:active{transform:scale(.9)}
+
+/* ========== EXPENSE CARD ========== */
+.exp-list{background:var(--card);border-radius:var(--r-l);box-shadow:var(--sh-1);overflow:hidden;margin-bottom:12px}
+.exp-card{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:.5px solid var(--separator-s);cursor:pointer;background:var(--card)}
+.exp-card:last-child{border-bottom:none}
+.exp-card:active{background:var(--gray-6)}
+.exp-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:0 0 auto}
+.exp-info{flex:1;min-width:0}
+.exp-desc{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.exp-meta{font-size:12px;color:var(--text-3);margin-top:2px;display:flex;gap:6px;align-items:center}
+.exp-tag{font-size:10px;padding:2px 6px;border-radius:6px;font-weight:600;background:var(--gray-6);color:var(--text-3)}
+.exp-amount{text-align:left}
+.exp-primary{font-size:15px;font-weight:700;white-space:nowrap;letter-spacing:-.2px}
+.exp-secondary{font-size:11px;color:var(--text-3);white-space:nowrap;margin-top:1px}
+.exp-detail{display:none;padding:0 16px 14px;background:var(--card-2);border-top:.5px solid var(--separator-s)}
+.exp-detail.open{display:block;padding-top:12px}
+.exp-currencies{display:flex;gap:10px;margin-bottom:10px;direction:ltr}
+.exp-curr{text-align:center;flex:1;background:var(--card);border-radius:var(--r-s);padding:8px}
+.exp-curr-val{font-size:14px;font-weight:700}
+.exp-curr-lbl{font-size:10px;color:var(--text-3);margin-top:1px}
+.exp-actions{display:flex;gap:8px}
+.exp-actions button{flex:1;padding:10px;border:none;border-radius:var(--r-s);font-size:13px;cursor:pointer;font-weight:500}
+.exp-actions .edit{background:rgba(0,122,255,.1);color:var(--blue)}
+.exp-actions .del{background:rgba(255,59,48,.1);color:var(--red)}
+
+/* ========== FILTER PILLS ========== */
+.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-top:4px}
+.filters::-webkit-scrollbar{display:none}
+.fil-btn{flex:0 0 auto;padding:8px 14px;border-radius:20px;border:none;background:var(--gray-6);font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;transition:.2s;white-space:nowrap}
+.fil-btn.active{background:var(--blue);color:#fff;font-weight:600}
+
+/* ========== TASKS ========== */
+.task-prog{background:var(--card);border-radius:var(--r-l);padding:18px;margin-bottom:12px;box-shadow:var(--sh-1)}
+.task-prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.task-prog-label{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
+.task-prog-count{font-size:15px;font-weight:700;color:var(--text)}
+.task-bar{height:6px;background:var(--gray-5);border-radius:3px;overflow:hidden}
+.task-bar-fill{height:100%;background:var(--green);border-radius:3px;transition:width .5s var(--ease)}
+
+.task-list{background:var(--card);border-radius:var(--r-l);box-shadow:var(--sh-1);overflow:hidden;margin-bottom:12px}
+.task-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:.5px solid var(--separator-s);background:var(--card)}
+.task-item:last-child{border-bottom:none}
+.task-item.done{opacity:.55}
+.task-item.done .task-text{text-decoration:line-through;color:var(--text-3)}
+.task-chk{width:24px;height:24px;border:2px solid var(--gray-4);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto;transition:.25s var(--ease);background:var(--card)}
+.task-item.done .task-chk{background:var(--green);border-color:var(--green);transform:scale(1.05)}
+.task-chk::after{content:'';display:none;width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
+.task-item.done .task-chk::after{display:block}
+.task-text{flex:1;font-size:15px;color:var(--text)}
+.task-due{font-size:12px;color:var(--text-3);font-weight:500}
+.task-due.over{color:var(--red)}
+.task-del{background:none;border:none;color:var(--text-4);font-size:18px;cursor:pointer;padding:4px;line-height:1}
+
+/* ========== PACKING ========== */
+.pack-summary{background:var(--card);border-radius:var(--r-l);padding:14px 18px;margin-bottom:12px;box-shadow:var(--sh-1);display:flex;align-items:center;justify-content:space-between}
+.pack-summary-txt{font-size:15px;font-weight:600;color:var(--text)}
+.pack-summary-count{font-size:13px;color:var(--text-3);font-weight:500}
+.pack-summary.done .pack-summary-txt{color:var(--green)}
+
+.pack-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.pack-tabs::-webkit-scrollbar{display:none}
+.pack-tab{flex:0 0 auto;padding:8px 14px;border-radius:20px;border:none;background:var(--gray-6);font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;white-space:nowrap;transition:.2s}
+.pack-tab.active{background:var(--blue);color:#fff;font-weight:600}
+
+.pack-cat-hdr{display:flex;align-items:center;padding:12px 16px 8px;margin-top:6px}
+.pack-cat-title{flex:1;font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.pack-cat-reorder{display:flex;gap:4px}
+.pack-cat-reorder button{background:none;border:none;font-size:13px;color:var(--text-4);cursor:pointer;padding:4px 6px;line-height:1}
+.pack-cat-reorder button:active{color:var(--blue)}
+.pack-cat-chev{font-size:12px;color:var(--text-3);margin-right:8px;transition:transform .2s;cursor:pointer}
+.pack-cat-hdr.collapsed .pack-cat-chev{transform:rotate(-90deg)}
+
+.pack-list{background:var(--card);border-radius:var(--r-l);box-shadow:var(--sh-1);overflow:hidden;margin-bottom:4px;transition:max-height .25s var(--ease)}
+.pack-list.collapsed{max-height:0!important;margin-bottom:0}
+.pack-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:.5px solid var(--separator-s);background:var(--card);transition:opacity .25s}
+.pack-item:last-child{border-bottom:none}
+.pack-item.done{opacity:.55}
+.pack-item.done .pack-txt{text-decoration:line-through;color:var(--text-3)}
+.pack-item.removing{opacity:0;transform:translateX(-40px);transition:all .3s}
+.pack-item.new-item{animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.pack-chk{width:24px;height:24px;border:2px solid var(--gray-4);border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:.25s var(--ease);cursor:pointer}
+.pack-item.done .pack-chk{background:var(--green);border-color:var(--green);transform:scale(1.05)}
+.pack-item.done .pack-chk::after{content:'';width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
+.pack-crit-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex:0 0 auto}
+.pack-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;cursor:pointer}
+.pack-who{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:600;flex:0 0 auto}
+.pack-who.tom{background:rgba(0,122,255,.12);color:var(--blue)}
+.pack-who.dani{background:rgba(255,45,85,.12);color:var(--pink)}
+.pack-who.shared{background:rgba(175,82,222,.12);color:var(--purple)}
+.pack-actions{display:flex;gap:2px;flex:0 0 auto}
+.pack-actions button{background:none;border:none;font-size:15px;padding:6px;border-radius:6px;cursor:pointer;line-height:1;color:var(--text-3)}
+.pack-actions button:active{background:var(--gray-6)}
+
+/* ========== LINKS ========== */
+.link-cat-hdr{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;padding:14px 16px 6px;display:flex;align-items:center;gap:6px;margin-top:6px}
+.link-list{background:var(--card);border-radius:var(--r-l);box-shadow:var(--sh-1);overflow:hidden;margin-bottom:4px}
+.link-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:.5px solid var(--separator-s);cursor:pointer;background:var(--card)}
+.link-card:last-child{border-bottom:none}
+.link-card:active{background:var(--gray-6)}
+.link-card.removing{opacity:0;transform:translateX(-40px);transition:all .3s}
+.link-card.new-item{animation:slideIn .3s ease}
+.link-icon{width:44px;height:44px;background:var(--gray-6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:0 0 auto}
+.link-info{flex:1;min-width:0}
+.link-name{font-size:15px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:5px}
+.link-name .ext{font-size:11px;color:var(--text-4)}
+.link-desc{font-size:12px;color:var(--text-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.link-actions{display:flex;gap:2px;flex:0 0 auto}
+.link-actions button{background:none;border:none;font-size:15px;padding:6px;cursor:pointer;color:var(--text-3);line-height:1}
+.link-actions button:active{background:var(--gray-6);border-radius:6px}
+
+/* ========== CONVERTER ========== */
+.conv-card{background:var(--card);border-radius:var(--r-l);padding:22px;box-shadow:var(--sh-1);margin-bottom:12px}
+.conv-display{text-align:center;margin-bottom:20px}
+.conv-amount{font-size:48px;font-weight:800;letter-spacing:-1.5px;direction:ltr;color:var(--text)}
+.conv-label{font-size:13px;color:var(--text-3);margin-top:4px;font-weight:500}
+.conv-from,.conv-to{display:flex;align-items:center;gap:10px;background:var(--gray-6);border-radius:var(--r-m);padding:14px 16px;margin-bottom:10px}
+.conv-inp{flex:1;background:none;border:none;font-size:24px;font-weight:700;outline:none;direction:ltr;text-align:left;color:var(--text)}
+.conv-sel{background:none;border:none;font-size:16px;font-weight:600;outline:none;color:var(--blue);cursor:pointer;min-width:80px;text-align:left}
+.conv-swap{display:flex;justify-content:center;margin:-4px 0 -4px}
+.conv-swap button{background:var(--blue);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;box-shadow:var(--sh-1);display:flex;align-items:center;justify-content:center}
+.conv-swap button:active{transform:rotate(180deg);transition:transform .3s}
+.conv-quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.conv-quick-btn{flex:1;min-width:70px;padding:10px;border:none;border-radius:var(--r-s);background:var(--gray-6);font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2)}
+.conv-quick-btn:active{background:var(--gray-5)}
+.conv-rate{font-size:12px;color:var(--text-3);text-align:center;margin-top:14px;font-weight:500}
+
+/* ========== EMERGENCY ========== */
+.emg-card{background:var(--card);border-radius:var(--r-l);padding:18px;margin-bottom:10px;box-shadow:var(--sh-1);border-right:3px solid var(--red)}
+.emg-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.emg-phone{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-weight:600;font-size:16px;padding:8px 14px;background:rgba(0,122,255,.1);border-radius:var(--r-s);margin-top:6px}
+.emg-info{font-size:13px;color:var(--text-3);line-height:1.4;margin-top:6px}
+
+/* ========== TOAST ========== */
+.toast{position:fixed;top:calc(var(--hdr) + env(safe-area-inset-top) + 12px);left:50%;transform:translateX(-50%) translateY(-80px);background:var(--card);color:var(--text);padding:12px 20px;border-radius:var(--r-m);font-size:14px;font-weight:500;z-index:300;opacity:0;transition:.35s var(--ease);pointer-events:none;box-shadow:var(--sh-3);display:flex;align-items:center;gap:8px;max-width:90%;border:.5px solid var(--separator)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast-ic{font-size:16px}
+
+/* ========== MODAL (simple) ========== */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex}
+.modal{background:var(--card);border-radius:var(--r-xl);padding:24px;max-width:320px;width:100%;box-shadow:var(--sh-3)}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:6px;text-align:center}
+.modal p{font-size:13px;color:var(--text-3);text-align:center;margin-bottom:16px}
+.modal input{width:100%;padding:14px;background:var(--gray-6);border:none;border-radius:var(--r-m);font-size:20px;font-weight:600;text-align:center;outline:none;direction:ltr;margin-bottom:16px}
+.modal-btns{display:flex;gap:10px}
+.modal-btns button{flex:1;padding:13px;border:none;border-radius:var(--r-m);font-size:15px;font-weight:600;cursor:pointer}
+.modal-save{background:var(--blue);color:#fff}
+.modal-cancel{background:var(--gray-6);color:var(--blue)}
+
+/* ========== MISC ========== */
+.empty{text-align:center;padding:40px 20px;color:var(--text-3);font-size:15px;line-height:1.6}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:.3}
+.spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--gray-5);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{text-align:center;padding:80px 20px;color:var(--text-3)}
+.loading div{margin-top:12px;font-size:14px}
 </style>
 </head>
 <body>
+
 <!-- HEADER -->
 <div class="app-hdr">
-    <button class="hdr-back" id="hdr-back" onclick="goBack()">&#8594;</button>
-    <div class="hdr-title" id="hdr-title">&#127477;&#127469; הטיול של טום ודני</div>
-    <button class="hdr-refresh" onclick="refreshData(true)" title="רענן">&#128260;</button>
-    <button class="hdr-menu" onclick="toggleSidebar()">&#9776;</button>
+    <button class="hdr-btn hdr-back" id="hdr-back" onclick="goBack()">&#8594;</button>
+    <div class="hdr-title" id="hdr-title">🇵🇭 הטיול של תום ודני</div>
+    <button class="hdr-btn hdr-refresh" onclick="refreshData(true)" title="רענן">↻</button>
+    <button class="hdr-btn hdr-menu" onclick="toggleSidebar()">☰</button>
 </div>
+
 <!-- SIDEBAR -->
-<div class="sb-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+<div class="sb-ov" id="sb-ov" onclick="toggleSidebar()"></div>
 <div class="sidebar" id="sidebar">
     <div class="sb-hdr">
-        <button class="sb-close" onclick="toggleSidebar()">&#10005;</button>
-        <h2>&#127477;&#127469; הפיליפינים 2026</h2>
-        <p>טום ודניאלה</p>
+        <button class="sb-close" onclick="toggleSidebar()">✕</button>
+        <h2>🇵🇭 הפיליפינים 2026</h2>
+        <p>תום ודניאלה</p>
     </div>
     <div class="sb-items">
-        <button class="sb-item" onclick="goHome();toggleSidebar()"><span class="si">&#127968;</span>בית</button>
-        <button class="sb-item" onclick="openSection('flights');toggleSidebar()"><span class="si">&#9992;&#65039;</span>כל הטיסות</button>
-        <button class="sb-item" onclick="openSection('hotels');toggleSidebar()"><span class="si">&#127976;</span>כל המלונות</button>
-        <button class="sb-item" onclick="openSection('expenses');toggleSidebar()"><span class="si">&#128176;</span>הוצאות</button>
-        <button class="sb-item" onclick="openSection('tasks');toggleSidebar()"><span class="si">&#9989;</span>משימות</button>
-        <button class="sb-item" onclick="openSection('packing');toggleSidebar()"><span class="si">&#127890;</span>ציוד</button>
-        <button class="sb-item" onclick="openSection('converter');toggleSidebar()"><span class="si">&#128177;</span>המרת מטבע</button>
-        <button class="sb-item" onclick="openSection('emergency');toggleSidebar()"><span class="si">&#127384;</span>חירום</button>
-        <button class="sb-item" onclick="openSection('links');toggleSidebar()"><span class="si">&#128279;</span>קישורים</button>
+        <button class="sb-item" onclick="goHome();toggleSidebar()"><span class="si">🏠</span>בית</button>
+        <button class="sb-item" onclick="openSection('flights');toggleSidebar()"><span class="si">✈️</span>כל הטיסות</button>
+        <button class="sb-item" onclick="openSection('hotels');toggleSidebar()"><span class="si">🏨</span>כל המלונות</button>
+        <button class="sb-item" onclick="openSection('expenses');toggleSidebar()"><span class="si">💰</span>הוצאות</button>
+        <button class="sb-item" onclick="openSection('tasks');toggleSidebar()"><span class="si">✅</span>משימות</button>
+        <button class="sb-item" onclick="openSection('packing');toggleSidebar()"><span class="si">🎒</span>ציוד</button>
+        <button class="sb-item" onclick="openSection('converter');toggleSidebar()"><span class="si">💱</span>המרת מטבע</button>
+        <button class="sb-item" onclick="openSection('emergency');toggleSidebar()"><span class="si">🆘</span>חירום</button>
+        <button class="sb-item" onclick="openSection('links');toggleSidebar()"><span class="si">🔗</span>קישורים</button>
     </div>
 </div>
+
 <!-- MAIN -->
 <div class="main" id="main"></div>
+
 <!-- BOTTOM NAV -->
 <nav class="bnav" id="bnav">
-    <button class="bnav-item active" data-t="home" onclick="goHome()"><span class="bi">&#127968;</span><span>בית</span></button>
-    <button class="bnav-item" data-t="expenses" onclick="openSection('expenses')"><span class="bi">&#128176;</span><span>הוצאות</span></button>
-    <button class="bnav-item" data-t="tasks" onclick="openSection('tasks')"><span class="bi">&#9989;</span><span>משימות</span></button>
-    <button class="bnav-item" data-t="packing" onclick="openSection('packing')"><span class="bi">&#127890;</span><span>ציוד</span></button>
-    <button class="bnav-item" data-t="converter" onclick="openSection('converter')"><span class="bi">&#128177;</span><span>המרה</span></button>
-    <button class="bnav-item" data-t="emergency" onclick="openSection('emergency')"><span class="bi">&#127384;</span><span>חירום</span></button>
+    <button class="bnav-item active" data-t="home" onclick="goHome()"><span class="bi">🏠</span><span>בית</span></button>
+    <button class="bnav-item" data-t="expenses" onclick="openSection('expenses')"><span class="bi">💰</span><span>הוצאות</span></button>
+    <button class="bnav-item" data-t="tasks" onclick="openSection('tasks')"><span class="bi">✅</span><span>משימות</span></button>
+    <button class="bnav-item" data-t="packing" onclick="openSection('packing')"><span class="bi">🎒</span><span>ציוד</span></button>
+    <button class="bnav-item" data-t="converter" onclick="openSection('converter')"><span class="bi">💱</span><span>המרה</span></button>
+    <button class="bnav-item" data-t="emergency" onclick="openSection('emergency')"><span class="bi">🆘</span><span>חירום</span></button>
 </nav>
+
+<!-- BOTTOM SHEET -->
+<div class="sheet-ov" id="sheet-ov" onclick="closeSheet()"></div>
+<div class="bottom-sheet" id="bottom-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hdr">
+        <button class="sheet-close" onclick="closeSheet()">✕</button>
+        <div class="sheet-title" id="sheet-title"></div>
+    </div>
+    <div class="sheet-body" id="sheet-body"></div>
+</div>
+
 <!-- TOAST -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast"><span class="toast-ic" id="toast-ic">✓</span><span id="toast-msg"></span></div>
+
 <!-- BUDGET MODAL -->
 <div class="modal-ov" id="bgt-modal">
     <div class="modal">
-        <h3>&#9881; הגדרת תקציב</h3>
-        <div style="font-size:12px;color:var(--text-l);margin-bottom:10px;">תקציב הוצאות שוטפות (בשקלים)</div>
+        <h3>הגדרת תקציב</h3>
+        <p>תקציב הוצאות שוטפות (בשקלים)</p>
         <input type="number" id="bgt-modal-inp" inputmode="numeric"/>
         <div class="modal-btns">
+            <button class="modal-cancel" onclick="closeBgtModal()">ביטול</button>
             <button class="modal-save" onclick="saveBudget()">שמור</button>
-            <button class="modal-cancel-btn" onclick="closeBgtModal()">ביטול</button>
         </div>
     </div>
 </div>
@@ -498,25 +559,23 @@ let currentSection = null;
 let viewHistory = [];
 let weatherData = {};
 
-// Expense state
 const PRE_TRIP_CATS = ['לינה','טיסות','ביורוקרטיה'];
 const ON_TRIP_CATS = ['אוכל','תחבורה','אטרקציות','קניות','משיכת כסף','שונות'];
 const ALL_CATS = [
-    {id:'אוכל',icon:'🍜',label:'אוכל',color:'#f59e0b'},
-    {id:'תחבורה',icon:'🚕',label:'תחבורה',color:'#4a9eed'},
-    {id:'אטרקציות',icon:'🏝️',label:'אטרקציות',color:'#22c55e'},
-    {id:'קניות',icon:'🛍️',label:'קניות',color:'#8b5cf6'},
-    {id:'משיכת כסף',icon:'🏧',label:'משיכת כסף',color:'#0d9488'},
-    {id:'שונות',icon:'📦',label:'שונות',color:'#a855f7'},
-    {id:'לינה',icon:'🏨',label:'לינה',color:'#0ea5e9'},
-    {id:'טיסות',icon:'✈️',label:'טיסות',color:'#06b6d4'},
-    {id:'ביורוקרטיה',icon:'📋',label:'ביורוקרטיה',color:'#64748b'},
+    {id:'אוכל',icon:'🍜',label:'אוכל',color:'#FF9500'},
+    {id:'תחבורה',icon:'🚕',label:'תחבורה',color:'#007AFF'},
+    {id:'אטרקציות',icon:'🏝️',label:'אטרקציות',color:'#34C759'},
+    {id:'קניות',icon:'🛍️',label:'קניות',color:'#AF52DE'},
+    {id:'משיכת כסף',icon:'🏧',label:'משיכת כסף',color:'#30B0C7'},
+    {id:'שונות',icon:'📦',label:'שונות',color:'#8E8E93'},
+    {id:'לינה',icon:'🏨',label:'לינה',color:'#5AC8FA'},
+    {id:'טיסות',icon:'✈️',label:'טיסות',color:'#5856D6'},
+    {id:'ביורוקרטיה',icon:'📋',label:'ביורוקרטיה',color:'#FF2D55'},
 ];
 const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
 let expFilter = 'all', editExpIdx = null, selCat = 'אוכל', selWho = 'Both';
 let currentPackWho = 'all';
 let packSelCat = 'שונות', packSelWho = 'Shared', packSelCrit = false, editPackRow = null;
-// Link state
 const LINK_CATS = [
     {id:'📄',label:'מסמכים'},{id:'🏨',label:'הזמנות'},{id:'🗺️',label:'מפות'},
     {id:'🛡️',label:'ביטוח'},{id:'✈️',label:'טיסות'},{id:'📱',label:'שירותים'},{id:'📦',label:'אחר'}
@@ -530,6 +589,7 @@ const PACK_CAT_MAP = {}; PACK_CATS.forEach(c=>PACK_CAT_MAP[c.id]=c);
 const collapsedCats = {};
 function getPackCatOrder(){try{return JSON.parse(localStorage.getItem('packing-category-order'))||null;}catch(e){return null;}}
 function savePackCatOrder(order){try{localStorage.setItem('packing-category-order',JSON.stringify(order));}catch(e){}}
+let selNoteCatVal='Food';
 
 // ==================== CSV PARSER ====================
 function parseCSV(text) {
@@ -581,8 +641,26 @@ function parseExp(e,idx){
     if(!ils&&a)ils=convertToILS(a,c);if(!usd&&a)usd=convertFromILS(convertToILS(a,c),'USD');if(!php&&a)php=convertFromILS(convertToILS(a,c),'PHP');
     return{idx,desc:e['Description']||'',amount:a,currency:c,cat,type,who:e['Who']||'',date:e['Date']||'',ils,usd,php};
 }
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+function showToast(m,icon='✓'){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;document.getElementById('toast-ic').textContent=icon;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 function todayStr(){const d=new Date();return`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;}
+
+// ==================== BOTTOM SHEET ====================
+function openSheet(title, contentHtml){
+    const ov=document.getElementById('sheet-ov');
+    const sh=document.getElementById('bottom-sheet');
+    document.getElementById('sheet-title').textContent=title;
+    document.getElementById('sheet-body').innerHTML=contentHtml;
+    ov.classList.add('open');
+    sh.classList.add('open');
+    document.body.style.overflow='hidden';
+}
+function closeSheet(){
+    document.getElementById('sheet-ov').classList.remove('open');
+    document.getElementById('bottom-sheet').classList.remove('open');
+    document.body.style.overflow='';
+    // reset edit states
+    editExpIdx=null;editPackRow=null;editLinkRow=null;
+}
 
 // ==================== WEATHER ====================
 async function fetchWeather(){
@@ -601,7 +679,7 @@ function getWeather(dest){
     if(!w)return'';
     const code=w.weather_code,temp=Math.round(w.temperature_2m);
     let icon='☀️';if(code>=1&&code<=3)icon='⛅';if(code>=45&&code<=48)icon='🌫️';if(code>=51&&code<=67)icon='🌧️';if(code>=71&&code<=77)icon='❄️';if(code>=80)icon='🌧️';if(code>=95)icon='⛈️';
-    return`${icon} ${temp}°C`;
+    return`${icon} ${temp}°`;
 }
 
 // ==================== NAVIGATION ====================
@@ -626,7 +704,7 @@ function goBack(){
     renderApp();
 }
 function toggleSidebar(){
-    const s=document.getElementById('sidebar'),o=document.getElementById('sb-overlay');
+    const s=document.getElementById('sidebar'),o=document.getElementById('sb-ov');
     s.classList.toggle('open');o.classList.toggle('open');
 }
 function renderApp(){
@@ -643,10 +721,10 @@ function renderApp(){
 }
 function updateHeader(){
     const back=document.getElementById('hdr-back'),title=document.getElementById('hdr-title');
-    if(currentView==='home'){back.style.display='none';title.textContent='🇵🇭 הטיול של טום ודני';}
-    else if(currentView==='space'){back.style.display='block';title.textContent=DEST_MAP[currentSpaceId]?.name||'';}
+    if(currentView==='home'){back.style.display='none';title.textContent='🇵🇭 הטיול של תום ודני';}
+    else if(currentView==='space'){back.style.display='flex';title.textContent=DEST_MAP[currentSpaceId]?.name||'';}
     else{
-        back.style.display='block';
+        back.style.display='flex';
         const names={flights:'כל הטיסות',hotels:'כל המלונות',expenses:'הוצאות',tasks:'משימות',packing:'ציוד',converter:'המרת מטבע',emergency:'חירום',links:'קישורים'};
         title.textContent=names[currentSection]||'';
     }
@@ -667,15 +745,14 @@ function renderMarketplace(){
     const diff=tripStart-now;
     const days=Math.floor(diff/(1000*60*60*24)),hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
     let countdownText='';
-    if(beforeTrip){countdownText=days>0?`⏳ עוד ${days} ימים ו-${hours} שעות לטיול!`:`⏳ עוד ${hours} שעות לטיול!`;}
-    else if(now>new Date(DESTS[DESTS.length-1].end)){countdownText='🎉 הטיול הסתיים!';}
-    else{countdownText=`🌴 ${cur.name} — נהנים מהטיול!`;}
+    if(beforeTrip){countdownText=days>0?`✈️ עוד ${days} ימים לטיול`:`✈️ עוד ${hours} שעות לטיול`;}
+    else if(now>new Date(DESTS[DESTS.length-1].end)){countdownText='🎉 הטיול הסתיים';}
+    else{countdownText=`🌴 נהנים מ${cur.name}`;}
 
     const others=DESTS.filter(d=>d.id!==cur.id);
     const heroBadge=beforeTrip?'היעד הראשון':now>=new Date(cur.start)&&now<new Date(cur.end)?'עכשיו':'היעד הבא';
     const heroWeather=getWeather(cur);
 
-    // Budget summary
     const exps=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
     const onTrip=exps.filter(e=>e.type==='on');
     const onILS=onTrip.reduce((s,e)=>s+e.ils,0);
@@ -686,33 +763,39 @@ function renderMarketplace(){
     const grandILS=preILS+onILS;
 
     main.innerHTML=`
+    <div class="mk-hdr">
+        <h1>שלום, תום 👋</h1>
+        <div class="sub">הטיול לפיליפינים בקרוב</div>
+    </div>
     ${countdownText?`<div class="mk-countdown">${countdownText}</div>`:''}
     <div class="mk-hero" onclick="goToSpace('${cur.id}')">
         <img class="mk-hero-img" src="${cur.img}" alt="${esc(cur.en)}" loading="eager"/>
         <div class="mk-hero-ov">
             <div class="mk-hero-badge">${heroBadge}</div>
             <div class="mk-hero-name">${esc(cur.name)}</div>
-            <div class="mk-hero-dates">${fmtDestDates(cur)} · ${getNights(cur)} לילות</div>
-            ${heroWeather?`<div class="mk-hero-weather">${heroWeather}</div>`:''}
-            <div class="mk-hero-cta">הכנס ליעד ←</div>
+            <div class="mk-hero-info">
+                <span>${fmtDestDates(cur)}</span>
+                <span class="dot"></span>
+                <span>${getNights(cur)} לילות</span>
+                ${heroWeather?`<span class="dot"></span><span>${heroWeather}</span>`:''}
+            </div>
         </div>
     </div>
-    <div class="mk-section-title">יעדים נוספים</div>
+    <div class="mk-scroll-title">יעדים נוספים</div>
     <div class="mk-scroll">${others.map(d=>`
         <div class="mk-card" onclick="goToSpace('${d.id}')">
             <img class="mk-card-img" src="${d.img}" alt="${esc(d.en)}" loading="lazy"/>
             <div class="mk-card-ov">
                 <div class="mk-card-name">${esc(d.name)}</div>
-                <div class="mk-card-dates">${fmtDestDates(d)}</div>
-                ${getWeather(d)?`<div class="mk-card-weather">${getWeather(d)}</div>`:''}
+                <div class="mk-card-info">${fmtDestDates(d)}${getWeather(d)?' · '+getWeather(d):''}</div>
             </div>
         </div>`).join('')}</div>
     <div class="mk-budget">
-        <div class="mk-budget-title">💰 סיכום תקציב</div>
+        <div class="mk-budget-title">סיכום תקציב</div>
         <div class="mk-budget-row">
             <div class="mk-budget-stat"><div class="mk-budget-val">${fmtMoney(onILS,'ILS')}</div><div class="mk-budget-lbl">שוטפות</div></div>
-            <div class="mk-budget-stat"><div class="mk-budget-val" style="color:var(--pri)">${fmtMoney(grandILS,'ILS')}</div><div class="mk-budget-lbl">עלות כוללת</div></div>
-            <div class="mk-budget-stat"><div class="mk-budget-val" style="color:${BUDGET_LIMIT-onILS>=0?'var(--ok)':'var(--err)'}">${fmtMoney(BUDGET_LIMIT-onILS,'ILS')}</div><div class="mk-budget-lbl">נותר</div></div>
+            <div class="mk-budget-stat"><div class="mk-budget-val" style="color:var(--blue)">${fmtMoney(grandILS,'ILS')}</div><div class="mk-budget-lbl">עלות כוללת</div></div>
+            <div class="mk-budget-stat"><div class="mk-budget-val" style="color:${BUDGET_LIMIT-onILS>=0?'var(--green)':'var(--red)'}">${fmtMoney(BUDGET_LIMIT-onILS,'ILS')}</div><div class="mk-budget-lbl">נותר</div></div>
         </div>
     </div>`;
 }
@@ -733,14 +816,16 @@ function renderSpace(destId){
         <img class="sp-banner-img" src="${dest.img}" alt="${esc(dest.en)}"/>
         <div class="sp-banner-ov">
             <div class="sp-banner-name">${esc(dest.name)}</div>
-            <div class="sp-banner-info">${fmtDestDates(dest)} · ${getNights(dest)} לילות</div>
-            ${weather?`<div class="sp-banner-weather">${weather}</div>`:''}
+            <div class="sp-banner-info">
+                <span>${fmtDestDates(dest)}</span><span>·</span><span>${getNights(dest)} לילות</span>
+                ${weather?`<span>·</span><span>${weather}</span>`:''}
+            </div>
         </div>
     </div>`;
 
     // Flights
     if(flights.length){
-        html+=`<div class="sp-section"><div class="sp-section-title">✈️ טיסות</div>`;
+        html+=`<div class="section-subtitle">✈️ טיסות</div><div class="section" style="padding-top:0">`;
         let currentRoute='';
         flights.forEach(f=>{
             if(f['Route'])currentRoute=f['Route'];
@@ -748,13 +833,13 @@ function renderSpace(destId){
             const dt=f['Departure Time']||'',at=f['Arrival Time']||'',dd=formatDate(f['Departure Date']||'');
             const price=parsePriceNum(f['Price']);
             html+=`<div class="fl-card">
-                <div style="font-size:12px;color:var(--text-l);margin-bottom:4px">${esc(currentRoute)} · ${dd}</div>
+                <div class="fl-route-info">${esc(currentRoute)} · ${dd}</div>
                 <div class="fl-route">
                     <div class="fl-point"><div class="fl-code">${esc(dc)}</div><div class="fl-time">${esc(dt)}</div></div>
                     <div class="fl-line"><span class="plane">✈️</span></div>
                     <div class="fl-point"><div class="fl-code">${esc(ac)}</div><div class="fl-time">${esc(at)}</div></div>
                 </div>
-                ${price?`<div style="text-align:center;font-size:13px;font-weight:600;color:var(--pri)">$${price.toLocaleString()}</div>`:''}
+                ${price?`<div class="fl-price">$${price.toLocaleString()}</div>`:''}
             </div>`;
         });
         html+=`</div>`;
@@ -762,16 +847,16 @@ function renderSpace(destId){
 
     // Hotels
     if(hotels.length){
-        html+=`<div class="sp-section"><div class="sp-section-title">🏨 לינה</div>`;
+        html+=`<div class="section-subtitle">🏨 לינה</div><div class="section" style="padding-top:0">`;
         hotels.forEach(h=>{
             const name=h['Hotel Name']||'',ci=formatDate(h['Check-in']||''),co=formatDate(h['Check-out']||''),n=h['Nights']||'',total=parsePriceNum(h['Total Price']),url=h['Booking URL']||'';
             html+=`<div class="ht-card">
-                <div class="g-card-title">${esc(name)}</div>
+                <div class="ht-name">${esc(name)}</div>
                 <div class="ht-dates">
                     <div class="ht-date"><div class="ht-date-lbl">צ'ק-אין</div><div class="ht-date-val">${esc(ci)}</div></div>
                     <div class="ht-date"><div class="ht-date-lbl">צ'ק-אאוט</div><div class="ht-date-val">${esc(co)}</div></div>
                 </div>
-                <div class="g-card-sub">${n} לילות${total?' · ₪'+total.toLocaleString():''}</div>
+                <div class="ht-meta">${n} לילות${total?' · ₪'+total.toLocaleString():''}</div>
                 ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפה בהזמנה</a>`:''}
             </div>`;
         });
@@ -780,7 +865,7 @@ function renderSpace(destId){
 
     // Dani's Picks
     const noteIcons={Food:'🍜',Visit:'📍',Note:'📝'};
-    html+=`<div class="sp-section"><div class="sp-section-title">🌟 הפינה של דני</div>`;
+    html+=`<div class="section-subtitle">🌟 הפינה של דני</div><div class="section" style="padding-top:0">`;
     if(notes.length){
         html+=notes.map(n=>{
             const done=(n['Done']||'').toUpperCase()==='TRUE';
@@ -796,33 +881,24 @@ function renderSpace(destId){
                 <button class="note-del" onclick="deleteNoteItem(${n._row},'${destId}')">✕</button>
             </div>`;
         }).join('');
-    } else { html+=`<div class="empty">אין המלצות עדיין — הוסיפו את הראשונה!</div>`; }
-    html+=`
-    <div class="note-form">
-        <div class="note-cat-row">
-            <button class="note-cat-btn active" data-cat="Food" onclick="selNoteCat(this)">🍜 אוכל</button>
-            <button class="note-cat-btn" data-cat="Visit" onclick="selNoteCat(this)">📍 ביקור</button>
-            <button class="note-cat-btn" data-cat="Note" onclick="selNoteCat(this)">📝 הערה</button>
-        </div>
-        <input class="note-inp" id="note-title" placeholder="שם ההמלצה..."/>
-        <input class="note-inp" id="note-link" placeholder="קישור (Maps / אתר)..." dir="ltr"/>
-        <input class="note-inp" id="note-desc" placeholder="תיאור קצר (אופציונלי)..."/>
-        <button class="submit-btn" onclick="addNoteItem('${destId}')" style="font-size:13px;padding:10px">+ הוסף המלצה</button>
-    </div></div>`;
+    } else { html+=`<div class="empty"><div class="empty-icon">🌟</div>אין המלצות עדיין<br>הוסיפו את הראשונה!</div>`; }
+    html+=`<button class="btn-secondary" onclick="openNoteSheet('${destId}')" style="margin-top:12px">+ הוסף המלצה</button></div>`;
 
     // Local budget
-    html+=`<div class="sp-section"><div class="sp-section-title">💰 הוצאות ב${esc(dest.name)}</div>`;
-    html+=`<div style="font-size:14px;font-weight:600;margin-bottom:10px">${fmtMoney(expILS,'ILS')}</div>`;
+    html+=`<div class="section-subtitle">💰 הוצאות ב${esc(dest.name)}</div><div class="section" style="padding-top:0">`;
+    html+=`<div class="card"><div style="font-size:13px;color:var(--text-3);font-weight:500">סה"כ ביעד</div><div style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin-top:4px">${fmtMoney(expILS,'ILS')}</div></div>`;
     if(expenses.length){
+        html+=`<div class="exp-list">`;
         html+=expenses.map(e=>{
             const cat=e['Category']||'';const cm=CAT_MAP[cat];
-            return`<div class="g-card" style="padding:10px 12px;display:flex;align-items:center;gap:8px">
-                <span style="font-size:16px">${cm?cm.icon:'📦'}</span>
-                <div style="flex:1;font-size:12px">${esc(e['Description'])}<div style="font-size:10px;color:var(--text-l)">${esc(e['Date'])}</div></div>
-                <div style="font-size:13px;font-weight:600">${fmtMoney(parsePriceNum(e['Amount']),e['Currency']||'ILS')}</div>
+            return`<div class="exp-card">
+                <div class="exp-icon" style="background:${cm?cm.color+'22':'var(--gray-6)'}">${cm?cm.icon:'📦'}</div>
+                <div class="exp-info"><div class="exp-desc">${esc(e['Description'])}</div><div class="exp-meta"><span>${esc(e['Date'])}</span></div></div>
+                <div class="exp-amount"><div class="exp-primary">${fmtMoney(parsePriceNum(e['Amount']),e['Currency']||'ILS')}</div></div>
             </div>`;
         }).join('');
-    } else { html+=`<div class="empty">אין הוצאות עדיין ביעד הזה</div>`; }
+        html+=`</div>`;
+    } else { html+=`<div class="empty"><div class="empty-icon">💰</div>אין הוצאות עדיין ביעד הזה</div>`; }
     html+=`</div>`;
     main.innerHTML=html;
 }
@@ -845,15 +921,15 @@ function renderSection(name){
 function renderFlightsSection(){
     const main=document.getElementById('main');
     const data=DB.flights;
-    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">✈️ טיסות</div><div class="empty">לא נמצאו טיסות</div></div>';return;}
-    let route='',num=0,total=0,html='<div class="section-view"><div class="section-view-title">✈️ כל הטיסות</div>';
+    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">✈️ טיסות</div><div class="empty"><div class="empty-icon">✈️</div>לא נמצאו טיסות</div></div>';return;}
+    let route='',num=0,total=0,html='<div class="section"><div class="section-title">✈️ כל הטיסות</div>';
     data.forEach(f=>{
         if(f['Route']){route=f['Route'];num++;}
         const dc=extractCode(f['Departure Place']||''),ac=extractCode(f['Arrival Place']||''),dt=f['Departure Time']||'',at=f['Arrival Time']||'',dd=formatDate(f['Departure Date']||'');
         const price=parsePriceNum(f['Price']);if(price)total+=price;
         const ticket=f['Ticket URL']||'';
         html+=`<div class="fl-card">
-            <div style="font-size:12px;color:var(--text-l);margin-bottom:4px"><span class="g-card-badge" style="background:rgba(13,148,136,.08);color:var(--pri)">${num}. ${esc(route)}</span> ${dd?dd+'/2026':''}</div>
+            <div class="fl-route-info">${num}. ${esc(route)} · ${dd?dd+'/2026':''}</div>
             <div class="fl-route">
                 <div class="fl-point"><div class="fl-code">${esc(dc)}</div><div class="fl-time">${esc(dt)}</div></div>
                 <div class="fl-line"><span class="plane">✈️</span></div>
@@ -862,12 +938,12 @@ function renderFlightsSection(){
             <div class="fl-details">
                 <div class="fl-detail"><div class="fl-detail-lbl">מחיר</div><div class="fl-detail-val">${price?'$'+price.toLocaleString():'—'}</div></div>
                 <div class="fl-detail"><div class="fl-detail-lbl">תאריך</div><div class="fl-detail-val">${esc(dd)}</div></div>
-                <div class="fl-detail"><div class="fl-detail-lbl">מזוודות</div><div class="fl-detail-val" style="font-size:10px">${esc(f['Allowed Baggage']||'—')}</div></div>
+                <div class="fl-detail"><div class="fl-detail-lbl">מזוודות</div><div class="fl-detail-val" style="font-size:11px">${esc(f['Allowed Baggage']||'—')}</div></div>
             </div>
-            ${ticket?`<a href="${esc(ticket)}" class="ht-link" target="_blank" style="margin-top:8px">🎫 צפה בכרטיס</a>`:''}
+            ${ticket?`<a href="${esc(ticket)}" class="ht-link" target="_blank">🎫 צפה בכרטיס</a>`:''}
         </div>`;
     });
-    html+=`<div class="g-card" style="text-align:center;background:rgba(13,148,136,.03)"><div style="font-size:12px;color:var(--text-l)">סה"כ טיסות</div><div style="font-size:24px;font-weight:800;color:var(--pri);margin-top:4px">$${total.toLocaleString()}</div></div></div>`;
+    html+=`<div class="card" style="text-align:center"><div style="font-size:13px;color:var(--text-3);font-weight:500">סה"כ טיסות</div><div style="font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-.5px;margin-top:4px">$${total.toLocaleString()}</div></div></div>`;
     main.innerHTML=html;
 }
 
@@ -875,66 +951,50 @@ function renderFlightsSection(){
 function renderHotelsSection(){
     const main=document.getElementById('main');
     const data=DB.hotels;
-    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🏨 מלונות</div><div class="empty">לא נמצאו מלונות</div></div>';return;}
-    let totalILS=0,html='<div class="section-view"><div class="section-view-title">🏨 כל המלונות</div>';
+    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">🏨 מלונות</div><div class="empty"><div class="empty-icon">🏨</div>לא נמצאו מלונות</div></div>';return;}
+    let totalILS=0,html='<div class="section"><div class="section-title">🏨 כל המלונות</div>';
     data.forEach(h=>{
         const loc=h['Location']||'',name=h['Hotel Name']||'',ci=formatDate(h['Check-in']||''),co=formatDate(h['Check-out']||''),n=h['Nights']||'',ppn=parsePriceNum(h['Price Per Night']),total=parsePriceNum(h['Total Price']),url=h['Booking URL']||'',pay=h['Payment Status']||'',cancel=h['Cancellation']||'';
         totalILS+=total;
         html+=`<div class="ht-card">
-            <div style="margin-bottom:4px"><span class="g-card-badge" style="background:rgba(13,148,136,.08);color:var(--pri)">${esc(loc)}</span></div>
-            <div class="g-card-title">${esc(name)}</div>
+            <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:4px">${esc(loc)}</div>
+            <div class="ht-name">${esc(name)}</div>
             <div class="ht-dates">
                 <div class="ht-date"><div class="ht-date-lbl">צ'ק-אין</div><div class="ht-date-val">${esc(ci)}</div></div>
                 <div class="ht-date"><div class="ht-date-lbl">צ'ק-אאוט</div><div class="ht-date-val">${esc(co)}</div></div>
             </div>
-            <div class="fl-details" style="border:none;padding-top:6px">
+            <div class="fl-details" style="border:none;padding-top:4px">
                 <div class="fl-detail"><div class="fl-detail-lbl">ללילה</div><div class="fl-detail-val">₪${ppn.toLocaleString()}</div></div>
                 <div class="fl-detail"><div class="fl-detail-lbl">סה"כ</div><div class="fl-detail-val">₪${total.toLocaleString()}</div></div>
-                <div class="fl-detail"><div class="fl-detail-lbl">תשלום</div><div class="fl-detail-val" style="color:${pay.toLowerCase()==='paid'?'var(--ok)':'var(--acc)'}">${pay.toLowerCase()==='paid'?'שולם':esc(pay)}</div></div>
+                <div class="fl-detail"><div class="fl-detail-lbl">תשלום</div><div class="fl-detail-val" style="color:${pay.toLowerCase()==='paid'?'var(--green)':'var(--orange)'}">${pay.toLowerCase()==='paid'?'שולם':esc(pay)}</div></div>
             </div>
-            ${cancel&&cancel!=='-'?`<div style="font-size:11px;color:var(--text-l);margin-top:6px">ביטול: ${esc(cancel)}</div>`:''}
+            ${cancel&&cancel!=='-'?`<div style="font-size:12px;color:var(--text-3);margin-top:8px">ביטול: ${esc(cancel)}</div>`:''}
             ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפה בהזמנה</a>`:''}
         </div>`;
     });
-    html+=`<div class="g-card" style="text-align:center;background:rgba(13,148,136,.03)"><div style="font-size:12px;color:var(--text-l)">סה"כ לינה</div><div style="font-size:24px;font-weight:800;color:var(--pri);margin-top:4px">₪${totalILS.toLocaleString()}</div></div></div>`;
+    html+=`<div class="card" style="text-align:center"><div style="font-size:13px;color:var(--text-3);font-weight:500">סה"כ לינה</div><div style="font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-.5px;margin-top:4px">₪${totalILS.toLocaleString()}</div></div></div>`;
     main.innerHTML=html;
 }
 
 // --- EXPENSES ---
 function renderExpensesSection(){
     const main=document.getElementById('main');
-    const catGrid=ALL_CATS.map(c=>`<button class="cat-btn ${c.id===selCat?'active':''}" data-cat="${c.id}" onclick="selCatBtn(this)"><span class="ci">${c.icon}</span>${c.label}</button>`).join('');
-    main.innerHTML=`<div class="section-view">
-        <div class="section-view-title">💰 הוצאות</div>
-        <div class="bgt-progress"><div class="bgt-progress-hdr"><span class="bgt-progress-title">תקציב שוטפות</span><button class="bgt-gear" onclick="openBgtModal()">⚙</button></div><div class="bgt-amounts"><span class="bgt-spent" id="bs-spent">₪0</span><span class="bgt-limit" id="bs-limit">/ ₪15,000</span></div><div class="bgt-bar"><div class="bgt-fill g" id="bs-bar"></div></div><div class="bgt-pct" id="bs-pct">0%</div></div>
-        <div class="bgt-warn" id="bs-warn">⚠ שימו לב! התקציב מתקרב לגבול</div>
+    main.innerHTML=`<div class="section">
+        <div class="section-title">💰 הוצאות</div>
+        <div class="bgt-card">
+            <div class="bgt-hdr"><span class="bgt-title">תקציב שוטפות</span><button class="bgt-gear" onclick="openBgtModal()">⚙️</button></div>
+            <div class="bgt-amount"><span class="bgt-spent" id="bs-spent">₪0</span><span class="bgt-limit" id="bs-limit">/ ₪15,000</span></div>
+            <div class="bgt-bar"><div class="bgt-fill" id="bs-bar"></div></div>
+            <div class="bgt-pct" id="bs-pct">0%</div>
+        </div>
+        <div class="bgt-warn" id="bs-warn">⚠ התקציב מתקרב לגבול</div>
         <div class="bgt-summary" id="bs-summary"></div>
         <div class="bgt-chart" id="bs-chart" style="display:none"><div class="bgt-chart-title">פילוח לפי קטגוריה</div><div class="bgt-chart-bar" id="bs-chartbar"></div><div class="bgt-chart-legend" id="bs-legend"></div></div>
-        <div class="frm-card"><div class="frm-title"><span id="frm-label">הוסף הוצאה</span><button class="frm-cancel" id="frm-cancel" onclick="cancelEditExp()">✕ ביטול</button></div>
-            <div class="frm-row"><input type="number" class="amt" id="ea-amt" placeholder="סכום" inputmode="decimal"/><select class="cur" id="ea-cur"><option value="PHP">₱ PHP</option><option value="USD">$ USD</option><option value="ILS">₪ ILS</option></select></div>
-            <div class="frm-conv" id="ea-conv"></div>
-            <div class="frm-row"><input type="text" class="desc-input" id="ea-desc" placeholder="תיאור ההוצאה..."/><input type="date" class="dt" id="ea-date"/></div>
-            <div class="cat-grid">${catGrid}</div>
-            <div class="who-row"><button class="who-btn active" data-who="Both" onclick="selWhoBtn(this)">👫 משותף</button><button class="who-btn" data-who="Tom" onclick="selWhoBtn(this)">👤 Tom</button><button class="who-btn" data-who="Daniella" onclick="selWhoBtn(this)">👤 Dani</button></div>
-            <button class="submit-btn" id="ea-submit" onclick="submitExp()">+ הוסף הוצאה</button>
-        </div>
-        <div class="budget-section-title" style="display:flex;justify-content:space-between"><span>הוצאות</span><span id="bs-count" style="font-size:11px;font-weight:400"></span></div>
         <div class="filters" id="bs-filters"></div>
         <div id="bs-list"></div>
-    </div>`;
-    document.getElementById('ea-date').valueAsDate=new Date();
-    document.getElementById('ea-amt').addEventListener('input',updateExpConv);
-    document.getElementById('ea-cur').addEventListener('change',updateExpConv);
+    </div>
+    <button class="fab" onclick="openExpenseSheet()">+</button>`;
     renderBudgetData();
-}
-function selCatBtn(b){document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');selCat=b.dataset.cat;}
-function selWhoBtn(b){document.querySelectorAll('.who-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');selWho=b.dataset.who;}
-function updateExpConv(){
-    const a=parseFloat(document.getElementById('ea-amt').value),c=document.getElementById('ea-cur').value,el=document.getElementById('ea-conv');
-    if(!a||!exchangeRates){el.textContent='';return;}
-    const l=lockRates(a,c),parts=[];
-    if(c!=='ILS')parts.push(fmtMoney(l.ILS_Amount,'ILS'));if(c!=='USD')parts.push(fmtMoney(l.USD_Amount,'USD'));if(c!=='PHP')parts.push(fmtMoney(l.PHP_Amount,'PHP'));
-    el.textContent='≈ '+parts.join(' | ');
 }
 function renderBudgetData(){
     const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
@@ -946,94 +1006,123 @@ function renderBudgetData(){
     const preILS=preTrip.reduce((s,e)=>s+e.ils,0)+flILS+htILS;
     const grandILS=preILS+onILS;
     const todayILS=onTrip.filter(e=>e.date===todayStr()).reduce((s,e)=>s+e.ils,0);
-    // Progress
     const pct=BUDGET_LIMIT>0?Math.min(100,onILS/BUDGET_LIMIT*100):0;
     const sp=document.getElementById('bs-spent');if(sp)sp.textContent=fmtMoney(onILS,'ILS');
     const lm=document.getElementById('bs-limit');if(lm)lm.textContent=`/ ${fmtMoney(BUDGET_LIMIT,'ILS')}`;
-    const bar=document.getElementById('bs-bar');if(bar){bar.style.width=pct+'%';bar.className='bgt-fill '+(pct<60?'g':pct<85?'o':'r');}
+    const bar=document.getElementById('bs-bar');if(bar){bar.style.width=pct+'%';bar.className='bgt-fill '+(pct<60?'':pct<85?'o':'r');}
     const pc=document.getElementById('bs-pct');if(pc)pc.textContent=Math.round(pct)+'%';
     const warn=document.getElementById('bs-warn');if(warn)warn.style.display=pct>=85?'block':'none';
-    // Summary
+
     const sm=document.getElementById('bs-summary');
-    if(sm)sm.innerHTML=`<div class="bgt-sum-card"><div class="bgt-sum-lbl">הוצאות היום</div><div class="bgt-sum-val">${fmtMoney(todayILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(todayILS,'USD'),'USD')}</div></div>
-        <div class="bgt-sum-card"><div class="bgt-sum-lbl">סה"כ שוטפות</div><div class="bgt-sum-val">${fmtMoney(onILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(onUSD,'USD')} | ${fmtMoney(onPHP,'PHP')}</div></div>
-        <div class="bgt-sum-card"><div class="bgt-sum-lbl">עלות כוללת</div><div class="bgt-sum-val" style="color:var(--pri)">${fmtMoney(grandILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(grandILS,'USD'),'USD')}</div></div>`;
-    // Chart
+    if(sm)sm.innerHTML=`<div class="bgt-sum-card"><div class="bgt-sum-lbl">היום</div><div class="bgt-sum-val">${fmtMoney(todayILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(todayILS,'USD'),'USD')}</div></div>
+        <div class="bgt-sum-card"><div class="bgt-sum-lbl">שוטפות</div><div class="bgt-sum-val">${fmtMoney(onILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(onUSD,'USD')}</div></div>
+        <div class="bgt-sum-card"><div class="bgt-sum-lbl">סה"כ</div><div class="bgt-sum-val" style="color:var(--blue)">${fmtMoney(grandILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(grandILS,'USD'),'USD')}</div></div>`;
+
     const chartCard=document.getElementById('bs-chart');
     if(chartCard&&onTrip.length){
         chartCard.style.display='block';const byCat={};
         onTrip.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+e.ils;});
         const entries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('bs-chartbar').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat];return`<div class="bgt-chart-seg" style="width:${onILS>0?amt/onILS*100:0}%;background:${c?c.color:'#94a3b8'}"></div>`;}).join('');
-        document.getElementById('bs-legend').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat],p=onILS>0?Math.round(amt/onILS*100):0;return`<div class="bgt-chart-item"><div class="bgt-chart-dot" style="background:${c?c.color:'#94a3b8'}"></div>${c?c.icon:''} ${fmtMoney(amt,'ILS')} (${p}%)</div>`;}).join('');
+        document.getElementById('bs-chartbar').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat];return`<div class="bgt-chart-seg" style="width:${onILS>0?amt/onILS*100:0}%;background:${c?c.color:'#8E8E93'}"></div>`;}).join('');
+        document.getElementById('bs-legend').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat],p=onILS>0?Math.round(amt/onILS*100):0;return`<div class="bgt-chart-item"><div class="bgt-chart-dot" style="background:${c?c.color:'#8E8E93'}"></div>${c?c.icon:''} ${fmtMoney(amt,'ILS')} (${p}%)</div>`;}).join('');
     }
-    // Filters
+
     const fEl=document.getElementById('bs-filters');
     if(fEl){
         const cats=[...new Set(all.map(e=>e.cat))];
-        fEl.innerHTML=`<button class="fil-btn ${expFilter==='all'?'active':''}" data-cat="all" onclick="setExpFilter('all')">הכל</button><button class="fil-btn ${expFilter==='on'?'active':''}" data-cat="on" onclick="setExpFilter('on')">שוטפות</button><button class="fil-btn ${expFilter==='pre'?'active':''}" data-cat="pre" onclick="setExpFilter('pre')">מוקדמות</button>`+cats.map(cat=>{const c=CAT_MAP[cat];return`<button class="fil-btn ${expFilter===cat?'active':''}" data-cat="${cat}" onclick="setExpFilter('${cat}')">${c?c.icon+' ':''}${cat}</button>`;}).join('');
+        fEl.innerHTML=`<button class="fil-btn ${expFilter==='all'?'active':''}" onclick="setExpFilter('all')">הכל</button><button class="fil-btn ${expFilter==='on'?'active':''}" onclick="setExpFilter('on')">שוטפות</button><button class="fil-btn ${expFilter==='pre'?'active':''}" onclick="setExpFilter('pre')">מוקדמות</button>`+cats.map(cat=>{const c=CAT_MAP[cat];return`<button class="fil-btn ${expFilter===cat?'active':''}" onclick="setExpFilter('${cat}')">${c?c.icon+' ':''}${cat}</button>`;}).join('');
     }
-    // List
+
     let filtered=all;
     if(expFilter==='on')filtered=onTrip;else if(expFilter==='pre')filtered=preTrip;else if(expFilter!=='all')filtered=all.filter(e=>e.cat===expFilter);
     filtered.sort((a,b)=>{const pd=s=>{const p=s.split('/');return p.length===3?new Date(`${p[2]}-${p[1]}-${p[0]}`):new Date(s);};return pd(b.date)-pd(a.date);});
-    const cnt=document.getElementById('bs-count');if(cnt)cnt.textContent=`(${filtered.length})`;
     const list=document.getElementById('bs-list');
     if(!list)return;
-    if(!filtered.length){list.innerHTML='<div class="empty">אין הוצאות</div>';return;}
-    list.innerHTML=filtered.map(e=>{
-        const c=CAT_MAP[e.cat],bg=c?c.color+'15':'rgba(148,163,184,.1)';
-        const sec=['ILS','USD','PHP'].filter(x=>x!==e.currency).map(x=>fmtMoney(x==='ILS'?e.ils:x==='USD'?e.usd:e.php,x)).join(' | ');
-        const wl=e.who==='Both'?'משותף':e.who;
-        return`<div class="exp-card ${e.type==='pre'?'pre':''}">
-            <div class="exp-main" onclick="toggleExpDet(this.parentElement)">
-                <div class="exp-icon" style="background:${bg}">${c?c.icon:'📦'}</div>
-                <div class="exp-info"><div class="exp-desc">${esc(e.desc)}</div><div class="exp-meta"><span>${esc(e.date)}</span><span>${esc(wl)}</span>${e.type==='pre'?'<span class="exp-tag">מוקדמת</span>':''}</div></div>
-                <div class="exp-amounts"><div class="exp-primary">${fmtMoney(e.amount,e.currency)}</div><div class="exp-secondary">${sec}</div></div>
-            </div>
-            <div class="exp-detail"><div class="exp-currencies"><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.ils,'ILS')}</div><div class="exp-curr-lbl">ILS</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.usd,'USD')}</div><div class="exp-curr-lbl">USD</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.php,'PHP')}</div><div class="exp-curr-lbl">PHP</div></div></div>
-                <div class="exp-actions"><button class="edit-btn" onclick="event.stopPropagation();startEditExp(${e.idx})">✏ ערוך</button><button class="delete-btn" onclick="event.stopPropagation();deleteExp(${e.idx})">🗑 מחק</button></div>
-            </div>
+    if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">💰</div>אין הוצאות</div>';return;}
+    list.innerHTML=`<div class="exp-list">`+filtered.map(e=>{
+        const c=CAT_MAP[e.cat],bg=c?c.color+'22':'var(--gray-6)';
+        const sec=['ILS','USD','PHP'].filter(x=>x!==e.currency).map(x=>fmtMoney(x==='ILS'?e.ils:x==='USD'?e.usd:e.php,x)).join(' · ');
+        const wl=e.who==='Both'?'משותף':e.who==='Tom'?'תום':e.who==='Daniella'?'דני':e.who;
+        return`<div class="exp-card" onclick="toggleExpDet(this.parentElement.children[${filtered.indexOf(e)*2+1}])">
+            <div class="exp-icon" style="background:${bg};color:${c?c.color:'var(--text-2)'}">${c?c.icon:'📦'}</div>
+            <div class="exp-info"><div class="exp-desc">${esc(e.desc)}</div><div class="exp-meta"><span>${esc(e.date)}</span><span>·</span><span>${esc(wl)}</span>${e.type==='pre'?'<span class="exp-tag">מוקדמת</span>':''}</div></div>
+            <div class="exp-amount"><div class="exp-primary">${fmtMoney(e.amount,e.currency)}</div><div class="exp-secondary">${sec}</div></div>
+        </div>
+        <div class="exp-detail"><div class="exp-currencies"><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.ils,'ILS')}</div><div class="exp-curr-lbl">ILS</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.usd,'USD')}</div><div class="exp-curr-lbl">USD</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.php,'PHP')}</div><div class="exp-curr-lbl">PHP</div></div></div>
+            <div class="exp-actions"><button class="edit" onclick="event.stopPropagation();openExpenseSheet(${e.idx})">ערוך</button><button class="del" onclick="event.stopPropagation();deleteExp(${e.idx})">מחק</button></div>
         </div>`;
-    }).join('');
+    }).join('')+`</div>`;
 }
-function toggleExpDet(el){const d=el.querySelector('.exp-detail');if(d)d.classList.toggle('open');}
+function toggleExpDet(el){if(el&&el.classList.contains('exp-detail'))el.classList.toggle('open');}
 function setExpFilter(c){expFilter=c;renderBudgetData();}
+
+function openExpenseSheet(editIdx){
+    if(editIdx===undefined)editIdx=null;
+    editExpIdx=editIdx;
+    const e=editIdx!==null?DB.expenses[editIdx]:null;
+    selCat=e?(e['Category']||'אוכל'):'אוכל';
+    selWho=e?(e['Who']||'Both'):'Both';
+    const today=new Date().toISOString().split('T')[0];
+    let dateVal=today;
+    if(e&&e['Date']){const p=e['Date'].split('/');if(p.length===3)dateVal=`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
+    const html=`
+        <div class="input-row">
+            <input type="number" class="input amt" id="ea-amt" placeholder="0" inputmode="decimal" value="${e?parsePriceNum(e['Amount']):''}">
+            <select class="input cur" id="ea-cur">
+                <option value="PHP" ${e&&e['Currency']==='PHP'?'selected':''}>₱ PHP</option>
+                <option value="USD" ${e&&e['Currency']==='USD'?'selected':''}>$ USD</option>
+                <option value="ILS" ${e&&(!e['Currency']||e['Currency']==='ILS')?'selected':''}>₪ ILS</option>
+            </select>
+        </div>
+        <div class="conv-hint" id="ea-conv"></div>
+        <input type="text" class="input" id="ea-desc" placeholder="תיאור ההוצאה" value="${e?esc(e['Description']||''):''}" style="margin-bottom:10px">
+        <input type="date" class="input dt" id="ea-date" value="${dateVal}">
+        <div class="form-label">קטגוריה</div>
+        <div class="cat-grid">${ALL_CATS.map(c=>`<button type="button" class="cat-btn ${c.id===selCat?'active':''}" onclick="pickCat(this,'${c.id}')"><span class="cat-ic">${c.icon}</span>${c.label}</button>`).join('')}</div>
+        <div class="form-label">למי</div>
+        <div class="seg">
+            <button type="button" class="seg-btn ${selWho==='Both'?'active':''}" onclick="pickWho(this,'Both')">👫 משותף</button>
+            <button type="button" class="seg-btn ${selWho==='Tom'?'active':''}" onclick="pickWho(this,'Tom')">👤 תום</button>
+            <button type="button" class="seg-btn ${selWho==='Daniella'?'active':''}" onclick="pickWho(this,'Daniella')">👤 דני</button>
+        </div>
+        <button class="btn-primary" onclick="submitExp()">${e?'שמור שינויים':'+ הוסף הוצאה'}</button>
+        ${e?'<button class="btn-destructive" onclick="deleteExp('+editIdx+');closeSheet()">מחק הוצאה</button>':''}
+    `;
+    openSheet(e?'עריכת הוצאה':'הוצאה חדשה',html);
+    setTimeout(()=>{
+        const a=document.getElementById('ea-amt');if(a){a.addEventListener('input',updateExpConv);if(!e)a.focus();}
+        const c=document.getElementById('ea-cur');if(c)c.addEventListener('change',updateExpConv);
+        updateExpConv();
+    },100);
+}
+function pickCat(btn,id){selCat=id;document.querySelectorAll('#sheet-body .cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function pickWho(btn,w){selWho=w;document.querySelectorAll('#sheet-body .seg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function updateExpConv(){
+    const a=parseFloat(document.getElementById('ea-amt').value),c=document.getElementById('ea-cur').value,el=document.getElementById('ea-conv');
+    if(!el)return;
+    if(!a||!exchangeRates){el.textContent='';return;}
+    const l=lockRates(a,c),parts=[];
+    if(c!=='ILS')parts.push(fmtMoney(l.ILS_Amount,'ILS'));if(c!=='USD')parts.push(fmtMoney(l.USD_Amount,'USD'));if(c!=='PHP')parts.push(fmtMoney(l.PHP_Amount,'PHP'));
+    el.textContent='≈ '+parts.join(' · ');
+}
 async function submitExp(){
     const a=parseFloat(document.getElementById('ea-amt').value),c=document.getElementById('ea-cur').value,desc=document.getElementById('ea-desc').value.trim(),dt=document.getElementById('ea-date').value;
-    if(!a||a<=0||!desc)return;
+    if(!a||a<=0||!desc){showToast('יש למלא סכום ותיאור','⚠️');return;}
     const dateF=dt?new Date(dt).toLocaleDateString('en-GB'):todayStr();
     const type=getExpType(selCat),locked=lockRates(a,c);
     const exp={Date:dateF,Description:desc,Amount:a,Currency:c,Category:selCat,Who:selWho,Type:type,...locked,Origin_Cur:c};
     if(!DB.expenses)DB.expenses=[];
     if(editExpIdx!==null){
         exp.Origin_Cur=DB.expenses[editExpIdx]['Origin_Cur']||DB.expenses[editExpIdx]['Currency']||c;
-        DB.expenses[editExpIdx]=exp;setCooldown('expenses');saveCache();cancelEditExp();renderBudgetData();showToast('ההוצאה עודכנה');
-        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editExpense',data:{...exp,row:editExpIdx+2}})});}catch(e){}
+        DB.expenses[editExpIdx]=exp;setCooldown('expenses');saveCache();
+        const rowN=editExpIdx+2;closeSheet();renderBudgetData();showToast('ההוצאה עודכנה');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editExpense',data:{...exp,row:rowN}})});}catch(e){}
     }else{
-        DB.expenses.push(exp);setCooldown('expenses');saveCache();resetExpForm();renderBudgetData();showToast('ההוצאה נוספה');
-        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){showToast('שגיאה בשמירה');}
+        DB.expenses.push(exp);setCooldown('expenses');saveCache();closeSheet();renderBudgetData();showToast('ההוצאה נוספה');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){showToast('שגיאה בשמירה','⚠️');}
     }
 }
-function startEditExp(idx){
-    const e=DB.expenses[idx];if(!e)return;editExpIdx=idx;
-    document.getElementById('ea-amt').value=parsePriceNum(e['Amount']);document.getElementById('ea-cur').value=e['Currency']||'ILS';document.getElementById('ea-desc').value=e['Description']||'';
-    const ds=e['Date']||'';if(ds){const p=ds.split('/');if(p.length===3)document.getElementById('ea-date').value=`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
-    selCat=e['Category']||'אוכל';document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===selCat));
-    selWho=e['Who']||'Both';document.querySelectorAll('.who-btn').forEach(b=>b.classList.toggle('active',b.dataset.who===selWho));
-    document.getElementById('frm-label').textContent='עריכת הוצאה';document.getElementById('frm-cancel').style.display='block';
-    document.getElementById('ea-submit').textContent='✓ שמור';document.getElementById('ea-submit').classList.add('editing');
-    updateExpConv();document.getElementById('ea-amt').focus();document.querySelector('.frm-card').scrollIntoView({behavior:'smooth',block:'center'});
-}
-function cancelEditExp(){
-    editExpIdx=null;document.getElementById('frm-label').textContent='הוסף הוצאה';document.getElementById('frm-cancel').style.display='none';
-    document.getElementById('ea-submit').textContent='+ הוסף הוצאה';document.getElementById('ea-submit').classList.remove('editing');resetExpForm();
-}
-function resetExpForm(){
-    document.getElementById('ea-amt').value='';document.getElementById('ea-desc').value='';document.getElementById('ea-date').valueAsDate=new Date();document.getElementById('ea-cur').value='PHP';document.getElementById('ea-conv').textContent='';
-    selCat='אוכל';selWho='Both';document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat==='אוכל'));document.querySelectorAll('.who-btn').forEach(b=>b.classList.toggle('active',b.dataset.who==='Both'));
-}
-async function deleteExp(idx){if(!confirm('למחוק את ההוצאה?'))return;DB.expenses.splice(idx,1);setCooldown('expenses');saveCache();renderBudgetData();showToast('ההוצאה נמחקה');try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteExpense',data:{row:idx+2}})});}catch(e){}}
+async function deleteExp(idx){if(!confirm('למחוק את ההוצאה?'))return;DB.expenses.splice(idx,1);setCooldown('expenses');saveCache();renderBudgetData();showToast('ההוצאה נמחקה','🗑️');try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteExpense',data:{row:idx+2}})});}catch(e){}}
 function openBgtModal(){document.getElementById('bgt-modal-inp').value=BUDGET_LIMIT;document.getElementById('bgt-modal').classList.add('open');}
 function closeBgtModal(){document.getElementById('bgt-modal').classList.remove('open');}
 function saveBudget(){const v=parseInt(document.getElementById('bgt-modal-inp').value);if(!v||v<=0)return;BUDGET_LIMIT=v;localStorage.setItem('ph-budget-limit',v);closeBgtModal();renderBudgetData();showToast('התקציב עודכן');}
@@ -1048,15 +1137,29 @@ function renderTasksSection(){
     const local=JSON.parse(localStorage.getItem('ph-local-tasks')||'[]');
     const allT=[...tasks,...local];
     const total=allT.length,done=allT.filter(t=>t.done).length,pct=total>0?done/total*100:0;
-    main.innerHTML=`<div class="section-view"><div class="section-view-title">✅ משימות</div>
-        <div class="todo-prog"><span>${done}/${total} הושלמו</span><div class="todo-bar"><div class="todo-bar-fill" style="width:${pct}%"></div></div></div>
-        <div class="todo-wrap"><input class="todo-inp" id="task-inp" placeholder="הוסף מטלה חדשה..."/><button class="todo-add" onclick="addTaskItem()">הוסף</button></div>
-        <div id="task-list">${allT.map((t,i)=>{
-            let dueH='';if(t.due){const ov=new Date(t.due)<new Date()&&!t.done;dueH=`<span class="todo-due ${ov?'overdue':''}">${esc(formatDate(t.due))}</span>`;}
-            return`<div class="todo-item ${t.done?'done':''}"><div class="todo-chk" onclick="toggleTaskItem(${i},${t.fromSheet})"></div><div class="todo-text">${esc(t.text)}</div>${dueH}${!t.fromSheet?`<button class="todo-del" onclick="delLocalTask(${i-tasks.length})">✕</button>`:''}</div>`;
-        }).join('')}</div>
-    </div>`;
-    document.getElementById('task-inp').addEventListener('keypress',e=>{if(e.key==='Enter')addTaskItem();});
+    main.innerHTML=`<div class="section">
+        <div class="section-title">✅ משימות</div>
+        <div class="task-prog">
+            <div class="task-prog-row"><span class="task-prog-label">התקדמות</span><span class="task-prog-count">${done}/${total}</span></div>
+            <div class="task-bar"><div class="task-bar-fill" style="width:${pct}%"></div></div>
+        </div>
+        ${allT.length?`<div class="task-list">${allT.map((t,i)=>{
+            let dueH='';if(t.due){const ov=new Date(t.due)<new Date()&&!t.done;dueH=`<span class="task-due ${ov?'over':''}">${esc(formatDate(t.due))}</span>`;}
+            return`<div class="task-item ${t.done?'done':''}"><div class="task-chk" onclick="toggleTaskItem(${i},${t.fromSheet})"></div><div class="task-text">${esc(t.text)}</div>${dueH}${!t.fromSheet?`<button class="task-del" onclick="delLocalTask(${i-tasks.length})">✕</button>`:''}</div>`;
+        }).join('')}</div>`:'<div class="empty"><div class="empty-icon">✅</div>אין משימות עדיין<br>הוסיפו משימות לטיול</div>'}
+    </div>
+    <button class="fab" onclick="openTaskSheet()">+</button>`;
+}
+function openTaskSheet(){
+    const html=`
+        <input type="text" class="input" id="task-inp" placeholder="תיאור המשימה..." autocomplete="off">
+        <button class="btn-primary" onclick="addTaskItem()">+ הוסף משימה</button>
+    `;
+    openSheet('משימה חדשה',html);
+    setTimeout(()=>{
+        const i=document.getElementById('task-inp');
+        if(i){i.focus();i.addEventListener('keypress',e=>{if(e.key==='Enter')addTaskItem();});}
+    },250);
 }
 function toggleTaskItem(idx,fromSheet){
     if(fromSheet&&DB.tasks&&DB.tasks[idx]){
@@ -1070,16 +1173,16 @@ function toggleTaskItem(idx,fromSheet){
     }
 }
 async function addTaskItem(){
-    const inp=document.getElementById('task-inp'),text=inp.value.trim();if(!text)return;
+    const inp=document.getElementById('task-inp'),text=inp?inp.value.trim():'';if(!text)return;
     if(!DB.tasks)DB.tasks=[];DB.tasks.push({Task:text,Done:'FALSE','Due Date':''});
-    setCooldown('tasks');saveCache();renderTasksSection();
+    setCooldown('tasks');saveCache();closeSheet();renderTasksSection();showToast('המשימה נוספה');
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addTask',data:{Task:text,Done:'FALSE','Due Date':''}})});}catch(e){}
 }
 function delLocalTask(idx){const lt=JSON.parse(localStorage.getItem('ph-local-tasks')||'[]');if(idx>=0&&idx<lt.length){lt.splice(idx,1);localStorage.setItem('ph-local-tasks',JSON.stringify(lt));}renderTasksSection();}
 
 // --- PACKING ---
 function packCatIcon(cat){const c=PACK_CAT_MAP[cat];return c?c.icon:'📦';}
-function packWhoLabel(w){return w==='Tom'?'Tom':w==='Dani'||w==='Daniella'?'Daniella':'משותף';}
+function packWhoLabel(w){return w==='Tom'?'תום':w==='Dani'||w==='Daniella'?'דני':'משותף';}
 function packWhoClass(w){return w==='Tom'?'tom':w==='Dani'||w==='Daniella'?'dani':'shared';}
 function isCritical(r){return (r['Critical']||'').toUpperCase()==='TRUE';}
 
@@ -1096,118 +1199,81 @@ function getOrderedCatKeys(catObj){
 function renderPackingSection(){
     const main=document.getElementById('main');
     const data=DB.packing;
-    if(!data){main.innerHTML='<div class="section-view"><div class="section-view-title">🎒 ציוד</div><div class="empty">טוען ציוד...</div></div>';return;}
+    if(!data){main.innerHTML='<div class="section"><div class="section-title">🎒 ציוד</div><div class="loading"><div class="spinner"></div><div>טוען ציוד...</div></div></div>';return;}
 
-    // annotate rows
     const all=data.map((r,i)=>({...r,_row:i+2}));
-    const totalI=all.length, packedI=all.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
-
-    // counts
+    const totalI=all.length,packedI=all.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
     const tomC=all.filter(r=>r['Who']==='Tom').length;
     const daniC=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella').length;
     const sharedC=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella').length;
     const critC=all.filter(r=>isCritical(r)).length;
 
-    // filter
     let filtered=all;
     if(currentPackWho==='tom') filtered=all.filter(r=>r['Who']==='Tom');
     else if(currentPackWho==='dani') filtered=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella');
     else if(currentPackWho==='shared') filtered=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella');
     else if(currentPackWho==='critical') filtered=all.filter(r=>isCritical(r));
 
-    // group by category
     const cats={};
     PACK_CATS.forEach(c=>{const items=filtered.filter(r=>(r['Category']||'שונות')===c.id);if(items.length)cats[c.id]=items;});
     filtered.forEach(r=>{const c=r['Category']||'שונות';if(!PACK_CAT_MAP[c]){if(!cats[c])cats[c]=[];cats[c].push(r);}});
 
-    // apply saved order
     const orderedKeys=getOrderedCatKeys(cats);
-
-    // summary
     const allDone=totalI>0&&packedI===totalI;
-    const summaryText=allDone?'הכל ארוז! 🎉':`ארזנו ${packedI} מתוך ${totalI} פריטים`;
 
-    main.innerHTML=`<div class="section-view"><div class="section-view-title">🎒 ציוד</div>
-        <div class="pack-summary ${allDone?'done':''}">${summaryText}</div>
-
-        <div class="pack-add-form">
-            <div class="pack-add-row">
-                <input type="text" class="pack-add-inp" id="pack-inp" placeholder="הוסף פריט..." autocomplete="off">
-                <button class="pack-add-btn" onclick="addPackItem()">הוסף</button>
-            </div>
-            <div class="pack-sel-label">קטגוריה</div>
-            <div class="pack-sel-row">${PACK_CATS.map(c=>`<button class="pack-sel-btn ${packSelCat===c.id?'active':''}" onclick="packSelCat='${c.id}';renderPackingSection()">${c.icon} ${c.id}</button>`).join('')}</div>
-            <div class="pack-sel-label">למי</div>
-            <div class="pack-sel-row">
-                <button class="pack-sel-btn ${packSelWho==='Tom'?'active':''}" onclick="packSelWho='Tom';renderPackingSection()">👨 Tom</button>
-                <button class="pack-sel-btn ${packSelWho==='Dani'?'active':''}" onclick="packSelWho='Dani';renderPackingSection()">👩 Daniella</button>
-                <button class="pack-sel-btn ${packSelWho==='Shared'?'active':''}" onclick="packSelWho='Shared';renderPackingSection()">👫 משותף</button>
-                <button class="pack-crit-toggle ${packSelCrit?'active':''}" onclick="packSelCrit=!packSelCrit;renderPackingSection()">⚠️ קריטי</button>
-            </div>
+    main.innerHTML=`<div class="section">
+        <div class="section-title">🎒 ציוד</div>
+        <div class="pack-summary ${allDone?'done':''}">
+            <div class="pack-summary-txt">${allDone?'הכל ארוז! 🎉':'ארזנו '+packedI+' מתוך '+totalI}</div>
+            ${!allDone&&totalI>0?`<div class="pack-summary-count">${Math.round(packedI/totalI*100)}%</div>`:''}
         </div>
 
         <div class="pack-tabs">
             <button class="pack-tab ${currentPackWho==='all'?'active':''}" onclick="setPackWho('all')">הכל (${totalI})</button>
-            <button class="pack-tab ${currentPackWho==='tom'?'active':''}" onclick="setPackWho('tom')">👨 Tom (${tomC})</button>
-            <button class="pack-tab ${currentPackWho==='dani'?'active':''}" onclick="setPackWho('dani')">👩 Daniella (${daniC})</button>
+            <button class="pack-tab ${currentPackWho==='tom'?'active':''}" onclick="setPackWho('tom')">👨 תום (${tomC})</button>
+            <button class="pack-tab ${currentPackWho==='dani'?'active':''}" onclick="setPackWho('dani')">👩 דני (${daniC})</button>
             <button class="pack-tab ${currentPackWho==='shared'?'active':''}" onclick="setPackWho('shared')">👫 משותף (${sharedC})</button>
             <button class="pack-tab ${currentPackWho==='critical'?'active':''}" onclick="setPackWho('critical')">🔴 קריטי (${critC})</button>
         </div>
 
-        ${orderedKeys.length===0?'<div class="empty">אין פריטים בסינון הנוכחי</div>':''}
+        ${orderedKeys.length===0?'<div class="empty"><div class="empty-icon">🎒</div>אין פריטים בסינון הנוכחי</div>':''}
         ${orderedKeys.map((cat,ci)=>{
             const items=cats[cat];
             const cp=items.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
             const icon=packCatIcon(cat);
             const isCollapsed=!!collapsedCats[cat];
             return`<div class="pack-cat-hdr ${isCollapsed?'collapsed':''}">
-                <h3 onclick="togglePackCat('${esc(cat)}')">${icon} ${esc(cat)} — <span style="font-weight:400;color:var(--text-l)">${cp}/${items.length}</span></h3>
+                <div class="pack-cat-title" onclick="togglePackCat('${esc(cat)}')">${icon} ${esc(cat)} · ${cp}/${items.length}</div>
                 <div class="pack-cat-reorder">
-                    <button onclick="event.stopPropagation();movePackCat('${esc(cat)}',-1)" title="הזז למעלה" ${ci===0?'disabled style="opacity:.2"':''}>▲</button>
-                    <button onclick="event.stopPropagation();movePackCat('${esc(cat)}',1)" title="הזז למטה" ${ci===orderedKeys.length-1?'disabled style="opacity:.2"':''}>▼</button>
+                    <button onclick="event.stopPropagation();movePackCat('${esc(cat)}',-1)" ${ci===0?'disabled style="opacity:.2"':''}>▲</button>
+                    <button onclick="event.stopPropagation();movePackCat('${esc(cat)}',1)" ${ci===orderedKeys.length-1?'disabled style="opacity:.2"':''}>▼</button>
                 </div>
-                <span class="chevron" onclick="togglePackCat('${esc(cat)}')">▼</span>
+                <span class="pack-cat-chev" onclick="togglePackCat('${esc(cat)}')">▼</span>
             </div>
-            <div class="pack-cat-items ${isCollapsed?'collapsed':''}">${items.map(r=>{
+            <div class="pack-list ${isCollapsed?'collapsed':''}">${items.map(r=>{
                 const done=(r['Packed']||'').toUpperCase()==='TRUE';
                 const who=r['Who']||'Shared';
                 const crit=isCritical(r);
-                const isEditing=editPackRow===r._row;
-                if(isEditing){
-                    return`<div class="pack-edit-row" id="pack-edit-${r._row}">
-                        <input class="pack-edit-inp" id="pe-name-${r._row}" value="${esc(r['Item'])}">
-                        <select class="pack-edit-sel" id="pe-cat-${r._row}">${PACK_CATS.map(c=>`<option value="${c.id}" ${(r['Category']||'שונות')===c.id?'selected':''}>${c.icon} ${c.id}</option>`).join('')}</select>
-                        <select class="pack-edit-sel" id="pe-who-${r._row}"><option value="Tom" ${who==='Tom'?'selected':''}>👨 Tom</option><option value="Dani" ${who==='Dani'||who==='Daniella'?'selected':''}>👩 Daniella</option><option value="Shared" ${who!=='Tom'&&who!=='Dani'&&who!=='Daniella'?'selected':''}>👫 משותף</option></select>
-                        <button class="pack-crit-toggle ${crit?'active':''}" id="pe-crit-${r._row}" onclick="this.classList.toggle('active')">⚠️ קריטי</button>
-                        <button class="pack-edit-save" onclick="savePackEdit(${r._row})">שמור</button>
-                        <button class="pack-edit-cancel" onclick="editPackRow=null;renderPackingSection()">ביטול</button>
-                    </div>`;
-                }
-                return`<div class="pack-item ${done?'done':''} ${crit?'critical':''}" id="pack-row-${r._row}">
+                return`<div class="pack-item ${done?'done':''}" id="pack-row-${r._row}">
                     <div class="pack-chk" onclick="togglePackItem(${r._row})"></div>
-                    ${crit?'<span class="pack-critical-dot">🔴</span>':''}
+                    ${crit?'<div class="pack-crit-dot"></div>':''}
                     <div class="pack-txt" onclick="togglePackItem(${r._row})">${esc(r['Item'])}</div>
-                    <span class="pack-who-badge ${packWhoClass(who)}">${packWhoLabel(who)}</span>
-                    <div class="pack-item-actions">
-                        <button class="pack-act-btn" onclick="toggleCriticalItem(${r._row})" title="${crit?'הסר קריטי':'סמן קריטי'}">${crit?'🔴':'⚪'}</button>
-                        <button class="pack-act-btn" onclick="startEditPack(${r._row})" title="ערוך">✏️</button>
-                        <button class="pack-act-btn" onclick="deletePackItem(${r._row},'${esc(r['Item'])}')" title="מחק">🗑️</button>
+                    <span class="pack-who ${packWhoClass(who)}">${packWhoLabel(who)}</span>
+                    <div class="pack-actions">
+                        <button onclick="openPackSheet(${r._row})" title="ערוך">✏️</button>
+                        <button onclick="deletePackItem(${r._row},'${esc(r['Item']).replace(/'/g,"\\'")}')" title="מחק">🗑️</button>
                     </div>
                 </div>`;
             }).join('')}</div>`;
         }).join('')}
-    </div>`;
-    const inp=document.getElementById('pack-inp');
-    if(inp && !data.length) inp.focus();
-    if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')addPackItem();});
+    </div>
+    <button class="fab" onclick="openPackSheet()">+</button>`;
 }
 
 function setPackWho(w){currentPackWho=w;renderPackingSection();}
 function togglePackCat(cat){collapsedCats[cat]=!collapsedCats[cat];renderPackingSection();}
 
 function movePackCat(cat,dir){
-    const saved=getPackCatOrder();
-    // build current order from rendered keys
     const data=DB.packing||[];
     const all=data.map((r,i)=>({...r,_row:i+2}));
     let filtered=all;
@@ -1228,19 +1294,56 @@ function movePackCat(cat,dir){
     renderPackingSection();
 }
 
-async function addPackItem(){
-    const inp=document.getElementById('pack-inp');
-    const name=(inp?inp.value:'').trim();
-    if(!name){inp&&inp.focus();return;}
+function openPackSheet(row){
+    const isEdit=row!==undefined&&row!==null;
+    editPackRow=isEdit?row:null;
+    const r=isEdit?(DB.packing&&DB.packing[row-2]):null;
+    const name=r?(r['Item']||''):'';
+    packSelCat=r?(r['Category']||'שונות'):'שונות';
+    packSelWho=r?(r['Who']==='Daniella'?'Dani':(r['Who']||'Shared')):'Shared';
+    packSelCrit=r?isCritical(r):false;
+    const html=`
+        <input type="text" class="input" id="pack-name-inp" placeholder="שם הפריט" value="${esc(name)}" autocomplete="off">
+        <div class="form-label">קטגוריה</div>
+        <div class="cat-grid" id="pack-cat-grid">${PACK_CATS.map(c=>`<button type="button" class="cat-btn ${packSelCat===c.id?'active':''}" onclick="pickPackCat(this,'${c.id}')"><span class="cat-ic">${c.icon}</span>${c.id}</button>`).join('')}</div>
+        <div class="form-label">למי</div>
+        <div class="seg">
+            <button type="button" class="seg-btn ${packSelWho==='Tom'?'active':''}" onclick="pickPackWho(this,'Tom')">👨 תום</button>
+            <button type="button" class="seg-btn ${packSelWho==='Dani'?'active':''}" onclick="pickPackWho(this,'Dani')">👩 דני</button>
+            <button type="button" class="seg-btn ${packSelWho==='Shared'?'active':''}" onclick="pickPackWho(this,'Shared')">👫 משותף</button>
+        </div>
+        <button type="button" class="btn-secondary ${packSelCrit?'':''}" id="pack-crit-btn" onclick="togglePackCrit()" style="background:${packSelCrit?'rgba(255,59,48,.1)':'var(--gray-6)'};color:${packSelCrit?'var(--red)':'var(--blue)'}">${packSelCrit?'🔴':'⚪'} ${packSelCrit?'פריט קריטי':'סמן כקריטי'}</button>
+        <button class="btn-primary" onclick="submitPackItem()">${isEdit?'שמור שינויים':'+ הוסף פריט'}</button>
+        ${isEdit?`<button class="btn-destructive" onclick="deletePackItem(${row},'${esc(name).replace(/'/g,"\\'")}');closeSheet()">מחק פריט</button>`:''}
+    `;
+    openSheet(isEdit?'עריכת פריט':'פריט חדש',html);
+    setTimeout(()=>{const i=document.getElementById('pack-name-inp');if(i&&!isEdit)i.focus();},250);
+}
+function pickPackCat(btn,id){packSelCat=id;document.querySelectorAll('#pack-cat-grid .cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function pickPackWho(btn,w){packSelWho=w;document.querySelectorAll('#sheet-body .seg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function togglePackCrit(){packSelCrit=!packSelCrit;const btn=document.getElementById('pack-crit-btn');if(btn){btn.textContent=(packSelCrit?'🔴':'⚪')+' '+(packSelCrit?'פריט קריטי':'סמן כקריטי');btn.style.background=packSelCrit?'rgba(255,59,48,.1)':'var(--gray-6)';btn.style.color=packSelCrit?'var(--red)':'var(--blue)';}}
+
+async function submitPackItem(){
+    const name=(document.getElementById('pack-name-inp')?.value||'').trim();
+    if(!name){showToast('יש להזין שם פריט','⚠️');return;}
     const who=packSelWho==='Dani'?'Dani':packSelWho;
     const critVal=packSelCrit?'TRUE':'FALSE';
-    if(!DB.packing)DB.packing=[];
-    DB.packing.push({Item:name,Category:packSelCat,Packed:'FALSE',Who:who,Critical:critVal});
-    setCooldown('packing');saveCache();
-    renderPackingSection();
-    showToast('פריט נוסף ✓');
-    setTimeout(()=>{const items=document.querySelectorAll('.pack-item');if(items.length){items[items.length-1].classList.add('new-item');}},50);
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addPackingItem',data:{Item:name,Category:packSelCat,Who:who,Critical:critVal}})});}catch(e){}
+    if(editPackRow){
+        const idx=editPackRow-2;
+        if(DB.packing&&DB.packing[idx]){
+            DB.packing[idx]['Item']=name;DB.packing[idx]['Category']=packSelCat;
+            DB.packing[idx]['Who']=who;DB.packing[idx]['Critical']=critVal;
+            setCooldown('packing');saveCache();
+        }
+        const rowN=editPackRow;closeSheet();renderPackingSection();showToast('פריט עודכן');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editPackingItem',data:{row:rowN,Item:name,Category:packSelCat,Who:who,Critical:packSelCrit}})});}catch(e){}
+    }else{
+        if(!DB.packing)DB.packing=[];
+        DB.packing.push({Item:name,Category:packSelCat,Packed:'FALSE',Who:who,Critical:critVal});
+        setCooldown('packing');saveCache();closeSheet();renderPackingSection();showToast('פריט נוסף');
+        setTimeout(()=>{const items=document.querySelectorAll('.pack-item');if(items.length){items[items.length-1].classList.add('new-item');}},50);
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addPackingItem',data:{Item:name,Category:packSelCat,Who:who,Critical:critVal}})});}catch(e){}
+    }
 }
 
 async function togglePackItem(row){
@@ -1251,43 +1354,13 @@ async function togglePackItem(row){
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'togglePacking',data:{row}})});}catch(e){}
 }
 
-async function toggleCriticalItem(row){
-    const idx=row-2;if(DB.packing&&DB.packing[idx]){
-        const cur=isCritical(DB.packing[idx]);DB.packing[idx]['Critical']=cur?'FALSE':'TRUE';
-        setCooldown('packing');renderPackingSection();saveCache();
-    }
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'toggleCritical',data:{row}})});}catch(e){}
-}
-
-function startEditPack(row){editPackRow=row;renderPackingSection();const inp=document.getElementById('pe-name-'+row);if(inp)inp.focus();}
-
-async function savePackEdit(row){
-    const name=(document.getElementById('pe-name-'+row)?.value||'').trim();
-    const cat=document.getElementById('pe-cat-'+row)?.value||'שונות';
-    const who=document.getElementById('pe-who-'+row)?.value||'Shared';
-    const critEl=document.getElementById('pe-crit-'+row);
-    const crit=critEl?critEl.classList.contains('active'):false;
-    if(!name){showToast('יש להזין שם פריט');return;}
-    const idx=row-2;
-    if(DB.packing&&DB.packing[idx]){
-        DB.packing[idx]['Item']=name;DB.packing[idx]['Category']=cat;DB.packing[idx]['Who']=who;
-        DB.packing[idx]['Critical']=crit?'TRUE':'FALSE';
-        setCooldown('packing');saveCache();
-    }
-    editPackRow=null;renderPackingSection();showToast('פריט עודכן ✓');
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editPackingItem',data:{row,Item:name,Category:cat,Who:who,Critical:crit}})});}catch(e){}
-}
-
 async function deletePackItem(row,name){
     if(!confirm(`למחוק את "${name}"?`))return;
     const el=document.getElementById('pack-row-'+row);
     if(el){el.classList.add('removing');await new Promise(r=>setTimeout(r,300));}
     const idx=row-2;
-    if(DB.packing&&DB.packing[idx]){
-        DB.packing.splice(idx,1);
-        setCooldown('packing');saveCache();
-    }
-    renderPackingSection();showToast('פריט נמחק');
+    if(DB.packing&&DB.packing[idx]){DB.packing.splice(idx,1);setCooldown('packing');saveCache();}
+    renderPackingSection();showToast('פריט נמחק','🗑️');
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deletePackingItem',data:{row}})});}catch(e){}
 }
 
@@ -1295,14 +1368,23 @@ async function deletePackItem(row,name){
 const CSYM={USD:'$',ILS:'₪',PHP:'₱'},CNAME={USD:'דולר',ILS:'שקל',PHP:'פזו'};
 function renderConverterSection(){
     const main=document.getElementById('main');
-    if(!exchangeRates){main.innerHTML='<div class="section-view"><div class="section-view-title">💱 המרת מטבעות</div><div class="loading"><div class="spinner"></div><div>טוען שערים...</div></div></div>';return;}
-    main.innerHTML=`<div class="section-view"><div class="section-view-title">💱 המרת מטבעות</div>
+    if(!exchangeRates){main.innerHTML='<div class="section"><div class="section-title">💱 המרת מטבעות</div><div class="loading"><div class="spinner"></div><div>טוען שערים...</div></div></div>';return;}
+    main.innerHTML=`<div class="section"><div class="section-title">💱 המרת מטבעות</div>
         <div class="conv-card">
-            <div class="conv-row"><input type="number" class="conv-inp" id="cv-amt" placeholder="סכום" inputmode="decimal"><select class="conv-sel" id="cv-from"><option value="USD">$ USD</option><option value="ILS">₪ ILS</option><option value="PHP">₱ PHP</option></select></div>
+            <div class="conv-display">
+                <div class="conv-amount" id="cv-amt-display">$0</div>
+                <div class="conv-label" id="cv-lbl">הכניסו סכום להמרה</div>
+            </div>
+            <div class="conv-from">
+                <input type="number" class="conv-inp" id="cv-amt" placeholder="0" inputmode="decimal">
+                <select class="conv-sel" id="cv-from"><option value="USD">$ USD</option><option value="ILS">₪ ILS</option><option value="PHP">₱ PHP</option></select>
+            </div>
             <div class="conv-swap"><button onclick="swapConv()">⇅</button></div>
-            <div class="conv-row"><div class="conv-inp" id="cv-out" style="display:flex;align-items:center;justify-content:flex-end;min-height:44px;color:var(--pri)">—</div><select class="conv-sel" id="cv-to"><option value="ILS">₪ ILS</option><option value="USD">$ USD</option><option value="PHP">₱ PHP</option></select></div>
+            <div class="conv-to">
+                <div class="conv-inp" id="cv-out" style="color:var(--blue)">—</div>
+                <select class="conv-sel" id="cv-to"><option value="ILS">₪ ILS</option><option value="USD">$ USD</option><option value="PHP">₱ PHP</option></select>
+            </div>
             <div class="conv-quick" id="cv-quick"></div>
-            <div class="conv-result" id="cv-res" style="display:none"><div class="conv-result-amt" id="cv-res-amt"></div><div class="conv-result-lbl" id="cv-res-lbl"></div></div>
             <div class="conv-rate" id="cv-rate"></div>
         </div>
     </div>`;
@@ -1318,13 +1400,13 @@ function updateQuickAmt(){
 }
 function doConv(){
     const from=document.getElementById('cv-from').value,to=document.getElementById('cv-to').value,amt=parseFloat(document.getElementById('cv-amt').value);
-    const o=document.getElementById('cv-out'),r=document.getElementById('cv-res');
-    if(!amt||!exchangeRates){o.textContent='—';r.style.display='none';return;}
+    const o=document.getElementById('cv-out'),disp=document.getElementById('cv-amt-display'),lbl=document.getElementById('cv-lbl');
+    if(!amt||!exchangeRates){o.textContent='—';disp.textContent=CSYM[to]+'0';lbl.textContent='הכניסו סכום להמרה';return;}
     const res=(amt/exchangeRates[from])*exchangeRates[to];
-    o.textContent=CSYM[to]+(Math.round(res*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
-    const rate=exchangeRates[to]/exchangeRates[from];r.style.display='block';
-    document.getElementById('cv-res-amt').textContent=`${CSYM[from]}1 = ${CSYM[to]}${rate.toFixed(4)}`;
-    document.getElementById('cv-res-lbl').textContent=`${CNAME[from]} ל${CNAME[to]}`;
+    const resFmt=CSYM[to]+(Math.round(res*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    o.textContent=resFmt;disp.textContent=resFmt;
+    const rate=exchangeRates[to]/exchangeRates[from];
+    lbl.textContent=`${CSYM[from]}1 = ${CSYM[to]}${rate.toFixed(4)} · ${CNAME[from]} ל${CNAME[to]}`;
 }
 function swapConv(){const f=document.getElementById('cv-from'),t=document.getElementById('cv-to'),tmp=f.value;f.value=t.value;t.value=tmp;updateQuickAmt();doConv();}
 
@@ -1332,8 +1414,8 @@ function swapConv(){const f=document.getElementById('cv-from'),t=document.getEle
 function renderEmergencySection(){
     const main=document.getElementById('main');
     const data=DB.emergency;
-    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🆘 חירום</div><div class="empty">לא נמצא מידע חירום</div></div>';return;}
-    main.innerHTML='<div class="section-view"><div class="section-view-title">🆘 חירום</div>'+data.map(e=>`<div class="emg-card"><div class="emg-title">${esc(e['Name'])}</div>${e['Phone']?`<a href="tel:${esc(e['Phone'])}" class="emg-phone">📞 ${esc(e['Phone'])}</a>`:''}${e['Address']?`<div class="emg-val" style="margin-top:6px">${esc(e['Address'])}</div>`:''}${e['Notes']?`<div class="emg-val" style="margin-top:4px;font-size:12px">${esc(e['Notes'])}</div>`:''}</div>`).join('')+'</div>';
+    if(!data||!data.length){main.innerHTML='<div class="section"><div class="section-title">🆘 חירום</div><div class="empty"><div class="empty-icon">🆘</div>לא נמצא מידע חירום</div></div>';return;}
+    main.innerHTML='<div class="section"><div class="section-title">🆘 חירום</div>'+data.map(e=>`<div class="emg-card"><div class="emg-title">${esc(e['Name'])}</div>${e['Phone']?`<a href="tel:${esc(e['Phone'])}" class="emg-phone">📞 ${esc(e['Phone'])}</a>`:''}${e['Address']?`<div class="emg-info">${esc(e['Address'])}</div>`:''}${e['Notes']?`<div class="emg-info">${esc(e['Notes'])}</div>`:''}</div>`).join('')+'</div>';
 }
 
 // --- LINKS ---
@@ -1342,76 +1424,71 @@ function renderLinksSection(){
     const data=DB.links||[];
     const all=data.map((l,i)=>({...l,_row:i+2}));
 
-    // group by icon category
     const groups={};
     all.forEach(l=>{const ic=l['Icon']||'📦';if(!groups[ic])groups[ic]=[];groups[ic].push(l);});
     const catLabel={};LINK_CATS.forEach(c=>catLabel[c.id]=c.label);
 
-    // editing state — pre-fill form
-    const ed=editLinkRow?all.find(l=>l._row===editLinkRow):null;
-    const formName=ed?esc(ed['Name']):'';
-    const formUrl=ed?esc(ed['URL']):'';
-    const formDesc=ed?esc(ed['Description']||''):'';
-    const formIcon=ed?(ed['Icon']||'📦'):linkSelIcon;
-    if(ed)linkSelIcon=formIcon;
-
-    main.innerHTML=`<div class="section-view"><div class="section-view-title">🔗 קישורים</div>
-        <div class="link-add-form">
-            <input type="text" class="link-add-inp" id="link-name" placeholder="שם הקישור" value="${formName}" autocomplete="off">
-            <input type="url" class="link-add-inp url" id="link-url" placeholder="הדביקו קישור..." value="${formUrl}" autocomplete="off">
-            <input type="text" class="link-add-inp" id="link-desc" placeholder="תיאור קצר (אופציונלי)" value="${formDesc}" autocomplete="off">
-            <div class="link-sel-row">${LINK_CATS.map(c=>`<button class="link-sel-btn ${linkSelIcon===c.id?'active':''}" onclick="linkSelIcon='${c.id}';document.querySelectorAll('.link-sel-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${c.id} ${c.label}</button>`).join('')}</div>
-            ${ed
-              ?`<div style="display:flex;gap:8px"><button class="submit-btn" onclick="saveLinkEdit(${ed._row})" style="flex:1">שמור שינויים</button><button class="submit-btn" onclick="editLinkRow=null;renderLinksSection()" style="flex:0 0 auto;background:var(--border);color:var(--text)">ביטול</button></div>`
-              :`<button class="submit-btn" onclick="addLinkItem()">+ הוסף קישור</button>`}
-        </div>
-
-        ${all.length===0?'<div class="empty" style="padding:30px 16px;line-height:1.7">אין קישורים עדיין.<br>הוסיפו קישורים חשובים כמו פוליסת ביטוח,<br>אישורי הזמנות ומסמכי טיול</div>':''}
+    main.innerHTML=`<div class="section">
+        <div class="section-title">🔗 קישורים</div>
+        ${all.length===0?'<div class="empty"><div class="empty-icon">🔗</div>אין קישורים עדיין<br>הוסיפו קישורים חשובים כמו<br>פוליסת ביטוח, אישורי הזמנות ומסמכי טיול</div>':''}
         ${Object.entries(groups).map(([icon,items])=>{
             const label=catLabel[icon]||'אחר';
-            return`<div class="link-cat-hdr">${icon} ${esc(label)} (${items.length})</div>
-            ${items.map(l=>`<div class="link-card" id="link-row-${l._row}" onclick="window.open('${esc(l['URL'])}','_blank')">
-                <div class="link-card-icon">${esc(l['Icon'])||'📦'}</div>
-                <div class="link-card-info">
-                    <div class="link-card-name">${esc(l['Name'])}<span class="ext">↗️</span></div>
-                    ${l['Description']?`<div class="link-card-desc">${esc(l['Description'])}</div>`:''}
+            return`<div class="link-cat-hdr">${icon} ${esc(label)} · ${items.length}</div>
+            <div class="link-list">${items.map(l=>`<div class="link-card" id="link-row-${l._row}" onclick="window.open('${esc(l['URL'])}','_blank')">
+                <div class="link-icon">${esc(l['Icon'])||'📦'}</div>
+                <div class="link-info">
+                    <div class="link-name">${esc(l['Name'])}<span class="ext">↗</span></div>
+                    ${l['Description']?`<div class="link-desc">${esc(l['Description'])}</div>`:''}
                 </div>
-                <div class="link-card-actions" onclick="event.stopPropagation()">
-                    <button onclick="startEditLink(${l._row})" title="ערוך">✏️</button>
-                    <button onclick="deleteLinkItem(${l._row},'${esc(l['Name'])}')" title="מחק">🗑️</button>
+                <div class="link-actions" onclick="event.stopPropagation()">
+                    <button onclick="openLinkSheet(${l._row})" title="ערוך">✏️</button>
+                    <button onclick="deleteLinkItem(${l._row},'${esc(l['Name']).replace(/'/g,"\\'")}')" title="מחק">🗑️</button>
                 </div>
-            </div>`).join('')}`;
+            </div>`).join('')}</div>`;
         }).join('')}
-    </div>`;
+    </div>
+    <button class="fab" onclick="openLinkSheet()">+</button>`;
 }
 
-async function addLinkItem(){
-    const name=(document.getElementById('link-name')?.value||'').trim();
-    const url=(document.getElementById('link-url')?.value||'').trim();
-    const desc=(document.getElementById('link-desc')?.value||'').trim();
-    if(!name||!url){showToast('יש להזין שם וקישור');return;}
-    if(!DB.links)DB.links=[];
-    DB.links.push({Name:name,URL:url,Description:desc,Icon:linkSelIcon});
-    setCooldown('links');saveCache();
-    renderLinksSection();showToast('קישור נוסף ✓');
-    setTimeout(()=>{const cards=document.querySelectorAll('.link-card');if(cards.length)cards[cards.length-1].classList.add('new-item');},50);
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addLink',data:{Name:name,URL:url,Description:desc,Icon:linkSelIcon}})});}catch(e){}
+function openLinkSheet(row){
+    const isEdit=row!==undefined&&row!==null;
+    editLinkRow=isEdit?row:null;
+    const l=isEdit?(DB.links&&DB.links[row-2]):null;
+    linkSelIcon=l?(l['Icon']||'📦'):'📦';
+    const html=`
+        <input type="text" class="input" id="link-name-inp" placeholder="שם הקישור" value="${l?esc(l['Name']||''):''}" autocomplete="off" style="margin-bottom:10px">
+        <input type="url" class="input" id="link-url-inp" placeholder="הדביקו קישור..." value="${l?esc(l['URL']||''):''}" autocomplete="off" dir="ltr" style="margin-bottom:10px">
+        <input type="text" class="input" id="link-desc-inp" placeholder="תיאור קצר (אופציונלי)" value="${l?esc(l['Description']||''):''}" autocomplete="off">
+        <div class="form-label">קטגוריה</div>
+        <div class="cat-grid" id="link-cat-grid">${LINK_CATS.map(c=>`<button type="button" class="cat-btn ${linkSelIcon===c.id?'active':''}" onclick="pickLinkIcon(this,'${c.id}')"><span class="cat-ic">${c.id}</span>${c.label}</button>`).join('')}</div>
+        <button class="btn-primary" onclick="submitLink()">${isEdit?'שמור שינויים':'+ הוסף קישור'}</button>
+        ${isEdit?`<button class="btn-destructive" onclick="deleteLinkItem(${row},'${esc(l['Name']).replace(/'/g,"\\'")}');closeSheet()">מחק קישור</button>`:''}
+    `;
+    openSheet(isEdit?'עריכת קישור':'קישור חדש',html);
+    setTimeout(()=>{const i=document.getElementById('link-name-inp');if(i&&!isEdit)i.focus();},250);
 }
+function pickLinkIcon(btn,id){linkSelIcon=id;document.querySelectorAll('#link-cat-grid .cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 
-function startEditLink(row){editLinkRow=row;renderLinksSection();document.getElementById('link-name')?.focus();}
-
-async function saveLinkEdit(row){
-    const name=(document.getElementById('link-name')?.value||'').trim();
-    const url=(document.getElementById('link-url')?.value||'').trim();
-    const desc=(document.getElementById('link-desc')?.value||'').trim();
-    if(!name||!url){showToast('יש להזין שם וקישור');return;}
-    const idx=row-2;
-    if(DB.links&&DB.links[idx]){
-        DB.links[idx]['Name']=name;DB.links[idx]['URL']=url;DB.links[idx]['Description']=desc;DB.links[idx]['Icon']=linkSelIcon;
-        setCooldown('links');saveCache();
+async function submitLink(){
+    const name=(document.getElementById('link-name-inp')?.value||'').trim();
+    const url=(document.getElementById('link-url-inp')?.value||'').trim();
+    const desc=(document.getElementById('link-desc-inp')?.value||'').trim();
+    if(!name||!url){showToast('יש להזין שם וקישור','⚠️');return;}
+    if(editLinkRow){
+        const idx=editLinkRow-2;
+        if(DB.links&&DB.links[idx]){
+            DB.links[idx]['Name']=name;DB.links[idx]['URL']=url;DB.links[idx]['Description']=desc;DB.links[idx]['Icon']=linkSelIcon;
+            setCooldown('links');saveCache();
+        }
+        const rowN=editLinkRow;closeSheet();renderLinksSection();showToast('קישור עודכן');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editLink',data:{row:rowN,Name:name,URL:url,Description:desc,Icon:linkSelIcon}})});}catch(e){}
+    }else{
+        if(!DB.links)DB.links=[];
+        DB.links.push({Name:name,URL:url,Description:desc,Icon:linkSelIcon});
+        setCooldown('links');saveCache();closeSheet();renderLinksSection();showToast('קישור נוסף');
+        setTimeout(()=>{const cards=document.querySelectorAll('.link-card');if(cards.length)cards[cards.length-1].classList.add('new-item');},50);
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addLink',data:{Name:name,URL:url,Description:desc,Icon:linkSelIcon}})});}catch(e){}
     }
-    editLinkRow=null;renderLinksSection();showToast('קישור עודכן ✓');
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editLink',data:{row,Name:name,URL:url,Description:desc,Icon:linkSelIcon}})});}catch(e){}
 }
 
 async function deleteLinkItem(row,name){
@@ -1420,18 +1497,34 @@ async function deleteLinkItem(row,name){
     if(el){el.classList.add('removing');await new Promise(r=>setTimeout(r,300));}
     const idx=row-2;
     if(DB.links&&DB.links[idx]){DB.links.splice(idx,1);setCooldown('links');saveCache();}
-    renderLinksSection();showToast('קישור נמחק');
+    renderLinksSection();showToast('קישור נמחק','🗑️');
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteLink',data:{row}})});}catch(e){}
 }
 
 // ==================== NOTES MANAGEMENT ====================
-let selNoteCatVal='Food';
-function selNoteCat(btn){document.querySelectorAll('.note-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selNoteCatVal=btn.dataset.cat;}
+function openNoteSheet(destId){
+    selNoteCatVal='Food';
+    const html=`
+        <div class="seg">
+            <button type="button" class="seg-btn active" onclick="pickNoteCat(this,'Food')">🍜 אוכל</button>
+            <button type="button" class="seg-btn" onclick="pickNoteCat(this,'Visit')">📍 ביקור</button>
+            <button type="button" class="seg-btn" onclick="pickNoteCat(this,'Note')">📝 הערה</button>
+        </div>
+        <input type="text" class="input" id="note-title" placeholder="שם ההמלצה" style="margin-top:14px;margin-bottom:10px">
+        <input type="url" class="input" id="note-link" placeholder="קישור (Maps / אתר)" dir="ltr" style="margin-bottom:10px">
+        <input type="text" class="input" id="note-desc" placeholder="תיאור קצר (אופציונלי)">
+        <button class="btn-primary" onclick="addNoteItem('${destId}')">+ הוסף המלצה</button>
+    `;
+    openSheet('המלצה חדשה',html);
+    setTimeout(()=>{const i=document.getElementById('note-title');if(i)i.focus();},250);
+}
+function pickNoteCat(btn,cat){selNoteCatVal=cat;document.querySelectorAll('#sheet-body .seg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+
 async function addNoteItem(destId){
     const title=document.getElementById('note-title').value.trim();if(!title){document.getElementById('note-title').focus();return;}
     const link=document.getElementById('note-link').value.trim(),desc=document.getElementById('note-desc').value.trim();
     const note={DestinationID:destId,Category:selNoteCatVal,Title:title,Link:link,Description:desc,Done:'FALSE',ID:Date.now().toString(36)};
-    if(!DB.notes)DB.notes=[];DB.notes.push(note);setCooldown('notes');saveCache();renderSpace(destId);showToast('ההמלצה נוספה');
+    if(!DB.notes)DB.notes=[];DB.notes.push(note);setCooldown('notes');saveCache();closeSheet();renderSpace(destId);showToast('ההמלצה נוספה');
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addNote',data:note})});}catch(e){}
 }
 async function toggleNote(row,destId){
@@ -1443,7 +1536,7 @@ async function toggleNote(row,destId){
 }
 async function deleteNoteItem(row,destId){
     if(!confirm('למחוק את ההמלצה?'))return;
-    const idx=row-2;if(DB.notes)DB.notes.splice(idx,1);setCooldown('notes');saveCache();renderSpace(destId);showToast('ההמלצה נמחקה');
+    const idx=row-2;if(DB.notes)DB.notes.splice(idx,1);setCooldown('notes');saveCache();renderSpace(destId);showToast('ההמלצה נמחקה','🗑️');
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteNote',data:{row}})});}catch(e){}
 }
 
@@ -1455,7 +1548,7 @@ async function refreshData(showIndicator){
         else if(currentView==='space')renderSpace(currentSpaceId);
         else if(currentView==='section')renderSection(currentSection);
     }
-    if(showIndicator)showToast('הנתונים עודכנו');
+    if(showIndicator)showToast('הנתונים עודכנו','↻');
     return success;
 }
 setInterval(()=>refreshData(false),60000);
@@ -1470,7 +1563,7 @@ async function fetchRates(){
 async function init(){
     const hadCache=loadCache();
     if(hadCache)renderMarketplace();
-    else document.getElementById('main').innerHTML='<div class="loading" style="padding-top:100px"><div class="spinner"></div><div style="margin-top:12px">טוען את הטיול...</div></div>';
+    else document.getElementById('main').innerHTML='<div class="loading" style="padding-top:80px"><div class="spinner"></div><div>טוען את הטיול...</div></div>';
     await Promise.all([fetchRates(),fetchWeather()]);
     const success=await fetchAllData();
     if(success||hadCache){renderApp();}
