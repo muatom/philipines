@@ -1,1325 +1,1153 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>הפיליפינים 2026</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap');
-
-        :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
-            --accent: #f59e0b;
-            --accent-light: #fbbf24;
-            --bg: #f0f9ff;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --gradient-start: #0ea5e9;
-            --gradient-end: #06b6d4;
-            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
-            --radius: 16px;
-            --radius-sm: 10px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Heebo', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding-bottom: 80px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            padding: 24px 20px 32px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%; right: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .header-emoji { font-size: 40px; margin-bottom: 8px; display: block; }
-        .header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; position: relative; }
-        .header p { font-size: 14px; opacity: 0.9; font-weight: 300; position: relative; }
-        .countdown {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-            padding: 8px 16px; border-radius: 20px; margin-top: 12px;
-            font-size: 13px; font-weight: 500; position: relative;
-        }
-
-        .nav {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: var(--card); border-top: 1px solid var(--border);
-            display: flex; justify-content: space-around;
-            padding: 6px 8px; padding-bottom: calc(6px + env(safe-area-inset-bottom));
-            z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
-            overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-            justify-content: flex-start; gap: 0; padding-left: 4px; padding-right: 4px;
-        }
-        .nav::-webkit-scrollbar { display: none; }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 2px;
-            padding: 6px 6px; border-radius: 12px; cursor: pointer; transition: all 0.2s;
-            font-size: 10px; color: var(--text-light); border: none; background: none;
-            font-family: inherit; min-width: 52px;
-        }
-        .nav-item.active { color: var(--primary); background: rgba(14, 165, 233, 0.08); }
-        .nav-item span.icon { font-size: 22px; line-height: 1; }
-
-        .section { display: none; padding: 20px 16px; animation: fadeIn 0.3s ease; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .section-title { font-size: 22px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-        .section-title .emoji { font-size: 24px; }
-
-        .card {
-            background: var(--card); border-radius: var(--radius); padding: 16px;
-            margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border);
-            transition: box-shadow 0.2s;
-        }
-        .card:active { box-shadow: var(--shadow-md); }
-        .card-label {
-            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-            color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-        }
-        .card-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-        .card-subtitle { font-size: 13px; color: var(--text-light); margin-bottom: 12px; }
-
-        .flight-route { display: flex; align-items: center; justify-content: space-between; margin: 16px 0; position: relative; }
-        .flight-point { text-align: center; flex: 0 0 auto; }
-        .flight-code { font-size: 28px; font-weight: 800; color: var(--text); }
-        .flight-city { font-size: 12px; color: var(--text-light); margin-top: 2px; }
-        .flight-time { font-size: 14px; font-weight: 600; color: var(--primary-dark); margin-top: 4px; }
-        .flight-line { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0 12px; position: relative; }
-        .flight-line::before {
-            content: ''; position: absolute; top: 50%; left: 12px; right: 12px;
-            height: 2px; background: linear-gradient(to left, var(--primary), var(--border)); border-radius: 1px;
-        }
-        .flight-line .plane { font-size: 20px; position: relative; z-index: 1; background: var(--card); padding: 0 4px; transform: scaleX(-1); }
-        .flight-duration { text-align: center; font-size: 11px; color: var(--text-light); margin-top: -4px; margin-bottom: 12px; }
-        .flight-details { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
-        .flight-detail { text-align: center; }
-        .flight-detail-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.3px; }
-        .flight-detail-value { font-size: 14px; font-weight: 600; margin-top: 2px; }
-
-        .day-nav { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 16px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-        .day-nav::-webkit-scrollbar { display: none; }
-        .day-btn {
-            flex: 0 0 auto; padding: 8px 16px; border-radius: 20px; border: 1.5px solid var(--border);
-            background: var(--card); font-family: inherit; font-size: 13px; font-weight: 500;
-            color: var(--text-light); cursor: pointer; transition: all 0.2s; white-space: nowrap;
-        }
-        .day-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 8px rgba(14,165,233,0.3); }
-        .day-content { display: none; animation: fadeIn 0.3s ease; }
-        .day-content.active { display: block; }
-        .itinerary-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .itinerary-item:last-child { border-bottom: none; }
-        .itinerary-time { flex: 0 0 auto; font-size: 13px; font-weight: 600; color: var(--primary); min-width: 50px; padding-top: 2px; }
-        .itinerary-details h4 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
-        .itinerary-details p { font-size: 13px; color: var(--text-light); line-height: 1.5; }
-        .itinerary-icon {
-            font-size: 18px; flex: 0 0 auto; width: 36px; height: 36px;
-            background: rgba(14,165,233,0.08); border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .hotel-dates { display: flex; gap: 12px; margin: 12px 0; }
-        .hotel-date { flex: 1; background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; text-align: center; }
-        .hotel-date-label { font-size: 10px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.3px; }
-        .hotel-date-value { font-size: 14px; font-weight: 600; margin-top: 3px; }
-        .hotel-link {
-            display: inline-flex; align-items: center; gap: 6px; color: var(--primary);
-            font-size: 13px; font-weight: 500; text-decoration: none; padding: 8px 14px;
-            background: rgba(14,165,233,0.08); border-radius: 8px; margin-top: 8px; transition: background 0.2s;
-        }
-        .hotel-link:active { background: rgba(14,165,233,0.15); }
-
-        .todo-input-wrap { display: flex; gap: 8px; margin-bottom: 16px; }
-        .todo-input {
-            flex: 1; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-            font-family: inherit; font-size: 14px; background: var(--card); outline: none;
-            transition: border-color 0.2s; direction: rtl;
-        }
-        .todo-input:focus { border-color: var(--primary); }
-        .todo-add-btn {
-            padding: 12px 18px; background: var(--primary); color: white; border: none;
-            border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; font-weight: 600;
-            cursor: pointer; transition: background 0.2s; white-space: nowrap;
-        }
-        .todo-add-btn:active { background: var(--primary-dark); }
-        .todo-item {
-            display: flex; align-items: center; gap: 12px; padding: 14px 16px;
-            background: var(--card); border-radius: var(--radius-sm); margin-bottom: 8px;
-            box-shadow: var(--shadow); border: 1px solid var(--border); transition: all 0.2s;
-        }
-        .todo-item.done { opacity: 0.5; }
-        .todo-item.done .todo-text { text-decoration: line-through; }
-        .todo-checkbox {
-            width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            flex: 0 0 auto; transition: all 0.2s; background: var(--card);
-        }
-        .todo-item.done .todo-checkbox { background: var(--success); border-color: var(--success); }
-        .todo-checkbox::after {
-            content: ''; display: none; width: 6px; height: 10px;
-            border: solid white; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); margin-top: -2px;
-        }
-        .todo-item.done .todo-checkbox::after { display: block; }
-        .todo-text { flex: 1; font-size: 14px; line-height: 1.4; }
-        .todo-delete { background: none; border: none; color: var(--text-light); font-size: 18px; cursor: pointer; padding: 4px; opacity: 0.4; transition: opacity 0.2s; }
-        .todo-delete:active { opacity: 1; color: var(--danger); }
-        .todo-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-size: 13px; color: var(--text-light); }
-        .todo-progress-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-        .todo-progress-fill { height: 100%; background: linear-gradient(to left, var(--success), #34d399); border-radius: 3px; transition: width 0.3s ease; }
-        .todo-due { font-size: 11px; color: var(--text-light); margin-right: auto; }
-        .todo-due.overdue { color: var(--danger); font-weight: 600; }
-
-        .emergency-card { border-right: 4px solid var(--danger); }
-        .emergency-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-        .emergency-value { font-size: 14px; color: var(--text-light); line-height: 1.5; }
-        .emergency-phone { display: inline-flex; align-items: center; gap: 6px; color: var(--primary); font-weight: 600; text-decoration: none; font-size: 16px; }
-
-        .link-item {
-            display: flex; align-items: center; gap: 12px; padding: 14px 16px;
-            background: var(--card); border-radius: var(--radius-sm); margin-bottom: 8px;
-            box-shadow: var(--shadow); border: 1px solid var(--border); text-decoration: none;
-            color: inherit; transition: box-shadow 0.2s;
-        }
-        .link-item:active { box-shadow: var(--shadow-md); }
-        .link-icon {
-            width: 42px; height: 42px; background: rgba(14,165,233,0.08); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; font-size: 20px; flex: 0 0 auto;
-        }
-        .link-info { flex: 1; }
-        .link-title { font-size: 15px; font-weight: 600; }
-        .link-desc { font-size: 12px; color: var(--text-light); margin-top: 2px; }
-        .link-arrow { color: var(--text-light); font-size: 18px; transform: scaleX(-1); }
-
-        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-        .badge-blue { background: rgba(14,165,233,0.1); color: var(--primary-dark); }
-        .badge-green { background: rgba(16,185,129,0.1); color: #059669; }
-        .badge-orange { background: rgba(245,158,11,0.1); color: #d97706; }
-        .badge-red { background: rgba(239,68,68,0.1); color: #dc2626; }
-        .stopover-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(245,158,11,0.1); color: #d97706; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
-
-        .mt-8 { margin-top: 8px; }
-        .text-sm { font-size: 13px; }
-        .text-muted { color: var(--text-light); }
-
-        .pack-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: var(--border); border-radius: 12px; padding: 3px; }
-        .pack-tab { flex: 1; padding: 9px 8px; border: none; border-radius: 10px; background: none; font-family: inherit; font-size: 13px; font-weight: 500; color: var(--text-light); cursor: pointer; transition: all 0.2s; }
-        .pack-tab.active { background: var(--card); color: var(--text); box-shadow: var(--shadow); font-weight: 600; }
-        .pack-category { margin-bottom: 12px; }
-        .pack-category-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--card); border-radius: var(--radius-sm) var(--radius-sm) 0 0; border: 1px solid var(--border); border-bottom: none; cursor: pointer; user-select: none; }
-        .pack-category-header h3 { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-        .pack-category-count { font-size: 12px; color: var(--text-light); background: var(--bg); padding: 2px 8px; border-radius: 10px; }
-        .pack-category-items { background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-sm) var(--radius-sm); overflow: hidden; }
-        .pack-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 14px; cursor: pointer; transition: background 0.15s; }
-        .pack-item:last-child { border-bottom: none; }
-        .pack-item.done { opacity: 0.45; }
-        .pack-item.done .pack-item-text { text-decoration: line-through; }
-        .pack-item-check { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .pack-item.done .pack-item-check { background: var(--success); border-color: var(--success); }
-        .pack-item.done .pack-item-check::after { content: ''; width: 5px; height: 9px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-top: -2px; }
-        .pack-item-text { flex: 1; }
-        .pack-summary { display: flex; gap: 8px; margin-bottom: 16px; }
-        .pack-summary-card { flex: 1; text-align: center; padding: 10px; background: var(--card); border-radius: var(--radius-sm); border: 1px solid var(--border); }
-        .pack-summary-num { font-size: 22px; font-weight: 700; color: var(--primary); }
-        .pack-summary-label { font-size: 10px; color: var(--text-light); margin-top: 2px; }
-
-        /* ===== BUDGET DASHBOARD ===== */
-        .budget-progress-card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        .budget-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .budget-progress-title { font-size: 13px; font-weight: 600; color: var(--text-light); }
-        .budget-progress-gear { background: none; border: none; font-size: 16px; cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: background 0.15s; }
-        .budget-progress-gear:active { background: var(--border); }
-        .budget-progress-amounts { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-        .budget-progress-spent { font-size: 28px; font-weight: 800; color: var(--text); }
-        .budget-progress-limit { font-size: 14px; color: var(--text-light); font-weight: 500; }
-        .budget-progress-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
-        .budget-progress-fill { height: 100%; border-radius: 5px; transition: width 0.5s ease, background 0.3s; }
-        .budget-progress-fill.green { background: linear-gradient(90deg, #10b981, #34d399); }
-        .budget-progress-fill.orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-        .budget-progress-fill.red { background: linear-gradient(90deg, #ef4444, #f87171); }
-        .budget-progress-pct { font-size: 11px; color: var(--text-light); text-align: left; }
-        .budget-warning { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 12px; font-size: 13px; color: var(--danger); font-weight: 600; text-align: center; display: none; }
-
-        /* Summary cards */
-        .budget-summary-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-        .budget-summary-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 10px; text-align: center; }
-        .budget-summary-label { font-size: 10px; color: var(--text-light); font-weight: 500; margin-bottom: 4px; }
-        .budget-summary-value { font-size: 17px; font-weight: 700; }
-        .budget-summary-sub { font-size: 10px; color: var(--text-light); margin-top: 2px; line-height: 1.4; }
-
-        /* Category chart */
-        .budget-chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
-        .budget-chart-title { font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 12px; }
-        .budget-chart-bar { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 10px; background: var(--border); }
-        .budget-chart-segment { height: 100%; transition: width 0.4s ease; min-width: 2px; }
-        .budget-chart-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; }
-        .budget-chart-item { display: flex; align-items: center; gap: 5px; font-size: 11px; }
-        .budget-chart-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
-        .budget-chart-item-amount { font-weight: 600; color: var(--text); }
-        .budget-chart-item-pct { color: var(--text-light); }
-
-        /* Add expense form */
-        .budget-form-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
-        .budget-form-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .budget-form-cancel { background: none; border: none; color: var(--danger); font-size: 13px; font-weight: 500; cursor: pointer; display: none; padding: 4px 8px; font-family: inherit; }
-        .budget-form-row { display: flex; gap: 8px; margin-bottom: 10px; }
-        .budget-form-row input, .budget-form-row select {
-            flex: 1; padding: 11px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-            font-family: inherit; font-size: 14px; background: var(--card); outline: none; direction: rtl;
-            transition: border-color 0.2s; min-width: 0;
-        }
-        .budget-form-row input:focus, .budget-form-row select:focus { border-color: var(--primary); }
-        .budget-form-row .amount-input { font-size: 18px; font-weight: 600; text-align: center; flex: 1.5; }
-        .budget-form-row .currency-select { flex: 0 0 90px; font-weight: 600; text-align: center; }
-        .budget-form-row .desc-input { flex: 1; }
-        .budget-form-row .date-input { flex: 0 0 140px; direction: ltr; }
-        .budget-form-conversion { font-size: 12px; color: var(--text-light); text-align: center; padding: 4px 0 8px; min-height: 20px; }
-        .budget-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-        .budget-cat-btn { padding: 8px 4px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card); font-family: inherit; font-size: 11px; cursor: pointer; text-align: center; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-        .budget-cat-btn.active { border-color: var(--primary); background: rgba(14,165,233,0.06); color: var(--primary); font-weight: 600; }
-        .budget-cat-btn:active { transform: scale(0.96); }
-        .budget-cat-icon { font-size: 18px; }
-        .budget-who-row { display: flex; gap: 6px; margin-bottom: 12px; }
-        .budget-who-btn { flex: 1; padding: 9px 8px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; text-align: center; transition: all 0.15s; color: var(--text-light); }
-        .budget-who-btn.active { border-color: var(--primary); background: rgba(14,165,233,0.06); color: var(--primary); font-weight: 600; }
-        .budget-submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: white; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
-        .budget-submit-btn:active { opacity: 0.9; transform: scale(0.99); }
-        .budget-submit-btn.editing { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-
-        /* Toast */
-        .budget-toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transition: all 0.3s ease; pointer-events: none; font-family: inherit; }
-        .budget-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        /* Expense list */
-        .budget-section-title { font-size: 14px; font-weight: 600; margin: 16px 0 8px; color: var(--text-light); display: flex; align-items: center; justify-content: space-between; }
-        .expense-filters { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-        .expense-filters::-webkit-scrollbar { display: none; }
-        .expense-filter-btn { flex: 0 0 auto; padding: 6px 12px; border-radius: 16px; border: 1.5px solid var(--border); background: var(--card); font-family: inherit; font-size: 12px; font-weight: 500; color: var(--text-light); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .expense-filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .expense-card { background: var(--card); border-radius: var(--radius-sm); margin-bottom: 6px; border: 1px solid var(--border); overflow: hidden; transition: box-shadow 0.2s; }
-        .expense-card:active { box-shadow: var(--shadow-md); }
-        .expense-card-main { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; }
-        .expense-card-icon { font-size: 20px; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
-        .expense-card-info { flex: 1; min-width: 0; }
-        .expense-card-desc { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .expense-card-meta { font-size: 11px; color: var(--text-light); margin-top: 2px; display: flex; gap: 6px; align-items: center; }
-        .expense-card-tag { font-size: 9px; padding: 1px 6px; border-radius: 4px; font-weight: 600; background: rgba(14,165,233,0.08); color: var(--primary); }
-        .expense-card-amounts { text-align: left; }
-        .expense-card-primary { font-size: 15px; font-weight: 700; white-space: nowrap; }
-        .expense-card-secondary { font-size: 10px; color: var(--text-light); margin-top: 1px; white-space: nowrap; }
-        .expense-card-detail { display: none; padding: 0 14px 12px; border-top: 1px dashed var(--border); margin-top: 0; }
-        .expense-card-detail.open { display: block; padding-top: 10px; }
-        .expense-card-currencies { display: flex; gap: 12px; margin-bottom: 10px; direction: ltr; }
-        .expense-card-curr { text-align: center; flex: 1; }
-        .expense-card-curr-val { font-size: 14px; font-weight: 600; }
-        .expense-card-curr-label { font-size: 10px; color: var(--text-light); }
-        .expense-card-actions { display: flex; gap: 8px; }
-        .expense-card-actions button { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .expense-card-actions .edit-btn:active { background: rgba(14,165,233,0.08); border-color: var(--primary); color: var(--primary); }
-        .expense-card-actions .delete-btn:active { background: rgba(239,68,68,0.08); border-color: var(--danger); color: var(--danger); }
-        .expense-card.pre-trip { border-right: 3px solid var(--primary); }
-
-        /* Budget settings modal */
-        .budget-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
-        .budget-modal-overlay.open { display: flex; }
-        .budget-modal { background: var(--card); border-radius: var(--radius); padding: 24px; max-width: 340px; width: 100%; box-shadow: var(--shadow-lg); }
-        .budget-modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-        .budget-modal input { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 20px; font-weight: 600; text-align: center; outline: none; background: var(--bg); direction: ltr; margin-bottom: 16px; }
-        .budget-modal input:focus { border-color: var(--primary); }
-        .budget-modal-btns { display: flex; gap: 8px; }
-        .budget-modal-btns button { flex: 1; padding: 11px; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
-        .budget-modal-save { background: var(--primary); color: white; }
-        .budget-modal-cancel { background: var(--border); color: var(--text); }
-
-        .converter-card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-        .converter-input-group { display: flex; gap: 10px; margin-bottom: 14px; align-items: stretch; }
-        .converter-input { flex: 1; padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 18px; font-family: 'Heebo', sans-serif; font-weight: 600; background: var(--bg); color: var(--text); direction: ltr; text-align: right; outline: none; transition: border-color 0.2s; }
-        .converter-input:focus { border-color: var(--primary); }
-        .converter-select { padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; font-family: 'Heebo', sans-serif; font-weight: 600; background: var(--bg); color: var(--text); cursor: pointer; min-width: 100px; outline: none; transition: border-color 0.2s; }
-        .converter-select:focus { border-color: var(--primary); }
-        .converter-swap { display: flex; justify-content: center; margin-bottom: 14px; }
-        .converter-swap button { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; transition: transform 0.3s; }
-        .converter-swap button:active { transform: rotate(180deg); }
-        .converter-result { background: var(--bg); border-radius: var(--radius-sm); padding: 20px; text-align: center; margin-bottom: 14px; }
-        .converter-result-amount { font-size: 32px; font-weight: 800; color: var(--primary); direction: ltr; }
-        .converter-result-label { font-size: 13px; color: var(--text-light); margin-top: 4px; }
-        .converter-rate-info { font-size: 12px; color: var(--text-light); text-align: center; padding-top: 8px; }
-        .converter-quick-amounts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-        .converter-quick-btn { flex: 1; min-width: 60px; padding: 8px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card); color: var(--text); font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
-        .converter-quick-btn:active { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .loading-wrap { text-align: center; padding: 40px 20px; color: var(--text-light); }
-        .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 10px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .last-updated { font-size: 11px; color: var(--text-light); text-align: center; margin-top: 12px; opacity: 0.7; }
-        .error-msg { text-align: center; padding: 20px; color: var(--danger); font-size: 14px; }
-        .retry-btn { margin-top: 10px; padding: 8px 20px; border: none; border-radius: 8px; background: var(--primary); color: white; font-family: 'Heebo', sans-serif; cursor: pointer; }
-
-        @media (prefers-color-scheme: dark) {
-            :root { --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --text-light: #94a3b8; --border: #334155; }
-            .header { background: linear-gradient(135deg, #0369a1, #0891b2); }
-            .nav { background: #1e293b; border-top-color: #334155; }
-            .flight-line::before { background: linear-gradient(to left, var(--primary), #334155); }
-            .todo-input, .todo-checkbox { background: #1e293b; color: var(--text); }
-            .itinerary-icon, .link-icon { background: rgba(14,165,233,0.15); }
-            .hotel-date { background: #0f172a; }
-            .pack-tabs { background: #334155; }
-            .pack-tab.active { background: #1e293b; }
-            .pack-item-check { background: #1e293b; }
-            .budget-form-row input, .budget-form-row select { background: #1e293b; color: var(--text); }
-            .budget-cat-btn { background: #1e293b; }
-            .budget-who-btn { background: #1e293b; }
-            .expense-card { background: #1e293b; }
-            .expense-card-detail { border-top-color: #334155; }
-            .expense-card-actions button { background: #1e293b; border-color: #334155; }
-            .budget-modal { background: #1e293b; }
-            .budget-modal input { background: #0f172a; }
-            .budget-modal-cancel { background: #334155; }
-            .budget-chart-card { background: #1e293b; }
-            .expense-filter-btn { background: #1e293b; }
-            .converter-select, .converter-input { background: #1e293b; color: var(--text); border-color: #334155; }
-            .converter-result { background: #0f172a; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>הפיליפינים 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#0d9488;--pri-d:#0f766e;--pri-l:#5eead4;--acc:#f97316;--acc-l:#fdba74;--bg:#f5f5f4;--card:#fff;--text:#1c1917;--text-l:#78716c;--text-m:#a8a29e;--border:#e7e5e4;--ok:#10b981;--err:#ef4444;--warn:#f59e0b;--sh:0 1px 3px rgba(0,0,0,.08);--sh-md:0 4px 12px rgba(0,0,0,.08);--sh-lg:0 8px 24px rgba(0,0,0,.12);--r:16px;--rs:10px;--hdr:56px;--nav:64px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* ===== APP HEADER ===== */
+.app-hdr{position:fixed;top:0;left:0;right:0;height:var(--hdr);background:var(--card);display:flex;align-items:center;padding:0 16px;z-index:50;border-bottom:1px solid var(--border);gap:12px}
+.hdr-back{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;color:var(--text);display:none;font-family:inherit;line-height:1}
+.hdr-title{flex:1;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-menu{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;color:var(--text)}
+.hdr-refresh{background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:var(--text-l)}
+/* ===== MAIN ===== */
+.main{padding-top:var(--hdr);padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom));min-height:100vh;transition:opacity .15s ease}
+.main.fading{opacity:0}
+/* ===== BOTTOM NAV ===== */
+.bnav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);padding-bottom:env(safe-area-inset-bottom);background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:50;box-shadow:0 -2px 8px rgba(0,0,0,.04)}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border:none;background:none;font-family:inherit;font-size:10px;color:var(--text-l);cursor:pointer;border-radius:var(--rs);transition:.2s;min-width:48px}
+.bnav-item .bi{font-size:22px;line-height:1}
+.bnav-item.active{color:var(--pri);background:rgba(13,148,136,.06)}
+/* ===== SIDEBAR ===== */
+.sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:90;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px)}
+.sb-overlay.open{opacity:1;pointer-events:auto}
+.sidebar{position:fixed;top:0;right:-280px;width:280px;height:100%;background:var(--card);z-index:100;transition:right .3s cubic-bezier(.4,0,.2,1);box-shadow:var(--sh-lg);display:flex;flex-direction:column}
+.sidebar.open{right:0}
+.sb-hdr{padding:24px 20px 16px;background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff}
+.sb-hdr h2{font-size:18px;font-weight:700}
+.sb-hdr p{font-size:12px;opacity:.8;margin-top:2px}
+.sb-items{flex:1;overflow-y:auto;padding:8px 0}
+.sb-item{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;font-family:inherit;text-align:right}
+.sb-item:active{background:rgba(13,148,136,.06)}
+.sb-item .si{font-size:20px;width:28px;text-align:center}
+.sb-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* ===== MARKETPLACE ===== */
+.mk-countdown{text-align:center;padding:12px 16px;font-size:13px;color:var(--pri-d);font-weight:600;background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(13,148,136,.02))}
+.mk-hero{margin:12px 16px;border-radius:var(--r);overflow:hidden;position:relative;height:220px;cursor:pointer;box-shadow:var(--sh-md)}
+.mk-hero-img{width:100%;height:100%;object-fit:cover}
+.mk-hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,rgba(0,0,0,.1) 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.mk-hero-badge{display:inline-flex;align-items:center;gap:4px;background:var(--acc);color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-bottom:8px;align-self:flex-start}
+.mk-hero-name{font-size:28px;font-weight:800;color:#fff}
+.mk-hero-dates{font-size:13px;color:rgba(255,255,255,.85);margin-top:2px}
+.mk-hero-weather{font-size:13px;color:rgba(255,255,255,.9);margin-top:4px}
+.mk-hero-cta{font-size:12px;color:var(--pri-l);font-weight:600;margin-top:8px}
+.mk-section-title{font-size:15px;font-weight:700;padding:16px 16px 10px;color:var(--text)}
+.mk-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 16px 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.mk-scroll::-webkit-scrollbar{display:none}
+.mk-card{flex:0 0 140px;height:180px;border-radius:var(--rs);overflow:hidden;position:relative;cursor:pointer;box-shadow:var(--sh)}
+.mk-card-img{width:100%;height:100%;object-fit:cover}
+.mk-card-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,.05) 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px}
+.mk-card-name{font-size:15px;font-weight:700;color:#fff}
+.mk-card-dates{font-size:10px;color:rgba(255,255,255,.8);margin-top:2px}
+.mk-card-weather{font-size:11px;color:rgba(255,255,255,.9);margin-top:3px}
+.mk-card.current{outline:2px solid var(--acc);outline-offset:2px}
+.mk-budget{margin:0 16px 16px;background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--sh);border:1px solid var(--border)}
+.mk-budget-title{font-size:13px;font-weight:600;color:var(--text-l);margin-bottom:10px}
+.mk-budget-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.mk-budget-stat{text-align:center}
+.mk-budget-val{font-size:17px;font-weight:700}
+.mk-budget-lbl{font-size:10px;color:var(--text-l);margin-top:2px}
+/* ===== DESTINATION SPACE ===== */
+.sp-banner{position:relative;height:200px;overflow:hidden}
+.sp-banner-img{width:100%;height:100%;object-fit:cover}
+.sp-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6) 0%,rgba(0,0,0,.1) 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.sp-banner-name{font-size:28px;font-weight:800;color:#fff}
+.sp-banner-info{font-size:13px;color:rgba(255,255,255,.85);margin-top:4px}
+.sp-banner-weather{font-size:14px;color:#fff;margin-top:6px}
+.sp-section{padding:16px}
+.sp-section-title{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+/* ===== GENERIC CARDS & LISTS ===== */
+.g-card{background:var(--card);border-radius:var(--rs);padding:14px;margin-bottom:8px;box-shadow:var(--sh);border:1px solid var(--border)}
+.g-card-title{font-size:14px;font-weight:600}
+.g-card-sub{font-size:12px;color:var(--text-l);margin-top:2px}
+.g-card-meta{display:flex;gap:8px;margin-top:8px;font-size:11px;color:var(--text-l)}
+.g-card-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
+.section-view{padding:16px}
+.section-view-title{font-size:20px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+/* ===== FLIGHT CARD ===== */
+.fl-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh);border:1px solid var(--border)}
+.fl-route{display:flex;align-items:center;justify-content:space-between;margin:10px 0}
+.fl-point{text-align:center}
+.fl-code{font-size:24px;font-weight:800}
+.fl-time{font-size:13px;font-weight:600;color:var(--pri-d);margin-top:2px}
+.fl-line{flex:1;display:flex;align-items:center;justify-content:center;padding:0 12px;position:relative}
+.fl-line::before{content:'';position:absolute;top:50%;left:12px;right:12px;height:2px;background:linear-gradient(to left,var(--pri),var(--border));border-radius:1px}
+.fl-line .plane{font-size:18px;position:relative;z-index:1;background:var(--card);padding:0 4px;transform:scaleX(-1)}
+.fl-details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:10px;border-top:1px solid var(--border);margin-top:8px}
+.fl-detail{text-align:center}
+.fl-detail-lbl{font-size:10px;color:var(--text-l);text-transform:uppercase}
+.fl-detail-val{font-size:13px;font-weight:600;margin-top:1px}
+/* ===== HOTEL CARD ===== */
+.ht-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh);border:1px solid var(--border)}
+.ht-dates{display:flex;gap:10px;margin:10px 0}
+.ht-date{flex:1;background:var(--bg);border-radius:var(--rs);padding:8px 10px;text-align:center}
+.ht-date-lbl{font-size:10px;color:var(--text-l)}
+.ht-date-val{font-size:13px;font-weight:600;margin-top:2px}
+.ht-link{display:inline-flex;align-items:center;gap:4px;color:var(--pri);font-size:12px;font-weight:500;text-decoration:none;padding:6px 12px;background:rgba(13,148,136,.06);border-radius:8px;margin-top:6px}
+/* ===== NOTES (DANI'S PICKS) ===== */
+.note-card{display:flex;align-items:flex-start;gap:10px;background:var(--card);border-radius:var(--rs);padding:12px 14px;margin-bottom:6px;border:1px solid var(--border);box-shadow:var(--sh)}
+.note-check{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;flex:0 0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;margin-top:2px}
+.note-card.done .note-check{background:var(--ok);border-color:var(--ok)}
+.note-card.done .note-check::after{content:'';width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+.note-card.done .note-info{opacity:.45;text-decoration:line-through}
+.note-icon{font-size:20px;flex:0 0 auto}
+.note-info{flex:1;min-width:0}
+.note-title{font-size:13px;font-weight:600}
+.note-title a{color:var(--pri);text-decoration:none}
+.note-desc{font-size:11px;color:var(--text-l);margin-top:2px}
+.note-del{background:none;border:none;color:var(--text-m);font-size:16px;cursor:pointer;padding:2px;opacity:.5}
+.note-del:active{opacity:1;color:var(--err)}
+/* ===== BUDGET SECTION ===== */
+.bgt-progress{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--border)}
+.bgt-progress-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.bgt-progress-title{font-size:13px;font-weight:600;color:var(--text-l)}
+.bgt-gear{background:none;border:none;font-size:16px;cursor:pointer;padding:2px}
+.bgt-amounts{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.bgt-spent{font-size:26px;font-weight:800}
+.bgt-limit{font-size:13px;color:var(--text-l)}
+.bgt-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.bgt-fill{height:100%;border-radius:4px;transition:width .4s}
+.bgt-fill.g{background:linear-gradient(90deg,#10b981,#34d399)}.bgt-fill.o{background:linear-gradient(90deg,#f59e0b,#fbbf24)}.bgt-fill.r{background:linear-gradient(90deg,#ef4444,#f87171)}
+.bgt-pct{font-size:11px;color:var(--text-l);text-align:left;margin-top:4px}
+.bgt-warn{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:var(--rs);padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--err);font-weight:600;text-align:center;display:none}
+.bgt-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.bgt-sum-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center}
+.bgt-sum-lbl{font-size:10px;color:var(--text-l);margin-bottom:3px}
+.bgt-sum-val{font-size:16px;font-weight:700}
+.bgt-sum-sub{font-size:10px;color:var(--text-l);margin-top:2px}
+.bgt-chart{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.bgt-chart-title{font-size:12px;color:var(--text-l);font-weight:600;margin-bottom:8px}
+.bgt-chart-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--border);margin-bottom:8px}
+.bgt-chart-seg{height:100%;min-width:2px}
+.bgt-chart-legend{display:flex;flex-wrap:wrap;gap:4px 12px}
+.bgt-chart-item{display:flex;align-items:center;gap:4px;font-size:10px}
+.bgt-chart-dot{width:7px;height:7px;border-radius:50%}
+/* ===== FORM COMPONENTS ===== */
+.frm-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.frm-title{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.frm-cancel{background:none;border:none;color:var(--err);font-size:12px;cursor:pointer;font-family:inherit;display:none}
+.frm-row{display:flex;gap:8px;margin-bottom:8px}
+.frm-row input,.frm-row select{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl;transition:border-color .2s;min-width:0}
+.frm-row input:focus,.frm-row select:focus{border-color:var(--pri)}
+.frm-row .amt{font-size:18px;font-weight:600;text-align:center;flex:1.5}
+.frm-row .cur{flex:0 0 85px;font-weight:600;text-align:center}
+.frm-row .dt{flex:0 0 135px;direction:ltr}
+.frm-conv{font-size:11px;color:var(--text-l);text-align:center;padding:2px 0 6px;min-height:16px}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
+.cat-btn{padding:7px 4px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card);font-family:inherit;font-size:10px;cursor:pointer;text-align:center;transition:.15s;display:flex;flex-direction:column;align-items:center;gap:1px}
+.cat-btn.active{border-color:var(--pri);background:rgba(13,148,136,.05);color:var(--pri);font-weight:600}
+.cat-btn .ci{font-size:16px}
+.who-row{display:flex;gap:6px;margin-bottom:10px}
+.who-btn{flex:1;padding:8px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;text-align:center;transition:.15s;color:var(--text-l)}
+.who-btn.active{border-color:var(--pri);background:rgba(13,148,136,.05);color:var(--pri);font-weight:600}
+.submit-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.submit-btn:active{opacity:.9}
+.submit-btn.editing{background:linear-gradient(135deg,var(--acc),var(--acc-l))}
+/* ===== EXPENSE CARD ===== */
+.exp-card{background:var(--card);border-radius:var(--rs);margin-bottom:6px;border:1px solid var(--border);overflow:hidden}
+.exp-card.pre{border-right:3px solid var(--pri)}
+.exp-main{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}
+.exp-icon{font-size:18px;width:34px;height:34px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.exp-info{flex:1;min-width:0}
+.exp-desc{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exp-meta{font-size:10px;color:var(--text-l);margin-top:1px;display:flex;gap:4px}
+.exp-tag{font-size:9px;padding:1px 5px;border-radius:4px;font-weight:600;background:rgba(13,148,136,.08);color:var(--pri)}
+.exp-amounts{text-align:left}
+.exp-primary{font-size:14px;font-weight:700;white-space:nowrap}
+.exp-secondary{font-size:9px;color:var(--text-l);white-space:nowrap}
+.exp-detail{display:none;padding:0 14px 10px;border-top:1px dashed var(--border)}
+.exp-detail.open{display:block;padding-top:8px}
+.exp-currencies{display:flex;gap:10px;margin-bottom:8px;direction:ltr}
+.exp-curr{text-align:center;flex:1}
+.exp-curr-val{font-size:13px;font-weight:600}
+.exp-curr-lbl{font-size:9px;color:var(--text-l)}
+.exp-actions{display:flex;gap:6px}
+.exp-actions button{flex:1;padding:7px;border:1px solid var(--border);border-radius:6px;background:var(--card);font-family:inherit;font-size:11px;cursor:pointer}
+/* ===== FILTER PILLS ===== */
+.filters{display:flex;gap:5px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.filters::-webkit-scrollbar{display:none}
+.fil-btn{flex:0 0 auto;padding:5px 10px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);font-family:inherit;font-size:11px;font-weight:500;color:var(--text-l);cursor:pointer;transition:.2s;white-space:nowrap}
+.fil-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+/* ===== TASKS ===== */
+.todo-wrap{display:flex;gap:8px;margin-bottom:14px}
+.todo-inp{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl}
+.todo-inp:focus{border-color:var(--pri)}
+.todo-add{padding:11px 16px;background:var(--pri);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.todo-prog{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:12px;color:var(--text-l)}
+.todo-bar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.todo-bar-fill{height:100%;background:linear-gradient(to left,var(--ok),#34d399);border-radius:3px;transition:width .3s}
+.todo-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--rs);margin-bottom:6px;border:1px solid var(--border)}
+.todo-item.done{opacity:.45}
+.todo-item.done .todo-text{text-decoration:line-through}
+.todo-chk{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto;transition:.2s;background:var(--card)}
+.todo-item.done .todo-chk{background:var(--ok);border-color:var(--ok)}
+.todo-chk::after{content:'';display:none;width:5px;height:9px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
+.todo-item.done .todo-chk::after{display:block}
+.todo-text{flex:1;font-size:13px}
+.todo-due{font-size:10px;color:var(--text-l)}.todo-due.overdue{color:var(--err);font-weight:600}
+.todo-del{background:none;border:none;color:var(--text-m);font-size:16px;cursor:pointer;padding:2px;opacity:.4}
+/* ===== PACKING ===== */
+.pack-tabs{display:flex;gap:3px;margin-bottom:14px;background:var(--border);border-radius:10px;padding:3px}
+.pack-tab{flex:1;padding:8px;border:none;border-radius:8px;background:none;font-family:inherit;font-size:12px;font-weight:500;color:var(--text-l);cursor:pointer;transition:.2s}
+.pack-tab.active{background:var(--card);color:var(--text);box-shadow:var(--sh);font-weight:600}
+.pack-sum{display:flex;gap:6px;margin-bottom:14px}
+.pack-sum-card{flex:1;text-align:center;padding:8px;background:var(--card);border-radius:var(--rs);border:1px solid var(--border)}
+.pack-sum-num{font-size:20px;font-weight:700;color:var(--pri)}
+.pack-sum-lbl{font-size:9px;color:var(--text-l);margin-top:1px}
+.pack-cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--card);border-radius:var(--rs) var(--rs) 0 0;border:1px solid var(--border);border-bottom:none;cursor:pointer}
+.pack-cat-hdr h3{font-size:13px;font-weight:600}
+.pack-cat-cnt{font-size:11px;color:var(--text-l);background:var(--bg);padding:1px 7px;border-radius:8px}
+.pack-cat-items{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--rs) var(--rs);overflow:hidden;margin-bottom:10px}
+.pack-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer}
+.pack-item:last-child{border-bottom:none}
+.pack-item.done{opacity:.4}
+.pack-item.done .pack-txt{text-decoration:line-through}
+.pack-chk{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:.2s}
+.pack-item.done .pack-chk{background:var(--ok);border-color:var(--ok)}
+.pack-item.done .pack-chk::after{content:'';width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-1px}
+.pack-txt{flex:1}
+/* ===== CONVERTER ===== */
+.conv-card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh);border:1px solid var(--border)}
+.conv-row{display:flex;gap:8px;margin-bottom:10px}
+.conv-inp{flex:1;padding:10px 12px;border:2px solid var(--border);border-radius:var(--rs);font-size:16px;font-family:inherit;font-weight:600;background:var(--bg);color:var(--text);direction:ltr;text-align:right;outline:none}
+.conv-inp:focus{border-color:var(--pri)}
+.conv-sel{padding:10px 12px;border:2px solid var(--border);border-radius:var(--rs);font-size:14px;font-family:inherit;font-weight:600;background:var(--bg);color:var(--text);cursor:pointer;min-width:90px;outline:none}
+.conv-swap{display:flex;justify-content:center;margin-bottom:10px}
+.conv-swap button{background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;cursor:pointer}
+.conv-result{background:var(--bg);border-radius:var(--rs);padding:14px;text-align:center;margin-bottom:10px}
+.conv-result-amt{font-size:28px;font-weight:800;color:var(--pri);direction:ltr}
+.conv-result-lbl{font-size:12px;color:var(--text-l);margin-top:2px}
+.conv-quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.conv-quick-btn{flex:1;min-width:55px;padding:7px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;text-align:center}
+.conv-rate{font-size:11px;color:var(--text-l);text-align:center}
+/* ===== EMERGENCY ===== */
+.emg-card{background:var(--card);border-radius:var(--rs);padding:14px;margin-bottom:8px;border:1px solid var(--border);border-right:3px solid var(--err)}
+.emg-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.emg-val{font-size:13px;color:var(--text-l);line-height:1.4}
+.emg-phone{display:inline-flex;align-items:center;gap:4px;color:var(--pri);font-weight:600;text-decoration:none;font-size:15px}
+/* ===== TOAST & MODAL ===== */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--text);color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;z-index:200;opacity:0;transition:.3s;pointer-events:none;font-family:inherit}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex}
+.modal{background:var(--card);border-radius:var(--r);padding:24px;max-width:320px;width:100%;box-shadow:var(--sh-lg)}
+.modal h3{font-size:17px;font-weight:700;margin-bottom:14px}
+.modal input{width:100%;padding:12px;border:2px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:18px;font-weight:600;text-align:center;outline:none;background:var(--bg);direction:ltr;margin-bottom:14px}
+.modal input:focus{border-color:var(--pri)}
+.modal-btns{display:flex;gap:8px}
+.modal-btns button{flex:1;padding:10px;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.modal-save{background:var(--pri);color:#fff}
+.modal-cancel-btn{background:var(--border);color:var(--text)}
+/* ===== LINK ITEM ===== */
+.link-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--rs);margin-bottom:6px;border:1px solid var(--border);text-decoration:none;color:inherit}
+.link-icon{width:38px;height:38px;background:rgba(13,148,136,.06);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 auto}
+.link-info{flex:1}
+.link-title{font-size:14px;font-weight:600}
+.link-desc{font-size:11px;color:var(--text-l);margin-top:1px}
+/* ===== NOTE ADD FORM ===== */
+.note-form{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-top:10px}
+.note-cat-row{display:flex;gap:5px;margin-bottom:8px}
+.note-cat-btn{flex:1;padding:7px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:11px;cursor:pointer;text-align:center;transition:.15s}
+.note-cat-btn.active{border-color:var(--pri);background:rgba(13,148,136,.05);color:var(--pri);font-weight:600}
+.note-inp{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl;margin-bottom:6px}
+.note-inp:focus{border-color:var(--pri)}
+/* ===== MISC ===== */
+.empty{text-align:center;padding:24px;color:var(--text-l);font-size:13px}
+.spinner{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--pri);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{text-align:center;padding:40px;color:var(--text-l)}
+.last-upd{font-size:10px;color:var(--text-m);text-align:center;margin-top:10px}
+/* ===== DARK MODE ===== */
+@media(prefers-color-scheme:dark){
+:root{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--text-l:#94a3b8;--text-m:#64748b;--border:#334155}
+.app-hdr{background:#1e293b;border-bottom-color:#334155}
+.bnav{background:#1e293b;border-top-color:#334155}
+.sidebar{background:#1e293b}
+.frm-row input,.frm-row select,.todo-inp,.conv-inp,.conv-sel,.note-inp,.modal input{background:#0f172a;color:var(--text)}
+.cat-btn,.who-btn,.fil-btn,.note-cat-btn,.conv-quick-btn{background:#1e293b}
+.pack-tabs{background:#334155}.pack-tab.active{background:#1e293b}
+.pack-chk,.todo-chk,.note-check{background:#1e293b}
+.ht-date{background:#0f172a}
+.conv-result{background:#0f172a}
+.fl-line::before{background:linear-gradient(to left,var(--pri),#334155)}
+.modal{background:#1e293b}.modal-cancel-btn{background:#334155}
+}
+</style>
 </head>
 <body>
-
-    <div class="header">
-        <span class="header-emoji">🏝️</span>
-        <h1>הפיליפינים 2026</h1>
-        <p>הרפתקה טרופית לזוג</p>
-        <div class="countdown" id="countdown"><span>⏳</span><span id="countdown-text">טוען...</span></div>
-        <button onclick="refreshData(true)" style="position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.2);border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;color:white;backdrop-filter:blur(10px);" title="רענן נתונים">🔄</button>
-        <span id="sync-indicator" style="display:none;position:absolute;top:16px;left:60px;background:rgba(255,255,255,0.25);padding:4px 12px;border-radius:12px;font-size:11px;color:white;align-items:center;gap:4px;backdrop-filter:blur(10px);"><span class="spinner" style="width:14px;height:14px;border-width:2px;margin:0;"></span> מסנכרן...</span>
+<!-- HEADER -->
+<div class="app-hdr">
+    <button class="hdr-back" id="hdr-back" onclick="goBack()">&#8594;</button>
+    <div class="hdr-title" id="hdr-title">&#127477;&#127469; הטיול של טום ודני</div>
+    <button class="hdr-refresh" onclick="refreshData(true)" title="רענן">&#128260;</button>
+    <button class="hdr-menu" onclick="toggleSidebar()">&#9776;</button>
+</div>
+<!-- SIDEBAR -->
+<div class="sb-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+<div class="sidebar" id="sidebar">
+    <div class="sb-hdr">
+        <button class="sb-close" onclick="toggleSidebar()">&#10005;</button>
+        <h2>&#127477;&#127469; הפיליפינים 2026</h2>
+        <p>טום ודניאלה</p>
     </div>
-
-    <div class="section active" id="sec-itinerary">
-        <div class="section-title"><span class="emoji">📅</span> תוכנית יומית</div>
-        <div class="day-nav" id="day-nav"></div>
-        <div id="days-container"></div>
+    <div class="sb-items">
+        <button class="sb-item" onclick="goHome();toggleSidebar()"><span class="si">&#127968;</span>בית</button>
+        <button class="sb-item" onclick="openSection('flights');toggleSidebar()"><span class="si">&#9992;&#65039;</span>כל הטיסות</button>
+        <button class="sb-item" onclick="openSection('hotels');toggleSidebar()"><span class="si">&#127976;</span>כל המלונות</button>
+        <button class="sb-item" onclick="openSection('expenses');toggleSidebar()"><span class="si">&#128176;</span>הוצאות</button>
+        <button class="sb-item" onclick="openSection('tasks');toggleSidebar()"><span class="si">&#9989;</span>משימות</button>
+        <button class="sb-item" onclick="openSection('packing');toggleSidebar()"><span class="si">&#127890;</span>ציוד</button>
+        <button class="sb-item" onclick="openSection('converter');toggleSidebar()"><span class="si">&#128177;</span>המרת מטבע</button>
+        <button class="sb-item" onclick="openSection('emergency');toggleSidebar()"><span class="si">&#127384;</span>חירום</button>
+        <button class="sb-item" onclick="openSection('links');toggleSidebar()"><span class="si">&#128279;</span>קישורים</button>
     </div>
-
-    <div class="section" id="sec-flights">
-        <div class="section-title"><span class="emoji">✈️</span> טיסות</div>
-        <div id="flights-content"><div class="loading-wrap"><div class="spinner"></div><div>טוען טיסות...</div></div></div>
-    </div>
-
-    <div class="section" id="sec-hotels">
-        <div class="section-title"><span class="emoji">🏨</span> מלונות</div>
-        <div id="hotels-content"><div class="loading-wrap"><div class="spinner"></div><div>טוען מלונות...</div></div></div>
-    </div>
-
-    <div class="section" id="sec-budget">
-        <div class="section-title"><span class="emoji">💰</span> תקציב הטיול</div>
-
-        <!-- Budget Progress Bar (on-trip only) -->
-        <div class="budget-progress-card">
-            <div class="budget-progress-header">
-                <span class="budget-progress-title">תקציב הוצאות שוטפות</span>
-                <button class="budget-progress-gear" onclick="openBudgetModal()">&#9881;</button>
-            </div>
-            <div class="budget-progress-amounts">
-                <span class="budget-progress-spent" id="budget-spent">₪0</span>
-                <span class="budget-progress-limit" id="budget-limit-display">/ ₪15,000</span>
-            </div>
-            <div class="budget-progress-bar"><div class="budget-progress-fill green" id="budget-bar"></div></div>
-            <div class="budget-progress-pct" id="budget-pct">0%</div>
-        </div>
-        <div class="budget-warning" id="budget-warning">&#9888; שימו לב! התקציב מתקרב לגבול</div>
-
-        <!-- Summary Cards -->
-        <div class="budget-summary-row" id="budget-summary-row"></div>
-
-        <!-- Category Breakdown Chart -->
-        <div class="budget-chart-card" id="budget-chart-card" style="display:none;">
-            <div class="budget-chart-title">פילוח לפי קטגוריה (שוטפות)</div>
-            <div class="budget-chart-bar" id="budget-chart-bar"></div>
-            <div class="budget-chart-legend" id="budget-chart-legend"></div>
-        </div>
-
-        <!-- Add/Edit Expense Form -->
-        <div class="budget-form-card">
-            <div class="budget-form-title">
-                <span id="budget-form-label">הוסף הוצאה</span>
-                <button class="budget-form-cancel" id="budget-form-cancel" onclick="cancelEditExpense()">&#10005; ביטול</button>
-            </div>
-            <div class="budget-form-row">
-                <input type="number" class="amount-input" id="exp-amount" placeholder="סכום" inputmode="decimal" />
-                <select class="currency-select" id="exp-currency">
-                    <option value="PHP">&#8369; PHP</option>
-                    <option value="USD">$ USD</option>
-                    <option value="ILS">&#8362; ILS</option>
-                </select>
-            </div>
-            <div class="budget-form-conversion" id="exp-conversion"></div>
-            <div class="budget-form-row">
-                <input type="text" class="desc-input" id="exp-desc" placeholder="תיאור ההוצאה..." />
-                <input type="date" class="date-input" id="exp-date" />
-            </div>
-            <div class="budget-cat-grid" id="exp-cats"></div>
-            <div class="budget-who-row">
-                <button class="budget-who-btn active" data-who="Both" onclick="selectWho(this)">&#128107; משותף</button>
-                <button class="budget-who-btn" data-who="Tom" onclick="selectWho(this)">&#128100; Tom</button>
-                <button class="budget-who-btn" data-who="Daniella" onclick="selectWho(this)">&#128100; Dani</button>
-            </div>
-            <button class="budget-submit-btn" id="exp-submit" onclick="submitExpense()">&#10133; הוסף הוצאה</button>
-        </div>
-
-        <!-- Expense Filters -->
-        <div class="budget-section-title">
-            <span id="expense-list-title">הוצאות</span>
-            <span id="expense-count" style="font-size:12px;font-weight:400;"></span>
-        </div>
-        <div class="expense-filters" id="expense-filters"></div>
-
-        <!-- Expense List -->
-        <div id="budget-expenses"><div class="loading-wrap"><div class="spinner"></div><div>טוען הוצאות...</div></div></div>
-
-        <!-- Toast -->
-        <div class="budget-toast" id="budget-toast"></div>
-    </div>
-
-    <!-- Budget Settings Modal -->
-    <div class="budget-modal-overlay" id="budget-modal">
-        <div class="budget-modal">
-            <h3>&#9881; הגדרת תקציב</h3>
-            <div style="font-size:13px;color:var(--text-light);margin-bottom:12px;">תקציב להוצאות שוטפות (בשקלים)</div>
-            <input type="number" id="budget-modal-input" inputmode="numeric" />
-            <div class="budget-modal-btns">
-                <button class="budget-modal-save" onclick="saveBudgetSetting()">שמור</button>
-                <button class="budget-modal-cancel" onclick="closeBudgetModal()">ביטול</button>
-            </div>
+</div>
+<!-- MAIN -->
+<div class="main" id="main"></div>
+<!-- BOTTOM NAV -->
+<nav class="bnav" id="bnav">
+    <button class="bnav-item active" data-t="home" onclick="goHome()"><span class="bi">&#127968;</span><span>בית</span></button>
+    <button class="bnav-item" data-t="expenses" onclick="openSection('expenses')"><span class="bi">&#128176;</span><span>הוצאות</span></button>
+    <button class="bnav-item" data-t="tasks" onclick="openSection('tasks')"><span class="bi">&#9989;</span><span>משימות</span></button>
+    <button class="bnav-item" data-t="packing" onclick="openSection('packing')"><span class="bi">&#127890;</span><span>ציוד</span></button>
+    <button class="bnav-item" data-t="converter" onclick="openSection('converter')"><span class="bi">&#128177;</span><span>המרה</span></button>
+    <button class="bnav-item" data-t="emergency" onclick="openSection('emergency')"><span class="bi">&#127384;</span><span>חירום</span></button>
+</nav>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+<!-- BUDGET MODAL -->
+<div class="modal-ov" id="bgt-modal">
+    <div class="modal">
+        <h3>&#9881; הגדרת תקציב</h3>
+        <div style="font-size:12px;color:var(--text-l);margin-bottom:10px;">תקציב הוצאות שוטפות (בשקלים)</div>
+        <input type="number" id="bgt-modal-inp" inputmode="numeric"/>
+        <div class="modal-btns">
+            <button class="modal-save" onclick="saveBudget()">שמור</button>
+            <button class="modal-cancel-btn" onclick="closeBgtModal()">ביטול</button>
         </div>
     </div>
+</div>
 
-    <div class="section" id="sec-packing">
-        <div class="section-title"><span class="emoji">🎒</span> רשימת ציוד</div>
-        <div class="pack-summary" id="pack-summary"></div>
-        <div class="pack-tabs">
-            <button class="pack-tab active" data-who="tom">Tom</button>
-            <button class="pack-tab" data-who="dani">Dani</button>
-            <button class="pack-tab" data-who="shared">משותף</button>
-        </div>
-        <div id="pack-list"></div>
-    </div>
+<script>
+// ==================== CONFIG ====================
+const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSO2YnQmzCIadMgeC25xtz-BZHHnxIpOxvUaYigbW3dSD7ODcNzortdwUSSw9E8qh4NCgRMN4P7JV4C/pub';
+const TABS = {
+    flights:   { gid: '1240829354' },
+    hotels:    { gid: '935661237' },
+    expenses:  { gid: '1296829800' },
+    tasks:     { gid: '714932989' },
+    links:     { gid: '2130634285' },
+    emergency: { gid: '476610190' },
+    packing:   { gid: '414706764' },
+    notes:     { gid: '0' }, // UPDATE after creating destination_notes tab
+};
+const TRIP_START = new Date('2026-04-05T15:40:00+02:00');
+let BUDGET_LIMIT = parseInt(localStorage.getItem('ph-budget-limit')) || 15000;
+const CACHE_KEY = 'ph-trip-cache-v3';
+const WEATHER_KEY = 'ph-weather-cache';
+const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzU1HaG0zdzaNNbhSXBnwTjEZ1ZgunpIdyvP1g107vVhag7biVLygglNOMIKsusSHrXzA/exec';
+const APPS_SCRIPT_URL = localStorage.getItem('ph-apps-script-url') || DEFAULT_APPS_SCRIPT_URL;
 
-    <div class="section" id="sec-todo">
-        <div class="section-title"><span class="emoji">✅</span> מטלות</div>
-        <div class="todo-progress"><span id="todo-progress-text">0/0</span><div class="todo-progress-bar"><div class="todo-progress-fill" id="todo-progress-fill" style="width:0%"></div></div></div>
-        <div class="todo-input-wrap"><input type="text" class="todo-input" id="todo-input" placeholder="הוסף מטלה חדשה..." /><button class="todo-add-btn" id="todo-add-btn">הוסף</button></div>
-        <div id="todo-list"><div class="loading-wrap"><div class="spinner"></div><div>טוען מטלות...</div></div></div>
-    </div>
+// ==================== DESTINATIONS ====================
+const DESTS = [
+    { id:'manila-1', name:'מנילה', en:'Manila', start:'2026-04-07', end:'2026-04-08', lat:14.5995, lon:120.9842, img:'https://images.unsplash.com/photo-1573455494060-c5595004fb6c?w=800' },
+    { id:'siargao', name:'שירגאו', en:'Siargao', start:'2026-04-08', end:'2026-04-17', lat:9.8482, lon:126.0458, img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800' },
+    { id:'el-nido', name:'אל נידו', en:'El Nido', start:'2026-04-17', end:'2026-04-23', lat:11.1784, lon:119.3906, img:'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800' },
+    { id:'boracay', name:'בורקאי', en:'Boracay', start:'2026-04-23', end:'2026-04-26', lat:11.9674, lon:121.9248, img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800' },
+    { id:'manila-2', name:'מנילה (חזרה)', en:'Manila Return', start:'2026-04-26', end:'2026-04-27', lat:14.5995, lon:120.9842, img:'https://images.unsplash.com/photo-1573455494060-c5595004fb6c?w=800' },
+];
+const DEST_MAP = {}; DESTS.forEach(d => DEST_MAP[d.id] = d);
 
-    <div class="section" id="sec-emergency">
-        <div class="section-title"><span class="emoji">🆘</span> חירום</div>
-        <div id="emergency-content"><div class="loading-wrap"><div class="spinner"></div><div>טוען מידע חירום...</div></div></div>
-    </div>
-
-    <div class="section" id="sec-converter">
-        <div class="section-title"><span class="emoji">💱</span> המרת מטבעות</div>
-        <div class="converter-card">
-            <div class="loading-wrap" id="converter-loading"><div class="spinner"></div><div>טוען שערי חליפין...</div></div>
-            <div id="converter-ui" style="display:none;">
-                <div class="converter-input-group">
-                    <input type="number" class="converter-input" id="conv-amount" placeholder="הזן סכום" inputmode="decimal">
-                    <select class="converter-select" id="conv-from"><option value="USD">$ USD</option><option value="ILS">₪ ILS</option><option value="PHP">₱ PHP</option></select>
-                </div>
-                <div class="converter-swap"><button id="conv-swap" title="החלף מטבעות">⇅</button></div>
-                <div class="converter-input-group">
-                    <div class="converter-input" id="conv-output" style="display:flex;align-items:center;justify-content:flex-end;background:var(--bg);min-height:48px;font-size:18px;color:var(--primary);">—</div>
-                    <select class="converter-select" id="conv-to"><option value="ILS">₪ ILS</option><option value="USD">$ USD</option><option value="PHP">₱ PHP</option></select>
-                </div>
-                <div class="converter-quick-amounts" id="conv-quick"></div>
-                <div class="converter-result" id="conv-result" style="display:none;"><div class="converter-result-amount" id="conv-result-amount"></div><div class="converter-result-label" id="conv-result-label"></div></div>
-                <div class="converter-rate-info" id="conv-rate-info"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section" id="sec-links">
-        <div class="section-title"><span class="emoji">🔗</span> קישורים חשובים</div>
-        <div id="links-content"><div class="loading-wrap"><div class="spinner"></div><div>טוען קישורים...</div></div></div>
-    </div>
-
-    <nav class="nav">
-        <button class="nav-item active" data-section="itinerary"><span class="icon">📅</span><span>תוכנית</span></button>
-        <button class="nav-item" data-section="flights"><span class="icon">✈️</span><span>טיסות</span></button>
-        <button class="nav-item" data-section="hotels"><span class="icon">🏨</span><span>מלונות</span></button>
-        <button class="nav-item" data-section="budget"><span class="icon">💰</span><span>תקציב</span></button>
-        <button class="nav-item" data-section="packing"><span class="icon">🎒</span><span>ציוד</span></button>
-        <button class="nav-item" data-section="todo"><span class="icon">✅</span><span>מטלות</span></button>
-        <button class="nav-item" data-section="emergency"><span class="icon">🆘</span><span>חירום</span></button>
-        <button class="nav-item" data-section="converter"><span class="icon">💱</span><span>המרה</span></button>
-        <button class="nav-item" data-section="links"><span class="icon">🔗</span><span>קישורים</span></button>
-    </nav>
-
-    <script>
-    // ==================== CONFIG ====================
-    const SHEET_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSO2YnQmzCIadMgeC25xtz-BZHHnxIpOxvUaYigbW3dSD7ODcNzortdwUSSw9E8qh4NCgRMN4P7JV4C/pub';
-    const TABS = {
-        flights:   { gid: '1240829354' },
-        hotels:    { gid: '935661237' },
-        expenses:  { gid: '1296829800' },
-        tasks:     { gid: '714932989' },
-        links:     { gid: '2130634285' },
-        emergency: { gid: '476610190' },
-        packing:   { gid: '414706764' },
-    };
-    const TRIP_START = new Date('2026-04-05T15:40:00+02:00');
-    let BUDGET_LIMIT = parseInt(localStorage.getItem('ph-budget-limit')) || 15000;
-    const CACHE_KEY = 'ph-trip-cache-v2';
-    const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzU1HaG0zdzaNNbhSXBnwTjEZ1ZgunpIdyvP1g107vVhag7biVLygglNOMIKsusSHrXzA/exec';
-    const APPS_SCRIPT_URL = localStorage.getItem('ph-apps-script-url') || DEFAULT_APPS_SCRIPT_URL;
-
-    // ==================== STATE ====================
-    const DB = {};
-    let exchangeRates = null;
-    let ratesLastUpdated = null;
-    let dataFetchedAt = null;
-    const writeCooldowns = {};
-    function setCooldown(tab) { writeCooldowns[tab] = Date.now(); }
-    function isInCooldown(tab) { return writeCooldowns[tab] && (Date.now() - writeCooldowns[tab] < 120000); }
-
-    // ==================== CSV PARSER ====================
-    function parseCSV(text) {
-        const rows = [];
-        let current = '';
-        let inQuotes = false;
-        const chars = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-        let row = [];
-        for (let i = 0; i < chars.length; i++) {
-            const c = chars[i];
-            if (inQuotes) {
-                if (c === '"' && chars[i + 1] === '"') { current += '"'; i++; }
-                else if (c === '"') { inQuotes = false; }
-                else { current += c; }
-            } else {
-                if (c === '"') { inQuotes = true; }
-                else if (c === ',') { row.push(current.trim()); current = ''; }
-                else if (c === '\n') { row.push(current.trim()); if (row.some(v => v)) rows.push(row); row = []; current = ''; }
-                else { current += c; }
-            }
-        }
-        if (current || row.length) { row.push(current.trim()); if (row.some(v => v)) rows.push(row); }
-        if (rows.length < 2) return [];
-        const headers = rows[0];
-        return rows.slice(1).map(r => { const obj = {}; headers.forEach((h, i) => { obj[h] = r[i] || ''; }); return obj; });
-    }
-
-    // ==================== DATA FETCHING ====================
-    function tabURL(tab) { return `${SHEET_BASE}?gid=${TABS[tab].gid}&single=true&output=csv&_=${Date.now()}`; }
-
-    async function fetchTab(name) {
-        const res = await fetch(tabURL(name));
-        if (!res.ok) throw new Error(`Failed to fetch ${name}: ${res.status}`);
-        return parseCSV(await res.text());
-    }
-
-    function loadCache() {
-        try { const raw = localStorage.getItem(CACHE_KEY); if (raw) { const c = JSON.parse(raw); Object.assign(DB, c.data); dataFetchedAt = c.ts; return true; } } catch(e) {}
-        return false;
-    }
-    function saveCache() { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data: DB, ts: Date.now() })); } catch(e) {} }
-
-    async function fetchAllData() {
-        const names = Object.keys(TABS);
-        const fetchNames = names.filter(n => !isInCooldown(n));
-        if (!fetchNames.length) return false;
-        const results = await Promise.allSettled(fetchNames.map(n => fetchTab(n)));
-        let anySuccess = false;
-        results.forEach((r, i) => { if (r.status === 'fulfilled') { DB[fetchNames[i]] = r.value; anySuccess = true; } });
-        if (anySuccess) { dataFetchedAt = Date.now(); saveCache(); }
-        return anySuccess;
-    }
-
-    // ==================== HELPERS ====================
-    function esc(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
-    function formatDate(dateStr) { if (!dateStr) return ''; const p = dateStr.split('/'); return p.length >= 2 ? p[0] + '/' + p[1] : dateStr; }
-    function extractAirportCode(place) { const m = place.match(/\(([A-Z]{3})\)/); return m ? m[1] : place.substring(0, 3).toUpperCase(); }
-    function parsePriceNum(str) { return parseFloat(String(str || '').replace(/[^0-9.\-]/g, '')) || 0; }
-    function fmtMoney(n, currency) { const sym = { ILS: '₪', USD: '$', PHP: '₱' }[currency] || '₪'; return sym + Math.round(n).toLocaleString(); }
-    function convertToILS(amount, currency) { if (!exchangeRates || currency === 'ILS') return amount; return (amount / (exchangeRates[currency] || 1)) * (exchangeRates['ILS'] || 1); }
-    function lastUpdatedHTML() { if (!dataFetchedAt) return ''; const d = new Date(dataFetchedAt); return `<div class="last-updated">עודכן: ${d.toLocaleDateString('he-IL')} ${d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}</div>`; }
-
-    // ==================== NAVIGATION ====================
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const target = item.dataset.section;
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            item.classList.add('active');
-            document.getElementById('sec-' + target).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+function getNights(d) { return Math.round((new Date(d.end) - new Date(d.start)) / 86400000); }
+function fmtDestDates(d) {
+    const s = new Date(d.start), e = new Date(d.end);
+    return `${s.getDate()}-${e.getDate()} באפריל`;
+}
+function getCurrentDest() {
+    const now = new Date();
+    for (const d of DESTS) { if (now >= new Date(d.start) && now < new Date(d.end)) return d; }
+    if (now < new Date(DESTS[0].start)) return DESTS[0];
+    return DESTS[DESTS.length - 1];
+}
+function getDestForDate(dateStr) {
+    const p = dateStr.split('/');
+    if (p.length < 2) return null;
+    const day = parseInt(p[0]), month = parseInt(p[1]), year = p[2] ? parseInt(p[2]) : 2026;
+    const d = new Date(year, month - 1, day);
+    for (const dest of DESTS) { if (d >= new Date(dest.start) && d < new Date(dest.end)) return dest.id; }
+    return null;
+}
+function getFlightsForDest(destId) {
+    if (!DB.flights) return [];
+    const dest = DEST_MAP[destId]; if (!dest) return [];
+    const start = new Date(dest.start), end = new Date(dest.end);
+    const dayBefore = new Date(start); dayBefore.setDate(dayBefore.getDate() - 1);
+    return DB.flights.filter(f => {
+        const dd = f['Departure Date'];
+        if (!dd) return false;
+        const p = dd.split('/');
+        const fd = new Date(2026, parseInt(p[1])-1, parseInt(p[0]));
+        return fd >= dayBefore && fd <= end;
     });
+}
+function getHotelsForDest(destId) {
+    if (!DB.hotels) return [];
+    const dest = DEST_MAP[destId]; if (!dest) return [];
+    const start = new Date(dest.start), end = new Date(dest.end);
+    return DB.hotels.filter(h => {
+        const ci = h['Check-in'];
+        if (!ci) return false;
+        const p = ci.split('/');
+        const hd = new Date(2026, parseInt(p[1])-1, parseInt(p[0]));
+        return hd >= start && hd < end;
+    });
+}
+function getExpensesForDest(destId) {
+    if (!DB.expenses) return [];
+    return DB.expenses.filter((e, i) => {
+        const d = e['Date'] || '';
+        return getDestForDate(d) === destId;
+    }).map((e, i) => ({ ...e, _origIdx: DB.expenses.indexOf(e) }));
+}
+function getNotesForDest(destId) {
+    if (!DB.notes) return [];
+    return DB.notes.filter(n => n['DestinationID'] === destId).map((n, i) => ({ ...n, _row: DB.notes.indexOf(n) + 2 }));
+}
 
-    // ==================== COUNTDOWN ====================
-    function updateCountdown() {
-        const now = new Date(), diff = TRIP_START - now, el = document.getElementById('countdown-text');
-        if (diff <= 0) { el.textContent = 'הטיול כבר התחיל! 🎉'; return; }
-        const days = Math.floor(diff / (1000*60*60*24)), hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        el.textContent = days > 0 ? `עוד ${days} ימים ו-${hours} שעות לטיול!` : `עוד ${hours} שעות לטיול!`;
+// ==================== STATE ====================
+const DB = {};
+let exchangeRates = null;
+let ratesLastUpdated = null;
+let dataFetchedAt = null;
+const writeCooldowns = {};
+function setCooldown(tab) { writeCooldowns[tab] = Date.now(); }
+function isInCooldown(tab) { return writeCooldowns[tab] && (Date.now() - writeCooldowns[tab] < 120000); }
+
+let currentView = 'home';
+let currentSpaceId = null;
+let currentSection = null;
+let viewHistory = [];
+let weatherData = {};
+
+// Expense state
+const PRE_TRIP_CATS = ['לינה','טיסות','ביורוקרטיה'];
+const ON_TRIP_CATS = ['אוכל','תחבורה','אטרקציות','קניות','משיכת כסף','שונות'];
+const ALL_CATS = [
+    {id:'אוכל',icon:'🍜',label:'אוכל',color:'#f59e0b'},
+    {id:'תחבורה',icon:'🚕',label:'תחבורה',color:'#4a9eed'},
+    {id:'אטרקציות',icon:'🏝️',label:'אטרקציות',color:'#22c55e'},
+    {id:'קניות',icon:'🛍️',label:'קניות',color:'#8b5cf6'},
+    {id:'משיכת כסף',icon:'🏧',label:'משיכת כסף',color:'#0d9488'},
+    {id:'שונות',icon:'📦',label:'שונות',color:'#a855f7'},
+    {id:'לינה',icon:'🏨',label:'לינה',color:'#0ea5e9'},
+    {id:'טיסות',icon:'✈️',label:'טיסות',color:'#06b6d4'},
+    {id:'ביורוקרטיה',icon:'📋',label:'ביורוקרטיה',color:'#64748b'},
+];
+const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
+let expFilter = 'all', editExpIdx = null, selCat = 'אוכל', selWho = 'Both';
+let currentPackWho = 'tom';
+
+// ==================== CSV PARSER ====================
+function parseCSV(text) {
+    const rows = []; let current = '', inQ = false; const chars = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n'); let row = [];
+    for (let i = 0; i < chars.length; i++) {
+        const c = chars[i];
+        if (inQ) { if (c==='"'&&chars[i+1]==='"'){current+='"';i++;}else if(c==='"'){inQ=false;}else{current+=c;} }
+        else { if(c==='"'){inQ=true;}else if(c===','){row.push(current.trim());current='';}else if(c==='\n'){row.push(current.trim());if(row.some(v=>v))rows.push(row);row=[];current='';}else{current+=c;} }
     }
-    updateCountdown(); setInterval(updateCountdown, 60000);
+    if(current||row.length){row.push(current.trim());if(row.some(v=>v))rows.push(row);}
+    if(rows.length<2)return[];
+    const headers=rows[0];
+    return rows.slice(1).map(r=>{const obj={};headers.forEach((h,i)=>{obj[h]=r[i]||'';});return obj;});
+}
 
-    // ==================== RENDER: FLIGHTS ====================
-    function renderFlights() {
-        const data = DB.flights, el = document.getElementById('flights-content');
-        if (!data || !data.length) { el.innerHTML = '<div class="error-msg">לא נמצאו טיסות</div>'; return; }
-        let currentRoute = '', flightNum = 0, totalPrice = 0, html = '';
-        data.forEach(f => {
-            if (f['Route']) { currentRoute = f['Route']; flightNum++; }
-            const depCode = extractAirportCode(f['Departure Place'] || ''), arrCode = extractAirportCode(f['Arrival Place'] || '');
-            const depTime = f['Departure Time'] || '', arrTime = f['Arrival Time'] || '', depDate = formatDate(f['Departure Date'] || '');
-            const price = parsePriceNum(f['Price']); if (price) totalPrice += price;
-            const baggage = (f['Allowed Baggage'] || '').replace(/\n/g, '<br>'), ticketURL = f['Ticket URL'] || '';
-            const isStopover = !f['Route'] && currentRoute;
-            if (isStopover) html += `<div class="stopover-badge">🔄 עצירת ביניים: ${esc(f['Departure Place'])}</div>`;
-            html += `<div class="card">
-                <div class="card-label"><span class="badge badge-blue">${isStopover ? '↳ המשך' : flightNum + '. ' + esc(currentRoute)}</span> ${depDate ? esc(depDate) + '/2026' : ''}</div>
-                <div class="flight-route">
-                    <div class="flight-point"><div class="flight-code">${esc(depCode)}</div><div class="flight-time">${esc(depTime)}</div></div>
-                    <div class="flight-line"><span class="plane">✈️</span></div>
-                    <div class="flight-point"><div class="flight-code">${esc(arrCode)}</div><div class="flight-time">${esc(arrTime)}</div></div>
+// ==================== DATA FETCHING ====================
+function tabURL(tab){return `${SHEET_BASE}?gid=${TABS[tab].gid}&single=true&output=csv&_=${Date.now()}`;}
+async function fetchTab(name){const r=await fetch(tabURL(name));if(!r.ok)throw new Error(r.status);return parseCSV(await r.text());}
+function loadCache(){try{const r=localStorage.getItem(CACHE_KEY);if(r){const c=JSON.parse(r);Object.assign(DB,c.data);dataFetchedAt=c.ts;return true;}}catch(e){}return false;}
+function saveCache(){try{localStorage.setItem(CACHE_KEY,JSON.stringify({data:DB,ts:Date.now()}));}catch(e){}}
+async function fetchAllData(){
+    const names=Object.keys(TABS).filter(n=>TABS[n].gid!=='0');
+    const fetchNames=names.filter(n=>!isInCooldown(n));
+    if(!fetchNames.length)return false;
+    const results=await Promise.allSettled(fetchNames.map(n=>fetchTab(n)));
+    let ok=false;
+    results.forEach((r,i)=>{if(r.status==='fulfilled'){DB[fetchNames[i]]=r.value;ok=true;}});
+    if(ok){dataFetchedAt=Date.now();saveCache();}
+    return ok;
+}
+
+// ==================== HELPERS ====================
+function esc(t){const d=document.createElement('div');d.textContent=t||'';return d.innerHTML;}
+function formatDate(s){if(!s)return'';const p=s.split('/');return p.length>=2?p[0]+'/'+p[1]:s;}
+function extractCode(p){const m=p.match(/\(([A-Z]{3})\)/);return m?m[1]:p.substring(0,3).toUpperCase();}
+function parsePriceNum(s){return parseFloat(String(s||'').replace(/[^0-9.\-]/g,''))||0;}
+function fmtMoney(n,c){const s={ILS:'₪',USD:'$',PHP:'₱'}[c]||'₪';return s+Math.round(n).toLocaleString();}
+function convertToILS(a,c){if(!exchangeRates||c==='ILS')return a;return(a/(exchangeRates[c]||1))*(exchangeRates['ILS']||1);}
+function convertFromILS(a,c){if(!exchangeRates||c==='ILS')return a;return a/(exchangeRates['ILS']||1)*(exchangeRates[c]||1);}
+function getExpType(cat){return PRE_TRIP_CATS.includes(cat)?'pre':'on';}
+function lockRates(amount,currency){
+    if(!exchangeRates){const fb={ILS_Amount:0,USD_Amount:0,PHP_Amount:0,Exchange_Rate:''};if(currency==='ILS')fb.ILS_Amount=amount;else if(currency==='USD')fb.USD_Amount=amount;else if(currency==='PHP')fb.PHP_Amount=amount;return fb;}
+    const u=amount/(exchangeRates[currency]||1);
+    return{ILS_Amount:Math.round(u*(exchangeRates['ILS']||1)*100)/100,USD_Amount:Math.round(u*100)/100,PHP_Amount:Math.round(u*(exchangeRates['PHP']||1)*100)/100,Exchange_Rate:JSON.stringify({USD:exchangeRates['USD'],ILS:exchangeRates['ILS'],PHP:exchangeRates['PHP']})};
+}
+function parseExp(e,idx){
+    const a=parsePriceNum(e['Amount']),c=e['Currency']||'ILS',cat=e['Category']||'',type=e['Type']||getExpType(cat);
+    let ils=parsePriceNum(e['ILS_Amount']),usd=parsePriceNum(e['USD_Amount']),php=parsePriceNum(e['PHP_Amount']);
+    if(!ils&&a)ils=convertToILS(a,c);if(!usd&&a)usd=convertFromILS(convertToILS(a,c),'USD');if(!php&&a)php=convertFromILS(convertToILS(a,c),'PHP');
+    return{idx,desc:e['Description']||'',amount:a,currency:c,cat,type,who:e['Who']||'',date:e['Date']||'',ils,usd,php};
+}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+function todayStr(){const d=new Date();return`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;}
+
+// ==================== WEATHER ====================
+async function fetchWeather(){
+    try{const cached=JSON.parse(localStorage.getItem(WEATHER_KEY)||'null');
+    if(cached&&Date.now()-cached.ts<3600000){weatherData=cached.data;return;}}catch(e){}
+    const data={};
+    await Promise.allSettled(DESTS.filter((d,i,a)=>a.findIndex(x=>x.lat===d.lat&&x.lon===d.lon)===i).map(async d=>{
+        try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${d.lat}&longitude=${d.lon}&current=temperature_2m,weather_code&timezone=auto`);
+        const j=await r.json();if(j.current){data[`${d.lat},${d.lon}`]=j.current;}}catch(e){}
+    }));
+    weatherData=data;
+    try{localStorage.setItem(WEATHER_KEY,JSON.stringify({data,ts:Date.now()}));}catch(e){}
+}
+function getWeather(dest){
+    const w=weatherData[`${dest.lat},${dest.lon}`];
+    if(!w)return'';
+    const code=w.weather_code,temp=Math.round(w.temperature_2m);
+    let icon='☀️';if(code>=1&&code<=3)icon='⛅';if(code>=45&&code<=48)icon='🌫️';if(code>=51&&code<=67)icon='🌧️';if(code>=71&&code<=77)icon='❄️';if(code>=80)icon='🌧️';if(code>=95)icon='⛈️';
+    return`${icon} ${temp}°C`;
+}
+
+// ==================== NAVIGATION ====================
+function goHome(){
+    currentView='home';currentSpaceId=null;currentSection=null;viewHistory=[];
+    renderApp();
+}
+function goToSpace(id){
+    viewHistory.push({v:currentView,s:currentSpaceId,sec:currentSection});
+    currentView='space';currentSpaceId=id;currentSection=null;
+    renderApp();
+}
+function openSection(name){
+    viewHistory.push({v:currentView,s:currentSpaceId,sec:currentSection});
+    currentView='section';currentSection=name;currentSpaceId=null;
+    renderApp();
+}
+function goBack(){
+    const p=viewHistory.pop();
+    if(p){currentView=p.v;currentSpaceId=p.s;currentSection=p.sec;}
+    else{currentView='home';currentSpaceId=null;currentSection=null;}
+    renderApp();
+}
+function toggleSidebar(){
+    const s=document.getElementById('sidebar'),o=document.getElementById('sb-overlay');
+    s.classList.toggle('open');o.classList.toggle('open');
+}
+function renderApp(){
+    const main=document.getElementById('main');
+    main.classList.add('fading');
+    setTimeout(()=>{
+        if(currentView==='home')renderMarketplace();
+        else if(currentView==='space')renderSpace(currentSpaceId);
+        else if(currentView==='section')renderSection(currentSection);
+        updateHeader();updateNav();
+        main.classList.remove('fading');
+        window.scrollTo(0,0);
+    },120);
+}
+function updateHeader(){
+    const back=document.getElementById('hdr-back'),title=document.getElementById('hdr-title');
+    if(currentView==='home'){back.style.display='none';title.textContent='🇵🇭 הטיול של טום ודני';}
+    else if(currentView==='space'){back.style.display='block';title.textContent=DEST_MAP[currentSpaceId]?.name||'';}
+    else{
+        back.style.display='block';
+        const names={flights:'כל הטיסות',hotels:'כל המלונות',expenses:'הוצאות',tasks:'משימות',packing:'ציוד',converter:'המרת מטבע',emergency:'חירום',links:'קישורים'};
+        title.textContent=names[currentSection]||'';
+    }
+}
+function updateNav(){
+    document.querySelectorAll('.bnav-item').forEach(b=>{
+        const t=b.dataset.t;
+        b.classList.toggle('active',currentView==='home'&&t==='home'||currentView==='section'&&t===currentSection);
+    });
+}
+
+// ==================== RENDER: MARKETPLACE ====================
+function renderMarketplace(){
+    const main=document.getElementById('main');
+    const cur=getCurrentDest();
+    const now=new Date(),tripStart=new Date(DESTS[0].start);
+    const beforeTrip=now<tripStart;
+    const diff=tripStart-now;
+    const days=Math.floor(diff/(1000*60*60*24)),hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    let countdownText='';
+    if(beforeTrip){countdownText=days>0?`⏳ עוד ${days} ימים ו-${hours} שעות לטיול!`:`⏳ עוד ${hours} שעות לטיול!`;}
+    else if(now>new Date(DESTS[DESTS.length-1].end)){countdownText='🎉 הטיול הסתיים!';}
+    else{countdownText=`🌴 ${cur.name} — נהנים מהטיול!`;}
+
+    const others=DESTS.filter(d=>d.id!==cur.id);
+    const heroBadge=beforeTrip?'היעד הראשון':now>=new Date(cur.start)&&now<new Date(cur.end)?'עכשיו':'היעד הבא';
+    const heroWeather=getWeather(cur);
+
+    // Budget summary
+    const exps=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
+    const onTrip=exps.filter(e=>e.type==='on');
+    const onILS=onTrip.reduce((s,e)=>s+e.ils,0);
+    let flightsILS=0,hotelsILS=0;
+    if(DB.flights)DB.flights.forEach(f=>{const p=parsePriceNum(f['Price']);if(p&&f['Route'])flightsILS+=convertToILS(p,'USD');});
+    if(DB.hotels)DB.hotels.forEach(h=>{const t=parsePriceNum(h['Total Price']);if(t)hotelsILS+=t;});
+    const preILS=exps.filter(e=>e.type==='pre').reduce((s,e)=>s+e.ils,0)+flightsILS+hotelsILS;
+    const grandILS=preILS+onILS;
+
+    main.innerHTML=`
+    ${countdownText?`<div class="mk-countdown">${countdownText}</div>`:''}
+    <div class="mk-hero" onclick="goToSpace('${cur.id}')">
+        <img class="mk-hero-img" src="${cur.img}" alt="${esc(cur.en)}" loading="eager"/>
+        <div class="mk-hero-ov">
+            <div class="mk-hero-badge">${heroBadge}</div>
+            <div class="mk-hero-name">${esc(cur.name)}</div>
+            <div class="mk-hero-dates">${fmtDestDates(cur)} · ${getNights(cur)} לילות</div>
+            ${heroWeather?`<div class="mk-hero-weather">${heroWeather}</div>`:''}
+            <div class="mk-hero-cta">הכנס ליעד ←</div>
+        </div>
+    </div>
+    <div class="mk-section-title">יעדים נוספים</div>
+    <div class="mk-scroll">${others.map(d=>`
+        <div class="mk-card" onclick="goToSpace('${d.id}')">
+            <img class="mk-card-img" src="${d.img}" alt="${esc(d.en)}" loading="lazy"/>
+            <div class="mk-card-ov">
+                <div class="mk-card-name">${esc(d.name)}</div>
+                <div class="mk-card-dates">${fmtDestDates(d)}</div>
+                ${getWeather(d)?`<div class="mk-card-weather">${getWeather(d)}</div>`:''}
+            </div>
+        </div>`).join('')}</div>
+    <div class="mk-budget">
+        <div class="mk-budget-title">💰 סיכום תקציב</div>
+        <div class="mk-budget-row">
+            <div class="mk-budget-stat"><div class="mk-budget-val">${fmtMoney(onILS,'ILS')}</div><div class="mk-budget-lbl">שוטפות</div></div>
+            <div class="mk-budget-stat"><div class="mk-budget-val" style="color:var(--pri)">${fmtMoney(grandILS,'ILS')}</div><div class="mk-budget-lbl">עלות כוללת</div></div>
+            <div class="mk-budget-stat"><div class="mk-budget-val" style="color:${BUDGET_LIMIT-onILS>=0?'var(--ok)':'var(--err)'}">${fmtMoney(BUDGET_LIMIT-onILS,'ILS')}</div><div class="mk-budget-lbl">נותר</div></div>
+        </div>
+    </div>`;
+}
+
+// ==================== RENDER: DESTINATION SPACE ====================
+function renderSpace(destId){
+    const dest=DEST_MAP[destId]; if(!dest)return goHome();
+    const main=document.getElementById('main');
+    const weather=getWeather(dest);
+    const flights=getFlightsForDest(destId);
+    const hotels=getHotelsForDest(destId);
+    const notes=getNotesForDest(destId);
+    const expenses=getExpensesForDest(destId);
+    const expILS=expenses.reduce((s,e)=>s+convertToILS(parsePriceNum(e['Amount']),e['Currency']||'ILS'),0);
+
+    let html=`
+    <div class="sp-banner">
+        <img class="sp-banner-img" src="${dest.img}" alt="${esc(dest.en)}"/>
+        <div class="sp-banner-ov">
+            <div class="sp-banner-name">${esc(dest.name)}</div>
+            <div class="sp-banner-info">${fmtDestDates(dest)} · ${getNights(dest)} לילות</div>
+            ${weather?`<div class="sp-banner-weather">${weather}</div>`:''}
+        </div>
+    </div>`;
+
+    // Flights
+    if(flights.length){
+        html+=`<div class="sp-section"><div class="sp-section-title">✈️ טיסות</div>`;
+        let currentRoute='';
+        flights.forEach(f=>{
+            if(f['Route'])currentRoute=f['Route'];
+            const dc=extractCode(f['Departure Place']||''),ac=extractCode(f['Arrival Place']||'');
+            const dt=f['Departure Time']||'',at=f['Arrival Time']||'',dd=formatDate(f['Departure Date']||'');
+            const price=parsePriceNum(f['Price']);
+            html+=`<div class="fl-card">
+                <div style="font-size:12px;color:var(--text-l);margin-bottom:4px">${esc(currentRoute)} · ${dd}</div>
+                <div class="fl-route">
+                    <div class="fl-point"><div class="fl-code">${esc(dc)}</div><div class="fl-time">${esc(dt)}</div></div>
+                    <div class="fl-line"><span class="plane">✈️</span></div>
+                    <div class="fl-point"><div class="fl-code">${esc(ac)}</div><div class="fl-time">${esc(at)}</div></div>
                 </div>
-                <div class="flight-details">
-                    <div class="flight-detail"><div class="flight-detail-label">מחיר</div><div class="flight-detail-value">${price ? '$' + price.toLocaleString() : '—'}</div></div>
-                    <div class="flight-detail"><div class="flight-detail-label">תאריך</div><div class="flight-detail-value">${esc(depDate)}</div></div>
-                    <div class="flight-detail"><div class="flight-detail-label">מזוודות</div><div class="flight-detail-value" style="font-size:11px;">${baggage || '—'}</div></div>
-                </div>
-                ${ticketURL ? `<a href="${esc(ticketURL)}" class="hotel-link" target="_blank">🎫 צפה בכרטיס</a>` : ''}
+                ${price?`<div style="text-align:center;font-size:13px;font-weight:600;color:var(--pri)">$${price.toLocaleString()}</div>`:''}
             </div>`;
         });
-        html += `<div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(14,165,233,0.05),rgba(6,182,212,0.05));">
-            <div style="font-size:13px;color:var(--text-light);">סה"כ טיסות</div>
-            <div style="font-size:28px;font-weight:800;color:var(--primary);margin-top:4px;">$${totalPrice.toLocaleString()}</div></div>`;
-        el.innerHTML = html + lastUpdatedHTML();
+        html+=`</div>`;
     }
 
-    // ==================== RENDER: HOTELS ====================
-    function renderHotels() {
-        const data = DB.hotels, el = document.getElementById('hotels-content');
-        if (!data || !data.length) { el.innerHTML = '<div class="error-msg">לא נמצאו מלונות</div>'; return; }
-        let totalILS = 0, html = '';
-        const colorMap = { 'Siargao': 'badge-green', 'El Nido': 'badge-orange', 'Boracay': 'badge-orange', 'Manila': 'badge-blue' };
-        data.forEach(h => {
-            const loc = h['Location'] || '', name = h['Hotel Name'] || '';
-            const checkin = formatDate(h['Check-in'] || ''), checkout = formatDate(h['Check-out'] || '');
-            const nights = h['Nights'] || '', pricePerNight = parsePriceNum(h['Price Per Night']), total = parsePriceNum(h['Total Price']);
-            const url = h['Booking URL'] || '', payStatus = h['Payment Status'] || '', cancel = h['Cancellation'] || '';
-            totalILS += total;
-            let badgeClass = 'badge-blue'; Object.keys(colorMap).forEach(k => { if (loc.includes(k)) badgeClass = colorMap[k]; });
-            let payColor = 'var(--text)', payText = payStatus;
-            if (payStatus.toLowerCase() === 'paid') { payColor = 'var(--success)'; payText = 'שולם'; }
-            else if (payStatus.toLowerCase().startsWith('due') || payStatus.toLowerCase().startsWith('cancel')) { payColor = 'var(--accent)'; }
-            html += `<div class="card">
-                <div class="card-label"><span class="badge ${badgeClass}">${esc(loc)}</span> ${nights} ${parseInt(nights) === 1 ? 'לילה' : 'לילות'}</div>
-                <div class="card-title">${esc(name)}</div>
-                <div class="hotel-dates">
-                    <div class="hotel-date"><div class="hotel-date-label">צ'ק-אין</div><div class="hotel-date-value">${esc(checkin)}</div></div>
-                    <div class="hotel-date"><div class="hotel-date-label">צ'ק-אאוט</div><div class="hotel-date-value">${esc(checkout)}</div></div>
+    // Hotels
+    if(hotels.length){
+        html+=`<div class="sp-section"><div class="sp-section-title">🏨 לינה</div>`;
+        hotels.forEach(h=>{
+            const name=h['Hotel Name']||'',ci=formatDate(h['Check-in']||''),co=formatDate(h['Check-out']||''),n=h['Nights']||'',total=parsePriceNum(h['Total Price']),url=h['Booking URL']||'';
+            html+=`<div class="ht-card">
+                <div class="g-card-title">${esc(name)}</div>
+                <div class="ht-dates">
+                    <div class="ht-date"><div class="ht-date-lbl">צ'ק-אין</div><div class="ht-date-val">${esc(ci)}</div></div>
+                    <div class="ht-date"><div class="ht-date-lbl">צ'ק-אאוט</div><div class="ht-date-val">${esc(co)}</div></div>
                 </div>
-                <div class="flight-details" style="border:none;padding-top:8px;">
-                    <div class="flight-detail"><div class="flight-detail-label">ללילה</div><div class="flight-detail-value">₪${pricePerNight.toLocaleString()}</div></div>
-                    <div class="flight-detail"><div class="flight-detail-label">סה"כ</div><div class="flight-detail-value">₪${total.toLocaleString()}</div></div>
-                    <div class="flight-detail"><div class="flight-detail-label">תשלום</div><div class="flight-detail-value" style="color:${payColor}">${esc(payText)}</div></div>
-                </div>
-                ${cancel && cancel !== '-' ? `<div class="text-sm text-muted mt-8">ביטול: ${esc(cancel)}</div>` : ''}
-                ${url ? `<a href="${esc(url)}" class="hotel-link" target="_blank">🔗 צפה בהזמנה</a>` : ''}
+                <div class="g-card-sub">${n} לילות${total?' · ₪'+total.toLocaleString():''}</div>
+                ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפה בהזמנה</a>`:''}
             </div>`;
         });
-        html += `<div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(14,165,233,0.05),rgba(6,182,212,0.05));">
-            <div style="font-size:13px;color:var(--text-light);">סה"כ לינה (שהוזמנה)</div>
-            <div style="font-size:28px;font-weight:800;color:var(--primary);margin-top:4px;">₪${totalILS.toLocaleString()}</div></div>`;
-        el.innerHTML = html + lastUpdatedHTML();
+        html+=`</div>`;
     }
 
-    // ==================== EXPENSE MANAGEMENT ====================
-    const PRE_TRIP_CATS = ['לינה', 'טיסות', 'ביורוקרטיה'];
-    const ON_TRIP_CATS = ['אוכל', 'תחבורה', 'אטרקציות', 'קניות', 'משיכת כסף', 'שונות'];
-    const ALL_CATS = [
-        { id: 'אוכל', icon: '🍜', label: 'אוכל', color: '#f59e0b' },
-        { id: 'תחבורה', icon: '🚕', label: 'תחבורה', color: '#4a9eed' },
-        { id: 'אטרקציות', icon: '🏝️', label: 'אטרקציות', color: '#22c55e' },
-        { id: 'קניות', icon: '🛍️', label: 'קניות', color: '#8b5cf6' },
-        { id: 'משיכת כסף', icon: '🏧', label: 'משיכת כסף', color: '#0d9488' },
-        { id: 'שונות', icon: '📦', label: 'שונות', color: '#a855f7' },
-        { id: 'לינה', icon: '🏨', label: 'לינה', color: '#0ea5e9' },
-        { id: 'טיסות', icon: '✈️', label: 'טיסות', color: '#06b6d4' },
-        { id: 'ביורוקרטיה', icon: '📋', label: 'ביורוקרטיה', color: '#64748b' },
-    ];
-    const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
-    let expenseFilter = 'all';
-    let editingExpenseIdx = null;
-    let selectedCat = 'אוכל';
-    let selectedWho = 'Both';
-
-    function getExpenseType(cat) { return PRE_TRIP_CATS.includes(cat) ? 'pre' : 'on'; }
-
-    function convertFromILS(amountILS, toCurrency) {
-        if (!exchangeRates || toCurrency === 'ILS') return amountILS;
-        return amountILS / (exchangeRates['ILS'] || 1) * (exchangeRates[toCurrency] || 1);
-    }
-
-    function lockRates(amount, currency) {
-        if (!exchangeRates) {
-            const fb = { ILS_Amount: 0, USD_Amount: 0, PHP_Amount: 0, Exchange_Rate: '' };
-            if (currency === 'ILS') fb.ILS_Amount = amount;
-            else if (currency === 'USD') fb.USD_Amount = amount;
-            else if (currency === 'PHP') fb.PHP_Amount = amount;
-            return fb;
-        }
-        const inUSD = amount / (exchangeRates[currency] || 1);
-        return {
-            ILS_Amount: Math.round(inUSD * (exchangeRates['ILS'] || 1) * 100) / 100,
-            USD_Amount: Math.round(inUSD * 100) / 100,
-            PHP_Amount: Math.round(inUSD * (exchangeRates['PHP'] || 1) * 100) / 100,
-            Exchange_Rate: JSON.stringify({ USD: exchangeRates['USD'], ILS: exchangeRates['ILS'], PHP: exchangeRates['PHP'] }),
-        };
-    }
-
-    function parseExpense(e, idx) {
-        const amount = parsePriceNum(e['Amount']);
-        const currency = e['Currency'] || 'ILS';
-        const cat = e['Category'] || '';
-        const type = e['Type'] || getExpenseType(cat);
-        let ilsAmt = parsePriceNum(e['ILS_Amount']);
-        let usdAmt = parsePriceNum(e['USD_Amount']);
-        let phpAmt = parsePriceNum(e['PHP_Amount']);
-        if (!ilsAmt && amount) ilsAmt = convertToILS(amount, currency);
-        if (!usdAmt && amount) usdAmt = convertFromILS(convertToILS(amount, currency), 'USD');
-        if (!phpAmt && amount) phpAmt = convertFromILS(convertToILS(amount, currency), 'PHP');
-        return {
-            idx, desc: e['Description'] || '', amount, currency, cat, type,
-            who: e['Who'] || '', date: e['Date'] || '',
-            ils: ilsAmt, usd: usdAmt, php: phpAmt,
-        };
-    }
-
-    function parseDate(d) {
-        if (!d) return new Date(0);
-        const p = d.split('/');
-        return p.length === 3 ? new Date(`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`) : new Date(d);
-    }
-
-    function todayStr() {
-        const d = new Date();
-        return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-    }
-
-    function showToast(msg) {
-        const t = document.getElementById('budget-toast');
-        t.textContent = msg; t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2000);
-    }
-
-    // ===== Budget settings modal =====
-    function openBudgetModal() {
-        document.getElementById('budget-modal-input').value = BUDGET_LIMIT;
-        document.getElementById('budget-modal').classList.add('open');
-    }
-    function closeBudgetModal() { document.getElementById('budget-modal').classList.remove('open'); }
-    function saveBudgetSetting() {
-        const val = parseInt(document.getElementById('budget-modal-input').value);
-        if (!val || val <= 0) return;
-        BUDGET_LIMIT = val;
-        localStorage.setItem('ph-budget-limit', val);
-        closeBudgetModal();
-        renderBudget();
-        showToast('התקציב עודכן');
-    }
-    document.getElementById('budget-modal').addEventListener('click', function(e) { if (e.target === this) closeBudgetModal(); });
-
-    // ===== Form setup =====
-    function initExpenseForm() {
-        // Categories grid
-        const grid = document.getElementById('exp-cats');
-        grid.innerHTML = ALL_CATS.map(c =>
-            `<button class="budget-cat-btn ${c.id === selectedCat ? 'active' : ''}" data-cat="${c.id}" onclick="selectCat(this)">
-                <span class="budget-cat-icon">${c.icon}</span>${c.label}
-            </button>`
-        ).join('');
-        // Date default
-        document.getElementById('exp-date').valueAsDate = new Date();
-        // Conversion preview listeners
-        document.getElementById('exp-amount').addEventListener('input', updateConvPreview);
-        document.getElementById('exp-currency').addEventListener('change', updateConvPreview);
-    }
-
-    function selectCat(btn) {
-        document.querySelectorAll('.budget-cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedCat = btn.dataset.cat;
-    }
-    function selectWho(btn) {
-        document.querySelectorAll('.budget-who-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedWho = btn.dataset.who;
-    }
-
-    function updateConvPreview() {
-        const amount = parseFloat(document.getElementById('exp-amount').value);
-        const currency = document.getElementById('exp-currency').value;
-        const el = document.getElementById('exp-conversion');
-        if (!amount || !exchangeRates) { el.textContent = ''; return; }
-        const locked = lockRates(amount, currency);
-        const parts = [];
-        if (currency !== 'ILS') parts.push(fmtMoney(locked.ILS_Amount, 'ILS'));
-        if (currency !== 'USD') parts.push(fmtMoney(locked.USD_Amount, 'USD'));
-        if (currency !== 'PHP') parts.push(fmtMoney(locked.PHP_Amount, 'PHP'));
-        el.textContent = '≈ ' + parts.join(' | ');
-    }
-
-    // ===== Add / Edit / Delete =====
-    async function submitExpense() {
-        const amount = parseFloat(document.getElementById('exp-amount').value);
-        const currency = document.getElementById('exp-currency').value;
-        const desc = document.getElementById('exp-desc').value.trim();
-        const dateVal = document.getElementById('exp-date').value;
-        if (!amount || amount <= 0) { document.getElementById('exp-amount').focus(); return; }
-        if (!desc) { document.getElementById('exp-desc').focus(); return; }
-        const dateFormatted = dateVal
-            ? new Date(dateVal).toLocaleDateString('en-GB')
-            : todayStr();
-        const type = getExpenseType(selectedCat);
-        const locked = lockRates(amount, currency);
-        const expense = {
-            Date: dateFormatted, Description: desc, Amount: amount,
-            Currency: currency, Category: selectedCat, Who: selectedWho,
-            Type: type, ...locked, Origin_Cur: currency,
-        };
-
-        if (!DB.expenses) DB.expenses = [];
-
-        if (editingExpenseIdx !== null) {
-            // Edit mode — preserve original currency from when it was first added
-            expense.Origin_Cur = DB.expenses[editingExpenseIdx]['Origin_Cur'] || DB.expenses[editingExpenseIdx]['Currency'] || currency;
-            DB.expenses[editingExpenseIdx] = expense;
-            setCooldown('expenses');
-            saveCache();
-            cancelEditExpense();
-            renderBudget();
-            showToast('ההוצאה עודכנה');
-            try {
-                await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'editExpense', data: { ...expense, row: editingExpenseIdx + 2 } }) });
-            } catch(e) {}
-        } else {
-            // Add mode
-            DB.expenses.push(expense);
-            setCooldown('expenses');
-            saveCache();
-            resetForm();
-            renderBudget();
-            showToast('ההוצאה נוספה');
-            try {
-                await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'addExpense', data: expense }) });
-            } catch(e) { showToast('שגיאה בשמירה'); }
-        }
-    }
-
-    function startEditExpense(idx) {
-        const e = DB.expenses[idx];
-        if (!e) return;
-        editingExpenseIdx = idx;
-        document.getElementById('exp-amount').value = parsePriceNum(e['Amount']);
-        document.getElementById('exp-currency').value = e['Currency'] || 'ILS';
-        document.getElementById('exp-desc').value = e['Description'] || '';
-        // Parse date
-        const ds = e['Date'] || '';
-        if (ds) {
-            const p = ds.split('/');
-            if (p.length === 3) document.getElementById('exp-date').value = `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
-        }
-        // Set category
-        selectedCat = e['Category'] || 'אוכל';
-        document.querySelectorAll('.budget-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === selectedCat));
-        // Set who
-        selectedWho = e['Who'] || 'Both';
-        document.querySelectorAll('.budget-who-btn').forEach(b => b.classList.toggle('active', b.dataset.who === selectedWho));
-        // UI
-        document.getElementById('budget-form-label').textContent = 'עריכת הוצאה';
-        document.getElementById('budget-form-cancel').style.display = 'block';
-        document.getElementById('exp-submit').textContent = '✓ שמור שינויים';
-        document.getElementById('exp-submit').classList.add('editing');
-        updateConvPreview();
-        document.getElementById('exp-amount').focus();
-        document.querySelector('.budget-form-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function cancelEditExpense() {
-        editingExpenseIdx = null;
-        document.getElementById('budget-form-label').textContent = 'הוסף הוצאה';
-        document.getElementById('budget-form-cancel').style.display = 'none';
-        document.getElementById('exp-submit').textContent = '+ הוסף הוצאה';
-        document.getElementById('exp-submit').classList.remove('editing');
-        resetForm();
-    }
-
-    function resetForm() {
-        document.getElementById('exp-amount').value = '';
-        document.getElementById('exp-desc').value = '';
-        document.getElementById('exp-date').valueAsDate = new Date();
-        document.getElementById('exp-currency').value = 'PHP';
-        document.getElementById('exp-conversion').textContent = '';
-        selectedCat = 'אוכל';
-        selectedWho = 'Both';
-        document.querySelectorAll('.budget-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'אוכל'));
-        document.querySelectorAll('.budget-who-btn').forEach(b => b.classList.toggle('active', b.dataset.who === 'Both'));
-    }
-
-    async function deleteExpense(idx) {
-        if (!confirm('למחוק את ההוצאה הזו?')) return;
-        const row = idx + 2;
-        DB.expenses.splice(idx, 1);
-        setCooldown('expenses');
-        saveCache();
-        renderBudget();
-        showToast('ההוצאה נמחקה');
-        try {
-            await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteExpense', data: { row } }) });
-        } catch(e) {}
-    }
-
-    function toggleExpenseDetail(el) {
-        const d = el.querySelector('.expense-card-detail');
-        if (d) d.classList.toggle('open');
-    }
-
-    function setExpenseFilter(cat) {
-        expenseFilter = cat;
-        document.querySelectorAll('.expense-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
-        renderBudget();
-    }
-
-    // ===== Main Render =====
-    function renderBudget() {
-        const sheetExpenses = DB.expenses || [];
-        const all = sheetExpenses.map((e, i) => parseExpense(e, i));
-        const onTrip = all.filter(e => e.type === 'on');
-        const preTrip = all.filter(e => e.type === 'pre');
-
-        // Add flights and hotels as pre-trip
-        let flightsILS = 0, hotelsILS = 0;
-        if (DB.flights) DB.flights.forEach(f => { const p = parsePriceNum(f['Price']); if (p && f['Route']) flightsILS += convertToILS(p, 'USD'); });
-        if (DB.hotels) DB.hotels.forEach(h => { const t = parsePriceNum(h['Total Price']); if (t) hotelsILS += t; });
-        const preTripILS = preTrip.reduce((s, e) => s + e.ils, 0) + flightsILS + hotelsILS;
-
-        // On-trip totals
-        const onTripILS = onTrip.reduce((s, e) => s + e.ils, 0);
-        const onTripUSD = onTrip.reduce((s, e) => s + e.usd, 0);
-        const onTripPHP = onTrip.reduce((s, e) => s + e.php, 0);
-
-        // Today's expenses
-        const today = todayStr();
-        const todayILS = onTrip.filter(e => e.date === today).reduce((s, e) => s + e.ils, 0);
-
-        // Grand total
-        const grandILS = preTripILS + onTripILS;
-
-        // ===== Progress bar =====
-        const pct = BUDGET_LIMIT > 0 ? Math.min(100, (onTripILS / BUDGET_LIMIT * 100)) : 0;
-        document.getElementById('budget-spent').textContent = fmtMoney(onTripILS, 'ILS');
-        document.getElementById('budget-limit-display').textContent = `/ ${fmtMoney(BUDGET_LIMIT, 'ILS')}`;
-        const bar = document.getElementById('budget-bar');
-        bar.style.width = pct + '%';
-        bar.className = 'budget-progress-fill ' + (pct < 60 ? 'green' : pct < 85 ? 'orange' : 'red');
-        document.getElementById('budget-pct').textContent = Math.round(pct) + '%';
-        document.getElementById('budget-warning').style.display = pct >= 85 ? 'block' : 'none';
-
-        // ===== Summary cards =====
-        document.getElementById('budget-summary-row').innerHTML = `
-            <div class="budget-summary-card">
-                <div class="budget-summary-label">הוצאות היום</div>
-                <div class="budget-summary-value">${fmtMoney(todayILS, 'ILS')}</div>
-                <div class="budget-summary-sub">${fmtMoney(convertFromILS(todayILS, 'USD'), 'USD')}</div>
-            </div>
-            <div class="budget-summary-card">
-                <div class="budget-summary-label">סה"כ שוטפות</div>
-                <div class="budget-summary-value">${fmtMoney(onTripILS, 'ILS')}</div>
-                <div class="budget-summary-sub">${fmtMoney(onTripUSD, 'USD')} | ${fmtMoney(onTripPHP, 'PHP')}</div>
-            </div>
-            <div class="budget-summary-card">
-                <div class="budget-summary-label">עלות כוללת</div>
-                <div class="budget-summary-value" style="color:var(--primary);">${fmtMoney(grandILS, 'ILS')}</div>
-                <div class="budget-summary-sub">${fmtMoney(convertFromILS(grandILS, 'USD'), 'USD')}</div>
+    // Dani's Picks
+    const noteIcons={Food:'🍜',Visit:'📍',Note:'📝'};
+    html+=`<div class="sp-section"><div class="sp-section-title">🌟 הפינה של דני</div>`;
+    if(notes.length){
+        html+=notes.map(n=>{
+            const done=(n['Done']||'').toUpperCase()==='TRUE';
+            const cat=n['Category']||'Note';
+            const link=n['Link']||'';
+            return`<div class="note-card ${done?'done':''}">
+                <div class="note-check" onclick="toggleNote(${n._row},'${destId}')"></div>
+                <span class="note-icon">${noteIcons[cat]||'📝'}</span>
+                <div class="note-info">
+                    <div class="note-title">${link?`<a href="${esc(link)}" target="_blank">${esc(n['Title'])}</a>`:esc(n['Title'])}</div>
+                    ${n['Description']?`<div class="note-desc">${esc(n['Description'])}</div>`:''}
+                </div>
+                <button class="note-del" onclick="deleteNoteItem(${n._row},'${destId}')">✕</button>
             </div>`;
-
-        // ===== Category chart (on-trip only) =====
-        const chartCard = document.getElementById('budget-chart-card');
-        if (onTrip.length) {
-            chartCard.style.display = 'block';
-            const byCat = {};
-            onTrip.forEach(e => { byCat[e.cat] = (byCat[e.cat] || 0) + e.ils; });
-            const catEntries = Object.entries(byCat).sort((a,b) => b[1] - a[1]);
-            const barHTML = catEntries.map(([cat, amt]) => {
-                const c = CAT_MAP[cat];
-                const w = onTripILS > 0 ? (amt / onTripILS * 100) : 0;
-                return `<div class="budget-chart-segment" style="width:${w}%;background:${c ? c.color : '#94a3b8'};"></div>`;
-            }).join('');
-            document.getElementById('budget-chart-bar').innerHTML = barHTML;
-            document.getElementById('budget-chart-legend').innerHTML = catEntries.map(([cat, amt]) => {
-                const c = CAT_MAP[cat];
-                const p = onTripILS > 0 ? Math.round(amt / onTripILS * 100) : 0;
-                return `<div class="budget-chart-item"><div class="budget-chart-dot" style="background:${c ? c.color : '#94a3b8'}"></div>${c ? c.icon : ''} <span class="budget-chart-item-amount">${fmtMoney(amt,'ILS')}</span> <span class="budget-chart-item-pct">(${p}%)</span></div>`;
-            }).join('');
-        } else {
-            chartCard.style.display = 'none';
-        }
-
-        // ===== Filters =====
-        const filtersEl = document.getElementById('expense-filters');
-        const activeCats = [...new Set(all.map(e => e.cat))];
-        filtersEl.innerHTML = `<button class="expense-filter-btn ${expenseFilter==='all'?'active':''}" data-cat="all" onclick="setExpenseFilter('all')">הכל</button>` +
-            `<button class="expense-filter-btn ${expenseFilter==='on'?'active':''}" data-cat="on" onclick="setExpenseFilter('on')">שוטפות</button>` +
-            `<button class="expense-filter-btn ${expenseFilter==='pre'?'active':''}" data-cat="pre" onclick="setExpenseFilter('pre')">מוקדמות</button>` +
-            activeCats.map(cat => {
-                const c = CAT_MAP[cat];
-                return `<button class="expense-filter-btn ${expenseFilter===cat?'active':''}" data-cat="${cat}" onclick="setExpenseFilter('${cat}')">${c ? c.icon+' ' : ''}${cat}</button>`;
-            }).join('');
-
-        // ===== Expense list =====
-        let filtered = all;
-        if (expenseFilter === 'on') filtered = onTrip;
-        else if (expenseFilter === 'pre') filtered = preTrip;
-        else if (expenseFilter !== 'all') filtered = all.filter(e => e.cat === expenseFilter);
-
-        filtered.sort((a, b) => parseDate(b.date) - parseDate(a.date));
-
-        document.getElementById('expense-count').textContent = `(${filtered.length})`;
-        const expEl = document.getElementById('budget-expenses');
-
-        if (!filtered.length) {
-            expEl.innerHTML = '<div class="text-sm text-muted" style="text-align:center;padding:20px;">אין הוצאות</div>';
-        } else {
-            expEl.innerHTML = filtered.map(e => {
-                const c = CAT_MAP[e.cat];
-                const iconBg = c ? c.color + '15' : 'rgba(148,163,184,0.1)';
-                const secondaryCurrencies = ['ILS','USD','PHP'].filter(cur => cur !== e.currency);
-                const secAmounts = secondaryCurrencies.map(cur => fmtMoney(cur === 'ILS' ? e.ils : cur === 'USD' ? e.usd : e.php, cur)).join(' | ');
-                const isPre = e.type === 'pre';
-                const whoLabel = e.who === 'Both' ? 'משותף' : e.who;
-                return `<div class="expense-card ${isPre ? 'pre-trip' : ''}">
-                    <div class="expense-card-main" onclick="toggleExpenseDetail(this.parentElement)">
-                        <div class="expense-card-icon" style="background:${iconBg}">${c ? c.icon : '📦'}</div>
-                        <div class="expense-card-info">
-                            <div class="expense-card-desc">${esc(e.desc)}</div>
-                            <div class="expense-card-meta">
-                                <span>${esc(e.date)}</span>
-                                <span>${esc(whoLabel)}</span>
-                                ${isPre ? '<span class="expense-card-tag">מוקדמת</span>' : ''}
-                            </div>
-                        </div>
-                        <div class="expense-card-amounts">
-                            <div class="expense-card-primary">${fmtMoney(e.amount, e.currency)}</div>
-                            <div class="expense-card-secondary">${secAmounts}</div>
-                        </div>
-                    </div>
-                    <div class="expense-card-detail">
-                        <div class="expense-card-currencies">
-                            <div class="expense-card-curr"><div class="expense-card-curr-val">${fmtMoney(e.ils,'ILS')}</div><div class="expense-card-curr-label">ILS</div></div>
-                            <div class="expense-card-curr"><div class="expense-card-curr-val">${fmtMoney(e.usd,'USD')}</div><div class="expense-card-curr-label">USD</div></div>
-                            <div class="expense-card-curr"><div class="expense-card-curr-val">${fmtMoney(e.php,'PHP')}</div><div class="expense-card-curr-label">PHP</div></div>
-                        </div>
-                        <div class="expense-card-actions">
-                            <button class="edit-btn" onclick="event.stopPropagation();startEditExpense(${e.idx})">&#9998; ערוך</button>
-                            <button class="delete-btn" onclick="event.stopPropagation();deleteExpense(${e.idx})">&#128465; מחק</button>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-    }
-
-    // ==================== RENDER: TASKS ====================
-    let tasks = [];
-    function renderTasks() {
-        const data = DB.tasks || [];
-        tasks = data.map((t, i) => ({ id: i, text: t['Task']||'', done: (t['Done']||'').toUpperCase()==='TRUE'||t['Done']==='V'||t['Done']==='1', due: t['Due Date']||'', fromSheet: true }));
-        const localTasks = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]');
-        const allTasks = [...tasks, ...localTasks];
-        const total = allTasks.length, done = allTasks.filter(t=>t.done).length, pct = total>0?(done/total*100):0;
-        document.getElementById('todo-progress-text').textContent = `${done}/${total} הושלמו`;
-        document.getElementById('todo-progress-fill').style.width = pct + '%';
-        const listEl = document.getElementById('todo-list');
-        if (!allTasks.length) { listEl.innerHTML = '<div class="text-sm text-muted" style="text-align:center;padding:16px;">אין מטלות</div>'; return; }
-        listEl.innerHTML = allTasks.map((t, i) => {
-            let dueHTML = '';
-            if (t.due) { const isOverdue = new Date(t.due) < new Date() && !t.done; dueHTML = `<span class="todo-due ${isOverdue?'overdue':''}">${esc(formatDate(t.due))}</span>`; }
-            return `<div class="todo-item ${t.done?'done':''}" data-id="${i}"><div class="todo-checkbox" onclick="toggleTask(${i},${t.fromSheet?'true':'false'})"></div><div class="todo-text">${esc(t.text)}</div>${dueHTML}${!t.fromSheet?`<button class="todo-delete" onclick="deleteLocalTask(${i-tasks.length})">✕</button>`:''}</div>`;
         }).join('');
+    } else { html+=`<div class="empty">אין המלצות עדיין — הוסיפו את הראשונה!</div>`; }
+    html+=`
+    <div class="note-form">
+        <div class="note-cat-row">
+            <button class="note-cat-btn active" data-cat="Food" onclick="selNoteCat(this)">🍜 אוכל</button>
+            <button class="note-cat-btn" data-cat="Visit" onclick="selNoteCat(this)">📍 ביקור</button>
+            <button class="note-cat-btn" data-cat="Note" onclick="selNoteCat(this)">📝 הערה</button>
+        </div>
+        <input class="note-inp" id="note-title" placeholder="שם ההמלצה..."/>
+        <input class="note-inp" id="note-link" placeholder="קישור (Maps / אתר)..." dir="ltr"/>
+        <input class="note-inp" id="note-desc" placeholder="תיאור קצר (אופציונלי)..."/>
+        <button class="submit-btn" onclick="addNoteItem('${destId}')" style="font-size:13px;padding:10px">+ הוסף המלצה</button>
+    </div></div>`;
+
+    // Local budget
+    html+=`<div class="sp-section"><div class="sp-section-title">💰 הוצאות ב${esc(dest.name)}</div>`;
+    html+=`<div style="font-size:14px;font-weight:600;margin-bottom:10px">${fmtMoney(expILS,'ILS')}</div>`;
+    if(expenses.length){
+        html+=expenses.map(e=>{
+            const cat=e['Category']||'';const cm=CAT_MAP[cat];
+            return`<div class="g-card" style="padding:10px 12px;display:flex;align-items:center;gap:8px">
+                <span style="font-size:16px">${cm?cm.icon:'📦'}</span>
+                <div style="flex:1;font-size:12px">${esc(e['Description'])}<div style="font-size:10px;color:var(--text-l)">${esc(e['Date'])}</div></div>
+                <div style="font-size:13px;font-weight:600">${fmtMoney(parsePriceNum(e['Amount']),e['Currency']||'ILS')}</div>
+            </div>`;
+        }).join('');
+    } else { html+=`<div class="empty">אין הוצאות עדיין ביעד הזה</div>`; }
+    html+=`</div>`;
+    main.innerHTML=html;
+}
+
+// ==================== RENDER: SECTIONS ====================
+function renderSection(name){
+    switch(name){
+        case 'flights':renderFlightsSection();break;
+        case 'hotels':renderHotelsSection();break;
+        case 'expenses':renderExpensesSection();break;
+        case 'tasks':renderTasksSection();break;
+        case 'packing':renderPackingSection();break;
+        case 'converter':renderConverterSection();break;
+        case 'emergency':renderEmergencySection();break;
+        case 'links':renderLinksSection();break;
     }
-    function toggleTask(idx, fromSheet) {
-        if (fromSheet && DB.tasks && DB.tasks[idx]) {
-            const cur = (DB.tasks[idx]['Done']||'').toUpperCase() === 'TRUE';
-            const newDone = !cur;
-            DB.tasks[idx]['Done'] = newDone ? 'TRUE' : 'FALSE';
-            setCooldown('tasks');
-            saveCache();
-            renderTasks();
-            fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'toggleTask',data:{row:idx+2,done:newDone}}) }).catch(e=>{});
-        } else {
-            const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'), li = idx - tasks.length;
-            if (li>=0&&li<lt.length) { lt[li].done=!lt[li].done; localStorage.setItem('ph-local-tasks',JSON.stringify(lt)); }
-            renderTasks();
-        }
+}
+
+// --- FLIGHTS ---
+function renderFlightsSection(){
+    const main=document.getElementById('main');
+    const data=DB.flights;
+    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">✈️ טיסות</div><div class="empty">לא נמצאו טיסות</div></div>';return;}
+    let route='',num=0,total=0,html='<div class="section-view"><div class="section-view-title">✈️ כל הטיסות</div>';
+    data.forEach(f=>{
+        if(f['Route']){route=f['Route'];num++;}
+        const dc=extractCode(f['Departure Place']||''),ac=extractCode(f['Arrival Place']||''),dt=f['Departure Time']||'',at=f['Arrival Time']||'',dd=formatDate(f['Departure Date']||'');
+        const price=parsePriceNum(f['Price']);if(price)total+=price;
+        const ticket=f['Ticket URL']||'';
+        html+=`<div class="fl-card">
+            <div style="font-size:12px;color:var(--text-l);margin-bottom:4px"><span class="g-card-badge" style="background:rgba(13,148,136,.08);color:var(--pri)">${num}. ${esc(route)}</span> ${dd?dd+'/2026':''}</div>
+            <div class="fl-route">
+                <div class="fl-point"><div class="fl-code">${esc(dc)}</div><div class="fl-time">${esc(dt)}</div></div>
+                <div class="fl-line"><span class="plane">✈️</span></div>
+                <div class="fl-point"><div class="fl-code">${esc(ac)}</div><div class="fl-time">${esc(at)}</div></div>
+            </div>
+            <div class="fl-details">
+                <div class="fl-detail"><div class="fl-detail-lbl">מחיר</div><div class="fl-detail-val">${price?'$'+price.toLocaleString():'—'}</div></div>
+                <div class="fl-detail"><div class="fl-detail-lbl">תאריך</div><div class="fl-detail-val">${esc(dd)}</div></div>
+                <div class="fl-detail"><div class="fl-detail-lbl">מזוודות</div><div class="fl-detail-val" style="font-size:10px">${esc(f['Allowed Baggage']||'—')}</div></div>
+            </div>
+            ${ticket?`<a href="${esc(ticket)}" class="ht-link" target="_blank" style="margin-top:8px">🎫 צפה בכרטיס</a>`:''}
+        </div>`;
+    });
+    html+=`<div class="g-card" style="text-align:center;background:rgba(13,148,136,.03)"><div style="font-size:12px;color:var(--text-l)">סה"כ טיסות</div><div style="font-size:24px;font-weight:800;color:var(--pri);margin-top:4px">$${total.toLocaleString()}</div></div></div>`;
+    main.innerHTML=html;
+}
+
+// --- HOTELS ---
+function renderHotelsSection(){
+    const main=document.getElementById('main');
+    const data=DB.hotels;
+    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🏨 מלונות</div><div class="empty">לא נמצאו מלונות</div></div>';return;}
+    let totalILS=0,html='<div class="section-view"><div class="section-view-title">🏨 כל המלונות</div>';
+    data.forEach(h=>{
+        const loc=h['Location']||'',name=h['Hotel Name']||'',ci=formatDate(h['Check-in']||''),co=formatDate(h['Check-out']||''),n=h['Nights']||'',ppn=parsePriceNum(h['Price Per Night']),total=parsePriceNum(h['Total Price']),url=h['Booking URL']||'',pay=h['Payment Status']||'',cancel=h['Cancellation']||'';
+        totalILS+=total;
+        html+=`<div class="ht-card">
+            <div style="margin-bottom:4px"><span class="g-card-badge" style="background:rgba(13,148,136,.08);color:var(--pri)">${esc(loc)}</span></div>
+            <div class="g-card-title">${esc(name)}</div>
+            <div class="ht-dates">
+                <div class="ht-date"><div class="ht-date-lbl">צ'ק-אין</div><div class="ht-date-val">${esc(ci)}</div></div>
+                <div class="ht-date"><div class="ht-date-lbl">צ'ק-אאוט</div><div class="ht-date-val">${esc(co)}</div></div>
+            </div>
+            <div class="fl-details" style="border:none;padding-top:6px">
+                <div class="fl-detail"><div class="fl-detail-lbl">ללילה</div><div class="fl-detail-val">₪${ppn.toLocaleString()}</div></div>
+                <div class="fl-detail"><div class="fl-detail-lbl">סה"כ</div><div class="fl-detail-val">₪${total.toLocaleString()}</div></div>
+                <div class="fl-detail"><div class="fl-detail-lbl">תשלום</div><div class="fl-detail-val" style="color:${pay.toLowerCase()==='paid'?'var(--ok)':'var(--acc)'}">${pay.toLowerCase()==='paid'?'שולם':esc(pay)}</div></div>
+            </div>
+            ${cancel&&cancel!=='-'?`<div style="font-size:11px;color:var(--text-l);margin-top:6px">ביטול: ${esc(cancel)}</div>`:''}
+            ${url?`<a href="${esc(url)}" class="ht-link" target="_blank">🔗 צפה בהזמנה</a>`:''}
+        </div>`;
+    });
+    html+=`<div class="g-card" style="text-align:center;background:rgba(13,148,136,.03)"><div style="font-size:12px;color:var(--text-l)">סה"כ לינה</div><div style="font-size:24px;font-weight:800;color:var(--pri);margin-top:4px">₪${totalILS.toLocaleString()}</div></div></div>`;
+    main.innerHTML=html;
+}
+
+// --- EXPENSES ---
+function renderExpensesSection(){
+    const main=document.getElementById('main');
+    const catGrid=ALL_CATS.map(c=>`<button class="cat-btn ${c.id===selCat?'active':''}" data-cat="${c.id}" onclick="selCatBtn(this)"><span class="ci">${c.icon}</span>${c.label}</button>`).join('');
+    main.innerHTML=`<div class="section-view">
+        <div class="section-view-title">💰 הוצאות</div>
+        <div class="bgt-progress"><div class="bgt-progress-hdr"><span class="bgt-progress-title">תקציב שוטפות</span><button class="bgt-gear" onclick="openBgtModal()">⚙</button></div><div class="bgt-amounts"><span class="bgt-spent" id="bs-spent">₪0</span><span class="bgt-limit" id="bs-limit">/ ₪15,000</span></div><div class="bgt-bar"><div class="bgt-fill g" id="bs-bar"></div></div><div class="bgt-pct" id="bs-pct">0%</div></div>
+        <div class="bgt-warn" id="bs-warn">⚠ שימו לב! התקציב מתקרב לגבול</div>
+        <div class="bgt-summary" id="bs-summary"></div>
+        <div class="bgt-chart" id="bs-chart" style="display:none"><div class="bgt-chart-title">פילוח לפי קטגוריה</div><div class="bgt-chart-bar" id="bs-chartbar"></div><div class="bgt-chart-legend" id="bs-legend"></div></div>
+        <div class="frm-card"><div class="frm-title"><span id="frm-label">הוסף הוצאה</span><button class="frm-cancel" id="frm-cancel" onclick="cancelEditExp()">✕ ביטול</button></div>
+            <div class="frm-row"><input type="number" class="amt" id="ea-amt" placeholder="סכום" inputmode="decimal"/><select class="cur" id="ea-cur"><option value="PHP">₱ PHP</option><option value="USD">$ USD</option><option value="ILS">₪ ILS</option></select></div>
+            <div class="frm-conv" id="ea-conv"></div>
+            <div class="frm-row"><input type="text" class="desc-input" id="ea-desc" placeholder="תיאור ההוצאה..."/><input type="date" class="dt" id="ea-date"/></div>
+            <div class="cat-grid">${catGrid}</div>
+            <div class="who-row"><button class="who-btn active" data-who="Both" onclick="selWhoBtn(this)">👫 משותף</button><button class="who-btn" data-who="Tom" onclick="selWhoBtn(this)">👤 Tom</button><button class="who-btn" data-who="Daniella" onclick="selWhoBtn(this)">👤 Dani</button></div>
+            <button class="submit-btn" id="ea-submit" onclick="submitExp()">+ הוסף הוצאה</button>
+        </div>
+        <div class="budget-section-title" style="display:flex;justify-content:space-between"><span>הוצאות</span><span id="bs-count" style="font-size:11px;font-weight:400"></span></div>
+        <div class="filters" id="bs-filters"></div>
+        <div id="bs-list"></div>
+    </div>`;
+    document.getElementById('ea-date').valueAsDate=new Date();
+    document.getElementById('ea-amt').addEventListener('input',updateExpConv);
+    document.getElementById('ea-cur').addEventListener('change',updateExpConv);
+    renderBudgetData();
+}
+function selCatBtn(b){document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');selCat=b.dataset.cat;}
+function selWhoBtn(b){document.querySelectorAll('.who-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');selWho=b.dataset.who;}
+function updateExpConv(){
+    const a=parseFloat(document.getElementById('ea-amt').value),c=document.getElementById('ea-cur').value,el=document.getElementById('ea-conv');
+    if(!a||!exchangeRates){el.textContent='';return;}
+    const l=lockRates(a,c),parts=[];
+    if(c!=='ILS')parts.push(fmtMoney(l.ILS_Amount,'ILS'));if(c!=='USD')parts.push(fmtMoney(l.USD_Amount,'USD'));if(c!=='PHP')parts.push(fmtMoney(l.PHP_Amount,'PHP'));
+    el.textContent='≈ '+parts.join(' | ');
+}
+function renderBudgetData(){
+    const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
+    const onTrip=all.filter(e=>e.type==='on'),preTrip=all.filter(e=>e.type==='pre');
+    const onILS=onTrip.reduce((s,e)=>s+e.ils,0),onUSD=onTrip.reduce((s,e)=>s+e.usd,0),onPHP=onTrip.reduce((s,e)=>s+e.php,0);
+    let flILS=0,htILS=0;
+    if(DB.flights)DB.flights.forEach(f=>{const p=parsePriceNum(f['Price']);if(p&&f['Route'])flILS+=convertToILS(p,'USD');});
+    if(DB.hotels)DB.hotels.forEach(h=>{const t=parsePriceNum(h['Total Price']);if(t)htILS+=t;});
+    const preILS=preTrip.reduce((s,e)=>s+e.ils,0)+flILS+htILS;
+    const grandILS=preILS+onILS;
+    const todayILS=onTrip.filter(e=>e.date===todayStr()).reduce((s,e)=>s+e.ils,0);
+    // Progress
+    const pct=BUDGET_LIMIT>0?Math.min(100,onILS/BUDGET_LIMIT*100):0;
+    const sp=document.getElementById('bs-spent');if(sp)sp.textContent=fmtMoney(onILS,'ILS');
+    const lm=document.getElementById('bs-limit');if(lm)lm.textContent=`/ ${fmtMoney(BUDGET_LIMIT,'ILS')}`;
+    const bar=document.getElementById('bs-bar');if(bar){bar.style.width=pct+'%';bar.className='bgt-fill '+(pct<60?'g':pct<85?'o':'r');}
+    const pc=document.getElementById('bs-pct');if(pc)pc.textContent=Math.round(pct)+'%';
+    const warn=document.getElementById('bs-warn');if(warn)warn.style.display=pct>=85?'block':'none';
+    // Summary
+    const sm=document.getElementById('bs-summary');
+    if(sm)sm.innerHTML=`<div class="bgt-sum-card"><div class="bgt-sum-lbl">הוצאות היום</div><div class="bgt-sum-val">${fmtMoney(todayILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(todayILS,'USD'),'USD')}</div></div>
+        <div class="bgt-sum-card"><div class="bgt-sum-lbl">סה"כ שוטפות</div><div class="bgt-sum-val">${fmtMoney(onILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(onUSD,'USD')} | ${fmtMoney(onPHP,'PHP')}</div></div>
+        <div class="bgt-sum-card"><div class="bgt-sum-lbl">עלות כוללת</div><div class="bgt-sum-val" style="color:var(--pri)">${fmtMoney(grandILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(grandILS,'USD'),'USD')}</div></div>`;
+    // Chart
+    const chartCard=document.getElementById('bs-chart');
+    if(chartCard&&onTrip.length){
+        chartCard.style.display='block';const byCat={};
+        onTrip.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+e.ils;});
+        const entries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+        document.getElementById('bs-chartbar').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat];return`<div class="bgt-chart-seg" style="width:${onILS>0?amt/onILS*100:0}%;background:${c?c.color:'#94a3b8'}"></div>`;}).join('');
+        document.getElementById('bs-legend').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat],p=onILS>0?Math.round(amt/onILS*100):0;return`<div class="bgt-chart-item"><div class="bgt-chart-dot" style="background:${c?c.color:'#94a3b8'}"></div>${c?c.icon:''} ${fmtMoney(amt,'ILS')} (${p}%)</div>`;}).join('');
     }
-    async function addTask() {
-        const input = document.getElementById('todo-input'), text = input.value.trim(); if (!text) return;
-        if (!DB.tasks) DB.tasks = [];
-        DB.tasks.push({ Task: text, Done: 'FALSE', 'Due Date': '' });
-        setCooldown('tasks');
-        saveCache();
-        input.value = '';
-        renderTasks();
-        try {
-            await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'addTask',data:{Task:text,Done:'FALSE','Due Date':''}}) });
-        } catch(e) { saveLocalTask(text); }
+    // Filters
+    const fEl=document.getElementById('bs-filters');
+    if(fEl){
+        const cats=[...new Set(all.map(e=>e.cat))];
+        fEl.innerHTML=`<button class="fil-btn ${expFilter==='all'?'active':''}" data-cat="all" onclick="setExpFilter('all')">הכל</button><button class="fil-btn ${expFilter==='on'?'active':''}" data-cat="on" onclick="setExpFilter('on')">שוטפות</button><button class="fil-btn ${expFilter==='pre'?'active':''}" data-cat="pre" onclick="setExpFilter('pre')">מוקדמות</button>`+cats.map(cat=>{const c=CAT_MAP[cat];return`<button class="fil-btn ${expFilter===cat?'active':''}" data-cat="${cat}" onclick="setExpFilter('${cat}')">${c?c.icon+' ':''}${cat}</button>`;}).join('');
     }
-    function saveLocalTask(text) { const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'); lt.push({id:Date.now(),text,done:false,fromSheet:false}); localStorage.setItem('ph-local-tasks',JSON.stringify(lt)); }
-    function deleteLocalTask(idx) { const lt = JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'); if(idx>=0&&idx<lt.length){lt.splice(idx,1);localStorage.setItem('ph-local-tasks',JSON.stringify(lt));} renderTasks(); }
-    document.getElementById('todo-add-btn').addEventListener('click', addTask);
-    document.getElementById('todo-input').addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
-
-    // ==================== RENDER: EMERGENCY ====================
-    function renderEmergency() {
-        const data = DB.emergency, el = document.getElementById('emergency-content');
-        if (!data || !data.length) { el.innerHTML = '<div class="error-msg">לא נמצא מידע חירום</div>'; return; }
-        el.innerHTML = data.map(e => `<div class="card emergency-card"><div class="emergency-title">${esc(e['Name'])}</div>${e['Phone']?`<a href="tel:${esc(e['Phone'])}" class="emergency-phone">📞 ${esc(e['Phone'])}</a>`:''}${e['Address']?`<div class="emergency-value mt-8">${esc(e['Address'])}</div>`:''}${e['Notes']?`<div class="emergency-value mt-8 text-muted">${esc(e['Notes'])}</div>`:''}</div>`).join('') + lastUpdatedHTML();
+    // List
+    let filtered=all;
+    if(expFilter==='on')filtered=onTrip;else if(expFilter==='pre')filtered=preTrip;else if(expFilter!=='all')filtered=all.filter(e=>e.cat===expFilter);
+    filtered.sort((a,b)=>{const pd=s=>{const p=s.split('/');return p.length===3?new Date(`${p[2]}-${p[1]}-${p[0]}`):new Date(s);};return pd(b.date)-pd(a.date);});
+    const cnt=document.getElementById('bs-count');if(cnt)cnt.textContent=`(${filtered.length})`;
+    const list=document.getElementById('bs-list');
+    if(!list)return;
+    if(!filtered.length){list.innerHTML='<div class="empty">אין הוצאות</div>';return;}
+    list.innerHTML=filtered.map(e=>{
+        const c=CAT_MAP[e.cat],bg=c?c.color+'15':'rgba(148,163,184,.1)';
+        const sec=['ILS','USD','PHP'].filter(x=>x!==e.currency).map(x=>fmtMoney(x==='ILS'?e.ils:x==='USD'?e.usd:e.php,x)).join(' | ');
+        const wl=e.who==='Both'?'משותף':e.who;
+        return`<div class="exp-card ${e.type==='pre'?'pre':''}">
+            <div class="exp-main" onclick="toggleExpDet(this.parentElement)">
+                <div class="exp-icon" style="background:${bg}">${c?c.icon:'📦'}</div>
+                <div class="exp-info"><div class="exp-desc">${esc(e.desc)}</div><div class="exp-meta"><span>${esc(e.date)}</span><span>${esc(wl)}</span>${e.type==='pre'?'<span class="exp-tag">מוקדמת</span>':''}</div></div>
+                <div class="exp-amounts"><div class="exp-primary">${fmtMoney(e.amount,e.currency)}</div><div class="exp-secondary">${sec}</div></div>
+            </div>
+            <div class="exp-detail"><div class="exp-currencies"><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.ils,'ILS')}</div><div class="exp-curr-lbl">ILS</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.usd,'USD')}</div><div class="exp-curr-lbl">USD</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.php,'PHP')}</div><div class="exp-curr-lbl">PHP</div></div></div>
+                <div class="exp-actions"><button class="edit-btn" onclick="event.stopPropagation();startEditExp(${e.idx})">✏ ערוך</button><button class="delete-btn" onclick="event.stopPropagation();deleteExp(${e.idx})">🗑 מחק</button></div>
+            </div>
+        </div>`;
+    }).join('');
+}
+function toggleExpDet(el){const d=el.querySelector('.exp-detail');if(d)d.classList.toggle('open');}
+function setExpFilter(c){expFilter=c;renderBudgetData();}
+async function submitExp(){
+    const a=parseFloat(document.getElementById('ea-amt').value),c=document.getElementById('ea-cur').value,desc=document.getElementById('ea-desc').value.trim(),dt=document.getElementById('ea-date').value;
+    if(!a||a<=0||!desc)return;
+    const dateF=dt?new Date(dt).toLocaleDateString('en-GB'):todayStr();
+    const type=getExpType(selCat),locked=lockRates(a,c);
+    const exp={Date:dateF,Description:desc,Amount:a,Currency:c,Category:selCat,Who:selWho,Type:type,...locked,Origin_Cur:c};
+    if(!DB.expenses)DB.expenses=[];
+    if(editExpIdx!==null){
+        exp.Origin_Cur=DB.expenses[editExpIdx]['Origin_Cur']||DB.expenses[editExpIdx]['Currency']||c;
+        DB.expenses[editExpIdx]=exp;setCooldown('expenses');saveCache();cancelEditExp();renderBudgetData();showToast('ההוצאה עודכנה');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editExpense',data:{...exp,row:editExpIdx+2}})});}catch(e){}
+    }else{
+        DB.expenses.push(exp);setCooldown('expenses');saveCache();resetExpForm();renderBudgetData();showToast('ההוצאה נוספה');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){showToast('שגיאה בשמירה');}
     }
+}
+function startEditExp(idx){
+    const e=DB.expenses[idx];if(!e)return;editExpIdx=idx;
+    document.getElementById('ea-amt').value=parsePriceNum(e['Amount']);document.getElementById('ea-cur').value=e['Currency']||'ILS';document.getElementById('ea-desc').value=e['Description']||'';
+    const ds=e['Date']||'';if(ds){const p=ds.split('/');if(p.length===3)document.getElementById('ea-date').value=`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
+    selCat=e['Category']||'אוכל';document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===selCat));
+    selWho=e['Who']||'Both';document.querySelectorAll('.who-btn').forEach(b=>b.classList.toggle('active',b.dataset.who===selWho));
+    document.getElementById('frm-label').textContent='עריכת הוצאה';document.getElementById('frm-cancel').style.display='block';
+    document.getElementById('ea-submit').textContent='✓ שמור';document.getElementById('ea-submit').classList.add('editing');
+    updateExpConv();document.getElementById('ea-amt').focus();document.querySelector('.frm-card').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function cancelEditExp(){
+    editExpIdx=null;document.getElementById('frm-label').textContent='הוסף הוצאה';document.getElementById('frm-cancel').style.display='none';
+    document.getElementById('ea-submit').textContent='+ הוסף הוצאה';document.getElementById('ea-submit').classList.remove('editing');resetExpForm();
+}
+function resetExpForm(){
+    document.getElementById('ea-amt').value='';document.getElementById('ea-desc').value='';document.getElementById('ea-date').valueAsDate=new Date();document.getElementById('ea-cur').value='PHP';document.getElementById('ea-conv').textContent='';
+    selCat='אוכל';selWho='Both';document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat==='אוכל'));document.querySelectorAll('.who-btn').forEach(b=>b.classList.toggle('active',b.dataset.who==='Both'));
+}
+async function deleteExp(idx){if(!confirm('למחוק את ההוצאה?'))return;DB.expenses.splice(idx,1);setCooldown('expenses');saveCache();renderBudgetData();showToast('ההוצאה נמחקה');try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteExpense',data:{row:idx+2}})});}catch(e){}}
+function openBgtModal(){document.getElementById('bgt-modal-inp').value=BUDGET_LIMIT;document.getElementById('bgt-modal').classList.add('open');}
+function closeBgtModal(){document.getElementById('bgt-modal').classList.remove('open');}
+function saveBudget(){const v=parseInt(document.getElementById('bgt-modal-inp').value);if(!v||v<=0)return;BUDGET_LIMIT=v;localStorage.setItem('ph-budget-limit',v);closeBgtModal();renderBudgetData();showToast('התקציב עודכן');}
+document.getElementById('bgt-modal').addEventListener('click',function(e){if(e.target===this)closeBgtModal();});
 
-    // ==================== RENDER: LINKS ====================
-    function renderLinks() {
-        const data = DB.links, el = document.getElementById('links-content');
-        if (!data || !data.length) { el.innerHTML = '<div class="error-msg">לא נמצאו קישורים</div>'; return; }
-        el.innerHTML = data.map(l => `<a href="${esc(l['URL'])}" class="link-item" target="_blank"><div class="link-icon">${esc(l['Icon'])||'🔗'}</div><div class="link-info"><div class="link-title">${esc(l['Name'])}</div>${l['Description']?`<div class="link-desc">${esc(l['Description'])}</div>`:''}</div><span class="link-arrow">‹</span></a>`).join('') + lastUpdatedHTML();
+// --- TASKS ---
+let tasks=[];
+function renderTasksSection(){
+    const main=document.getElementById('main');
+    const data=DB.tasks||[];
+    tasks=data.map((t,i)=>({id:i,text:t['Task']||'',done:(t['Done']||'').toUpperCase()==='TRUE'||t['Done']==='V',due:t['Due Date']||'',fromSheet:true}));
+    const local=JSON.parse(localStorage.getItem('ph-local-tasks')||'[]');
+    const allT=[...tasks,...local];
+    const total=allT.length,done=allT.filter(t=>t.done).length,pct=total>0?done/total*100:0;
+    main.innerHTML=`<div class="section-view"><div class="section-view-title">✅ משימות</div>
+        <div class="todo-prog"><span>${done}/${total} הושלמו</span><div class="todo-bar"><div class="todo-bar-fill" style="width:${pct}%"></div></div></div>
+        <div class="todo-wrap"><input class="todo-inp" id="task-inp" placeholder="הוסף מטלה חדשה..."/><button class="todo-add" onclick="addTaskItem()">הוסף</button></div>
+        <div id="task-list">${allT.map((t,i)=>{
+            let dueH='';if(t.due){const ov=new Date(t.due)<new Date()&&!t.done;dueH=`<span class="todo-due ${ov?'overdue':''}">${esc(formatDate(t.due))}</span>`;}
+            return`<div class="todo-item ${t.done?'done':''}"><div class="todo-chk" onclick="toggleTaskItem(${i},${t.fromSheet})"></div><div class="todo-text">${esc(t.text)}</div>${dueH}${!t.fromSheet?`<button class="todo-del" onclick="delLocalTask(${i-tasks.length})">✕</button>`:''}</div>`;
+        }).join('')}</div>
+    </div>`;
+    document.getElementById('task-inp').addEventListener('keypress',e=>{if(e.key==='Enter')addTaskItem();});
+}
+function toggleTaskItem(idx,fromSheet){
+    if(fromSheet&&DB.tasks&&DB.tasks[idx]){
+        const cur=(DB.tasks[idx]['Done']||'').toUpperCase()==='TRUE';DB.tasks[idx]['Done']=!cur?'TRUE':'FALSE';
+        setCooldown('tasks');saveCache();renderTasksSection();
+        fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'toggleTask',data:{row:idx+2,done:!cur}})}).catch(e=>{});
+    }else{
+        const lt=JSON.parse(localStorage.getItem('ph-local-tasks')||'[]'),li=idx-tasks.length;
+        if(li>=0&&li<lt.length){lt[li].done=!lt[li].done;localStorage.setItem('ph-local-tasks',JSON.stringify(lt));}
+        renderTasksSection();
     }
+}
+async function addTaskItem(){
+    const inp=document.getElementById('task-inp'),text=inp.value.trim();if(!text)return;
+    if(!DB.tasks)DB.tasks=[];DB.tasks.push({Task:text,Done:'FALSE','Due Date':''});
+    setCooldown('tasks');saveCache();renderTasksSection();
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addTask',data:{Task:text,Done:'FALSE','Due Date':''}})});}catch(e){}
+}
+function delLocalTask(idx){const lt=JSON.parse(localStorage.getItem('ph-local-tasks')||'[]');if(idx>=0&&idx<lt.length){lt.splice(idx,1);localStorage.setItem('ph-local-tasks',JSON.stringify(lt));}renderTasksSection();}
 
-    // ==================== ITINERARY (hardcoded) ====================
-    const itinerary = [
-        { day:1, date:'05/04', weekday:'ראשון', title:'טאבה → אתונה', items:[{time:'15:40',icon:'✈️',title:'טיסה טאבה → אתונה',desc:'Taba International Airport → Athens (ATH)'},{time:'18:50',icon:'🛬',title:'נחיתה באתונה',desc:'לילה באתונה / בשדה התעופה'}]},
-        { day:2, date:'06/04', weekday:'שני', title:'אתונה → סינגפור', items:[{time:'08:55',icon:'✈️',title:'טיסה אתונה → סינגפור',desc:'ATH → SIN, הגעה 7/4 01:10'}]},
-        { day:3, date:'07/04', weekday:'שלישי', title:'סינגפור → מנילה', items:[{time:'01:10',icon:'🛬',title:'נחיתה בסינגפור',desc:'Changi Airport - עצירת ביניים'},{time:'14:40',icon:'✈️',title:'טיסה סינגפור → מנילה',desc:'SIN → MNL (Ninoy Aquino Intl)'},{time:'',icon:'🏨',title:'צ\'ק-אין I\'M Hotel',desc:'מנילה, לילה אחד'}]},
-        { day:4, date:'08/04', weekday:'רביעי', title:'מנילה → סיארגאו', items:[{time:'04:30',icon:'⏰',title:'השכמה וצ\'ק-אאוט',desc:'יציאה מ-I\'M Hotel'},{time:'06:05',icon:'✈️',title:'טיסה מנילה → סבו',desc:'MNL → CEB (07:40)'},{time:'08:50',icon:'✈️',title:'טיסה סבו → סיארגאו',desc:'CEB → IAO'},{time:'',icon:'🏨',title:'צ\'ק-אין Surfing Temple',desc:'General Luna - 2 לילות'},{time:'',icon:'🏖️',title:'חוף ומנוחה',desc:'התארגנות, חוף, שקיעה'}]},
-        { day:5, date:'09/04', weekday:'חמישי', title:'סיארגאו - גלישה', items:[{time:'07:00',icon:'🍳',title:'ארוחת בוקר',desc:'במלון'},{time:'09:00',icon:'🏄',title:'שיעור גלישה',desc:'Cloud 9'},{time:'12:30',icon:'🍜',title:'ארוחת צהריים',desc:'ג\'נרל לונה'},{time:'14:00',icon:'🏖️',title:'חוף ומנוחה',desc:'שחייה, שנורקלינג'},{time:'18:00',icon:'🌅',title:'שקיעה',desc:'על החוף'},{time:'19:30',icon:'🍽️',title:'ארוחת ערב',desc:'מסעדה בג\'נרל לונה'}]},
-        { day:6, date:'10/04', weekday:'שישי', title:'סיארגאו - Kalo Villas', items:[{time:'',icon:'🏨',title:'מעבר ל-Kalo Villas',desc:'3 לילות'},{time:'10:00',icon:'🏝️',title:'Island Hopping',desc:'Naked, Daku, Guyam Islands'},{time:'12:00',icon:'🍱',title:'פיקניק על אי',desc:''},{time:'15:00',icon:'🤿',title:'סנורקלינג',desc:'שוניות'},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:'מסעדה מומלצת'}]},
-        { day:7, date:'11/04', weekday:'שבת', title:'סיארגאו - לגונות', items:[{time:'08:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'09:30',icon:'🏊',title:'Sugba Lagoon',desc:'לגונה טורקיז'},{time:'12:30',icon:'🍜',title:'ארוחת צהריים',desc:''},{time:'14:00',icon:'🕳️',title:'Magpupungko Rock Pools',desc:'בריכות סלע טבעיות'},{time:'17:00',icon:'🌴',title:'Palm Trees Swing',desc:''},{time:'19:30',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:8, date:'12/04', weekday:'ראשון', title:'סיארגאו - יום חופשי', items:[{time:'09:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'10:30',icon:'🏖️',title:'חוף ומנוחה',desc:'יום רגוע'},{time:'14:00',icon:'🏄',title:'גלישה / קיאק',desc:''},{time:'17:00',icon:'💆',title:'ספא',desc:'עיסוי זוגי'},{time:'19:30',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:9, date:'13/04', weekday:'שני', title:'סיארגאו - KAJALI', items:[{time:'',icon:'🏨',title:'מעבר ל-KAJALI',desc:'2 לילות'},{time:'10:00',icon:'🏖️',title:'חוף ואטרקציות',desc:''},{time:'13:00',icon:'🍜',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'🌊',title:'פעילות מים',desc:''},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:10, date:'14/04', weekday:'שלישי', title:'סיארגאו - KAJALI יום 2', items:[{time:'08:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'09:30',icon:'🏝️',title:'סיור / פעילות',desc:''},{time:'13:00',icon:'🍜',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'🏖️',title:'חוף ומנוחה',desc:''},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:11, date:'15/04', weekday:'רביעי', title:'סיארגאו - פסיפיקו', items:[{time:'',icon:'🏨',title:'מעבר ל-Bamboo Surf Beach',desc:'Pacifico, 2 לילות'},{time:'11:00',icon:'🏖️',title:'Pacifico Beach',desc:'חוף שקט'},{time:'13:00',icon:'🍜',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'🏄',title:'גלישה בפסיפיקו',desc:''},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:12, date:'16/04', weekday:'חמישי', title:'סיארגאו - יום אחרון', items:[{time:'08:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'09:30',icon:'🏖️',title:'חוף ומנוחה',desc:'יום אחרון'},{time:'13:00',icon:'🍜',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'📦',title:'אריזה',desc:''},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:13, date:'17/04', weekday:'שישי', title:'סיארגאו → אל נידו', items:[{time:'',icon:'⏰',title:'צ\'ק-אאוט',desc:'נסיעה ל-Sayak'},{time:'16:20',icon:'✈️',title:'טיסה IAO → CEB',desc:'17:20'},{time:'18:50',icon:'✈️',title:'טיסה CEB → ENI',desc:''},{time:'',icon:'🏨',title:'צ\'ק-אין באל נידו',desc:'טרם הוזמן!'}]},
-        { day:14, date:'18/04', weekday:'שבת', title:'אל נידו - Tour A', items:[{time:'07:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'08:30',icon:'🚤',title:'Tour A',desc:'Big Lagoon, Secret Lagoon, Shimizu Island, 7 Commando Beach'},{time:'12:00',icon:'🍱',title:'פיקניק',desc:'על אי טרופי'},{time:'16:30',icon:'🚤',title:'חזרה',desc:''},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:'מסעדת דגים'}]},
-        { day:15, date:'19/04', weekday:'ראשון', title:'אל נידו - Tour C', items:[{time:'07:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'08:30',icon:'🚤',title:'Tour C',desc:'Matinloc, Secret Beach, Helicopter Island'},{time:'12:00',icon:'🍱',title:'ארוחת צהריים',desc:''},{time:'16:00',icon:'🚤',title:'חזרה',desc:''},{time:'18:00',icon:'💆',title:'ספא',desc:''},{time:'20:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:16, date:'20/04', weekday:'שני', title:'אל נידו - Nacpan', items:[{time:'08:30',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'10:00',icon:'🏖️',title:'Nacpan Beach',desc:'אחד היפים בעולם'},{time:'13:00',icon:'🍜',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'🛶',title:'קיאקינג',desc:''},{time:'17:00',icon:'🌅',title:'שקיעה',desc:''},{time:'19:30',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:17, date:'21/04', weekday:'שלישי', title:'אל נידו - H Hotel', items:[{time:'',icon:'🏨',title:'צ\'ק-אין H Hotel',desc:'2 לילות'},{time:'10:00',icon:'🏖️',title:'חוף ומנוחה',desc:''},{time:'13:00',icon:'🍽️',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'🛍️',title:'קניות',desc:'מזכרות'},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:18, date:'22/04', weekday:'רביעי', title:'אל נידו - יום אחרון', items:[{time:'08:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'09:30',icon:'🏖️',title:'חוף אחרון',desc:''},{time:'14:00',icon:'📦',title:'אריזה',desc:''},{time:'18:00',icon:'🌅',title:'שקיעה אחרונה',desc:''},{time:'19:30',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:19, date:'23/04', weekday:'חמישי', title:'אל נידו → בורקאי', items:[{time:'',icon:'⏰',title:'צ\'ק-אאוט H Hotel',desc:''},{time:'14:25',icon:'✈️',title:'טיסה ENI → MPH',desc:'15:30'},{time:'16:00',icon:'🚢',title:'מעבורת לבורקאי',desc:''},{time:'17:00',icon:'🏨',title:'צ\'ק-אין בורקאי',desc:'טרם הוזמן!'},{time:'19:00',icon:'🍽️',title:'ארוחת ערב',desc:'White Beach'}]},
-        { day:20, date:'24/04', weekday:'שישי', title:'בורקאי - Shangri-La', items:[{time:'',icon:'🏨',title:'צ\'ק-אין Shangri-La',desc:'2 לילות'},{time:'09:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'10:00',icon:'🏖️',title:'Puka Shell Beach',desc:''},{time:'13:00',icon:'🍽️',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'🤿',title:'סנורקלינג',desc:''},{time:'18:00',icon:'🌅',title:'שקיעה',desc:''},{time:'20:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:21, date:'25/04', weekday:'שבת', title:'בורקאי - יום אחרון', items:[{time:'08:00',icon:'🍳',title:'ארוחת בוקר',desc:''},{time:'10:00',icon:'🏖️',title:'White Beach',desc:''},{time:'13:00',icon:'🍽️',title:'ארוחת צהריים',desc:''},{time:'15:00',icon:'💆',title:'ספא',desc:'עיסוי זוגי'},{time:'17:00',icon:'🛍️',title:'קניות',desc:'D\'Mall'},{time:'19:00',icon:'📦',title:'אריזה',desc:''},{time:'20:00',icon:'🍽️',title:'ארוחת ערב',desc:''}]},
-        { day:22, date:'26/04', weekday:'ראשון', title:'בורקאי → מנילה', items:[{time:'',icon:'⏰',title:'צ\'ק-אאוט Shangri-La',desc:'מעבורת לקטיקלאן'},{time:'17:45',icon:'✈️',title:'טיסה MPH → MNL',desc:'18:55'},{time:'19:00',icon:'🏨',title:'מנילה',desc:'לינה / טיסה הביתה'}]},
-    ];
-
-    function renderItinerary() {
-        const navEl = document.getElementById('day-nav'), container = document.getElementById('days-container');
-        navEl.innerHTML = itinerary.map((d,i) => `<button class="day-btn ${i===0?'active':''}" data-day="${i}">יום ${d.day} | ${d.date}</button>`).join('');
-        container.innerHTML = itinerary.map((d,i) => `<div class="day-content ${i===0?'active':''}" data-day="${i}"><div class="card"><div class="card-title">${d.title}</div><div class="card-subtitle">יום ${d.weekday} | ${d.date}/2026</div>${d.items.map(it => `<div class="itinerary-item"><div class="itinerary-time">${it.time}</div><div class="itinerary-icon">${it.icon}</div><div class="itinerary-details"><h4>${it.title}</h4><p>${it.desc}</p></div></div>`).join('')}</div></div>`).join('');
-        navEl.querySelectorAll('.day-btn').forEach(btn => { btn.addEventListener('click', () => {
-            navEl.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
-            container.querySelectorAll('.day-content').forEach(d=>d.classList.remove('active'));
-            btn.classList.add('active'); container.querySelector(`.day-content[data-day="${btn.dataset.day}"]`).classList.add('active');
-        }); });
+// --- PACKING ---
+function renderPackingSection(){
+    const main=document.getElementById('main');
+    const data=DB.packing;
+    if(!data){main.innerHTML='<div class="section-view"><div class="section-view-title">🎒 ציוד</div><div class="empty">טוען ציוד...</div></div>';return;}
+    if(!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🎒 ציוד</div><div class="empty">אין פריטים ברשימת הציוד</div></div>';return;}
+    const whoMap={tom:'Tom',dani:'Dani',shared:'Shared'};
+    const wantedWho=whoMap[currentPackWho]||'Tom';
+    const totalI=data.length,packedI=data.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
+    const tabI=data.map((r,i)=>({...r,_row:i+2})).filter(r=>(r['Who']||'')===wantedWho);
+    const tabT=tabI.length,tabP=tabI.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
+    const cats={};tabI.forEach(r=>{const c=r['Category']||'אחר';if(!cats[c])cats[c]=[];cats[c].push(r);});
+    main.innerHTML=`<div class="section-view"><div class="section-view-title">🎒 ציוד</div>
+        <div class="pack-sum"><div class="pack-sum-card"><div class="pack-sum-num">${packedI}/${totalI}</div><div class="pack-sum-lbl">סה"כ ארוז</div></div><div class="pack-sum-card"><div class="pack-sum-num">${tabP}/${tabT}</div><div class="pack-sum-lbl">${currentPackWho==='shared'?'משותף':currentPackWho==='tom'?'Tom':'Dani'}</div></div><div class="pack-sum-card"><div class="pack-sum-num">${totalI-packedI}</div><div class="pack-sum-lbl">נותר</div></div></div>
+        <div class="pack-tabs"><button class="pack-tab ${currentPackWho==='tom'?'active':''}" onclick="setPackWho('tom')">Tom</button><button class="pack-tab ${currentPackWho==='dani'?'active':''}" onclick="setPackWho('dani')">Dani</button><button class="pack-tab ${currentPackWho==='shared'?'active':''}" onclick="setPackWho('shared')">משותף</button></div>
+        ${Object.entries(cats).map(([cat,items])=>{
+            const cp=items.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
+            return`<div class="pack-cat-hdr"><h3>${esc(cat)}</h3><span class="pack-cat-cnt">${cp}/${items.length}</span></div><div class="pack-cat-items">${items.map(r=>{
+                const done=(r['Packed']||'').toUpperCase()==='TRUE';
+                return`<div class="pack-item ${done?'done':''}" onclick="togglePackItem(${r._row})"><div class="pack-chk"></div><div class="pack-txt">${esc(r['Item'])}</div></div>`;
+            }).join('')}</div>`;
+        }).join('')}
+    </div>`;
+}
+function setPackWho(w){currentPackWho=w;renderPackingSection();}
+async function togglePackItem(row){
+    const idx=row-2;if(DB.packing&&DB.packing[idx]){
+        const cur=(DB.packing[idx]['Packed']||'').toUpperCase()==='TRUE';DB.packing[idx]['Packed']=cur?'FALSE':'TRUE';
+        setCooldown('packing');renderPackingSection();saveCache();
     }
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'togglePacking',data:{row}})});}catch(e){}
+}
 
-    // ==================== PACKING (from Sheet) ====================
-    let currentPackWho = 'tom';
-    function renderPacking() {
-        const data = DB.packing;
-        if (!data || !data.length) {
-            document.getElementById('pack-summary').innerHTML = '';
-            document.getElementById('pack-list').innerHTML = '<div class="text-sm text-muted" style="text-align:center;padding:20px;">טוען ציוד...</div>';
-            return;
-        }
-        const whoMap = { tom: 'Tom', dani: 'Dani', shared: 'Shared' };
-        const wantedWho = whoMap[currentPackWho] || 'Tom';
-        const totalItems = data.length;
-        const packedItems = data.filter(r => (r['Packed']||'').toUpperCase() === 'TRUE').length;
-        const tabItems = data.map((r, i) => ({ ...r, _row: i + 2 })).filter(r => (r['Who']||'') === wantedWho);
-        const tabTotal = tabItems.length;
-        const tabPacked = tabItems.filter(r => (r['Packed']||'').toUpperCase() === 'TRUE').length;
-        document.getElementById('pack-summary').innerHTML = `<div class="pack-summary-card"><div class="pack-summary-num">${packedItems}/${totalItems}</div><div class="pack-summary-label">סה"כ ארוז</div></div><div class="pack-summary-card"><div class="pack-summary-num">${tabPacked}/${tabTotal}</div><div class="pack-summary-label">${currentPackWho==='shared'?'משותף':currentPackWho==='tom'?'Tom':'Dani'}</div></div><div class="pack-summary-card"><div class="pack-summary-num">${totalItems-packedItems}</div><div class="pack-summary-label">נותר לארוז</div></div>`;
-        const cats = {};
-        tabItems.forEach(r => { const c = r['Category'] || 'אחר'; if (!cats[c]) cats[c] = []; cats[c].push(r); });
-        document.getElementById('pack-list').innerHTML = Object.entries(cats).map(([cat, items]) => {
-            const cp = items.filter(r => (r['Packed']||'').toUpperCase() === 'TRUE').length;
-            return `<div class="pack-category"><div class="pack-category-header"><h3>${esc(cat)}</h3><span class="pack-category-count">${cp}/${items.length}</span></div><div class="pack-category-items">${items.map(r => {
-                const done = (r['Packed']||'').toUpperCase() === 'TRUE';
-                return `<div class="pack-item ${done?'done':''}" onclick="togglePack(${r._row})"><div class="pack-item-check"></div><div class="pack-item-text">${esc(r['Item'])}</div></div>`;
-            }).join('')}</div></div>`;
-        }).join('') + lastUpdatedHTML();
+// --- CONVERTER ---
+const CSYM={USD:'$',ILS:'₪',PHP:'₱'},CNAME={USD:'דולר',ILS:'שקל',PHP:'פזו'};
+function renderConverterSection(){
+    const main=document.getElementById('main');
+    if(!exchangeRates){main.innerHTML='<div class="section-view"><div class="section-view-title">💱 המרת מטבעות</div><div class="loading"><div class="spinner"></div><div>טוען שערים...</div></div></div>';return;}
+    main.innerHTML=`<div class="section-view"><div class="section-view-title">💱 המרת מטבעות</div>
+        <div class="conv-card">
+            <div class="conv-row"><input type="number" class="conv-inp" id="cv-amt" placeholder="סכום" inputmode="decimal"><select class="conv-sel" id="cv-from"><option value="USD">$ USD</option><option value="ILS">₪ ILS</option><option value="PHP">₱ PHP</option></select></div>
+            <div class="conv-swap"><button onclick="swapConv()">⇅</button></div>
+            <div class="conv-row"><div class="conv-inp" id="cv-out" style="display:flex;align-items:center;justify-content:flex-end;min-height:44px;color:var(--pri)">—</div><select class="conv-sel" id="cv-to"><option value="ILS">₪ ILS</option><option value="USD">$ USD</option><option value="PHP">₱ PHP</option></select></div>
+            <div class="conv-quick" id="cv-quick"></div>
+            <div class="conv-result" id="cv-res" style="display:none"><div class="conv-result-amt" id="cv-res-amt"></div><div class="conv-result-lbl" id="cv-res-lbl"></div></div>
+            <div class="conv-rate" id="cv-rate"></div>
+        </div>
+    </div>`;
+    document.getElementById('cv-amt').addEventListener('input',doConv);
+    document.getElementById('cv-from').addEventListener('change',()=>{updateQuickAmt();doConv();});
+    document.getElementById('cv-to').addEventListener('change',doConv);
+    updateQuickAmt();
+    if(ratesLastUpdated){const d=new Date(ratesLastUpdated);document.getElementById('cv-rate').textContent=`שערים עודכנו: ${d.toLocaleDateString('he-IL')} ${d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}`;}
+}
+function updateQuickAmt(){
+    const from=document.getElementById('cv-from').value;const a=from==='USD'?[10,50,100,500]:from==='ILS'?[50,100,500,1000]:[500,1000,5000,10000];
+    document.getElementById('cv-quick').innerHTML=a.map(v=>`<button class="conv-quick-btn" onclick="document.getElementById('cv-amt').value=${v};doConv()">${CSYM[from]}${v.toLocaleString()}</button>`).join('');
+}
+function doConv(){
+    const from=document.getElementById('cv-from').value,to=document.getElementById('cv-to').value,amt=parseFloat(document.getElementById('cv-amt').value);
+    const o=document.getElementById('cv-out'),r=document.getElementById('cv-res');
+    if(!amt||!exchangeRates){o.textContent='—';r.style.display='none';return;}
+    const res=(amt/exchangeRates[from])*exchangeRates[to];
+    o.textContent=CSYM[to]+(Math.round(res*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    const rate=exchangeRates[to]/exchangeRates[from];r.style.display='block';
+    document.getElementById('cv-res-amt').textContent=`${CSYM[from]}1 = ${CSYM[to]}${rate.toFixed(4)}`;
+    document.getElementById('cv-res-lbl').textContent=`${CNAME[from]} ל${CNAME[to]}`;
+}
+function swapConv(){const f=document.getElementById('cv-from'),t=document.getElementById('cv-to'),tmp=f.value;f.value=t.value;t.value=tmp;updateQuickAmt();doConv();}
+
+// --- EMERGENCY ---
+function renderEmergencySection(){
+    const main=document.getElementById('main');
+    const data=DB.emergency;
+    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🆘 חירום</div><div class="empty">לא נמצא מידע חירום</div></div>';return;}
+    main.innerHTML='<div class="section-view"><div class="section-view-title">🆘 חירום</div>'+data.map(e=>`<div class="emg-card"><div class="emg-title">${esc(e['Name'])}</div>${e['Phone']?`<a href="tel:${esc(e['Phone'])}" class="emg-phone">📞 ${esc(e['Phone'])}</a>`:''}${e['Address']?`<div class="emg-val" style="margin-top:6px">${esc(e['Address'])}</div>`:''}${e['Notes']?`<div class="emg-val" style="margin-top:4px;font-size:12px">${esc(e['Notes'])}</div>`:''}</div>`).join('')+'</div>';
+}
+
+// --- LINKS ---
+function renderLinksSection(){
+    const main=document.getElementById('main');
+    const data=DB.links;
+    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🔗 קישורים</div><div class="empty">לא נמצאו קישורים</div></div>';return;}
+    main.innerHTML='<div class="section-view"><div class="section-view-title">🔗 קישורים</div>'+data.map(l=>`<a href="${esc(l['URL'])}" class="link-item" target="_blank"><div class="link-icon">${esc(l['Icon'])||'🔗'}</div><div class="link-info"><div class="link-title">${esc(l['Name'])}</div>${l['Description']?`<div class="link-desc">${esc(l['Description'])}</div>`:''}</div></a>`).join('')+'</div>';
+}
+
+// ==================== NOTES MANAGEMENT ====================
+let selNoteCatVal='Food';
+function selNoteCat(btn){document.querySelectorAll('.note-cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selNoteCatVal=btn.dataset.cat;}
+async function addNoteItem(destId){
+    const title=document.getElementById('note-title').value.trim();if(!title){document.getElementById('note-title').focus();return;}
+    const link=document.getElementById('note-link').value.trim(),desc=document.getElementById('note-desc').value.trim();
+    const note={DestinationID:destId,Category:selNoteCatVal,Title:title,Link:link,Description:desc,Done:'FALSE',ID:Date.now().toString(36)};
+    if(!DB.notes)DB.notes=[];DB.notes.push(note);setCooldown('notes');saveCache();renderSpace(destId);showToast('ההמלצה נוספה');
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addNote',data:note})});}catch(e){}
+}
+async function toggleNote(row,destId){
+    const idx=row-2;if(DB.notes&&DB.notes[idx]){
+        const cur=(DB.notes[idx]['Done']||'').toUpperCase()==='TRUE';DB.notes[idx]['Done']=cur?'FALSE':'TRUE';
+        setCooldown('notes');saveCache();renderSpace(destId);
     }
-    async function togglePack(row) {
-        const idx = row - 2;
-        if (DB.packing && DB.packing[idx]) {
-            const cur = (DB.packing[idx]['Packed']||'').toUpperCase() === 'TRUE';
-            DB.packing[idx]['Packed'] = cur ? 'FALSE' : 'TRUE';
-            setCooldown('packing');
-            renderPacking();
-            saveCache();
-        }
-        try { await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify({action:'togglePacking',data:{row:row}}) }); } catch(e){}
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'toggleNote',data:{row}})});}catch(e){}
+}
+async function deleteNoteItem(row,destId){
+    if(!confirm('למחוק את ההמלצה?'))return;
+    const idx=row-2;if(DB.notes)DB.notes.splice(idx,1);setCooldown('notes');saveCache();renderSpace(destId);showToast('ההמלצה נמחקה');
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteNote',data:{row}})});}catch(e){}
+}
+
+// ==================== SYNC & REFRESH ====================
+async function refreshData(showIndicator){
+    const success=await fetchAllData();
+    if(success){
+        if(currentView==='home')renderMarketplace();
+        else if(currentView==='space')renderSpace(currentSpaceId);
+        else if(currentView==='section')renderSection(currentSection);
     }
-    document.querySelectorAll('.pack-tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.pack-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');currentPackWho=t.dataset.who;renderPacking();});});
+    if(showIndicator)showToast('הנתונים עודכנו');
+    return success;
+}
+setInterval(()=>refreshData(false),60000);
 
-    // ==================== CURRENCY CONVERTER ====================
-    const CURRENCY_SYMBOLS={USD:'$',ILS:'₪',PHP:'₱'},CURRENCY_NAMES={USD:'דולר',ILS:'שקל',PHP:'פזו פיליפיני'};
-    async function fetchRates(){try{const r=await fetch('https://open.er-api.com/v6/latest/USD');const d=await r.json();if(d.result==='success'){exchangeRates=d.rates;ratesLastUpdated=d.time_last_update_utc;initConverterUI();}else showConverterError();}catch(e){showConverterError();}}
-    function showConverterError(){document.getElementById('converter-loading').innerHTML='<div style="color:var(--danger);">לא הצלחנו לטעון שערים</div><button onclick="fetchRates()" class="retry-btn">נסה שוב</button>';}
-    function initConverterUI(){document.getElementById('converter-loading').style.display='none';document.getElementById('converter-ui').style.display='block';updateQuickAmounts();updateRateInfo();document.getElementById('conv-amount').addEventListener('input',convertCurrency);document.getElementById('conv-from').addEventListener('change',()=>{updateQuickAmounts();convertCurrency();});document.getElementById('conv-to').addEventListener('change',convertCurrency);document.getElementById('conv-swap').addEventListener('click',()=>{const f=document.getElementById('conv-from'),t=document.getElementById('conv-to'),tmp=f.value;f.value=t.value;t.value=tmp;updateQuickAmounts();convertCurrency();});}
-    function updateQuickAmounts(){const from=document.getElementById('conv-from').value;const a=from==='USD'?[10,50,100,500]:from==='ILS'?[50,100,500,1000]:[500,1000,5000,10000];document.getElementById('conv-quick').innerHTML=a.map(v=>`<button class="converter-quick-btn" onclick="document.getElementById('conv-amount').value=${v};convertCurrency();">${CURRENCY_SYMBOLS[from]}${v.toLocaleString()}</button>`).join('');}
-    function convertCurrency(){const from=document.getElementById('conv-from').value,to=document.getElementById('conv-to').value,amount=parseFloat(document.getElementById('conv-amount').value),o=document.getElementById('conv-output'),r=document.getElementById('conv-result');if(!amount||isNaN(amount)||!exchangeRates){o.textContent='—';r.style.display='none';return;}const result=(amount/exchangeRates[from])*exchangeRates[to];o.textContent=CURRENCY_SYMBOLS[to]+(Math.round(result*100)/100).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});const rate=exchangeRates[to]/exchangeRates[from];r.style.display='block';document.getElementById('conv-result-amount').textContent=`${CURRENCY_SYMBOLS[from]}1 = ${CURRENCY_SYMBOLS[to]}${rate.toFixed(4)}`;document.getElementById('conv-result-label').textContent=`${CURRENCY_NAMES[from]} ל${CURRENCY_NAMES[to]}`;}
-    function updateRateInfo(){if(!ratesLastUpdated)return;const d=new Date(ratesLastUpdated);document.getElementById('conv-rate-info').textContent=`שערים עודכנו: ${d.toLocaleDateString('he-IL')} ${d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}`;}
+// ==================== EXCHANGE RATES ====================
+async function fetchRates(){
+    try{const r=await fetch('https://open.er-api.com/v6/latest/USD');const d=await r.json();
+    if(d.result==='success'){exchangeRates=d.rates;ratesLastUpdated=d.time_last_update_utc;}}catch(e){}
+}
 
-    // ==================== SYNC & REFRESH ====================
-    function renderAll() { renderFlights(); renderHotels(); renderEmergency(); renderLinks(); renderTasks(); renderBudget(); renderPacking(); }
-
-    async function refreshData(showIndicator) {
-        if (showIndicator) document.getElementById('sync-indicator').style.display = 'inline-flex';
-        const success = await fetchAllData();
-        if (success) renderAll();
-        if (showIndicator) setTimeout(() => { document.getElementById('sync-indicator').style.display = 'none'; }, 600);
-        return success;
-    }
-
-    // Auto-refresh every 60 seconds
-    setInterval(() => refreshData(false), 60000);
-
-    // ==================== INIT ====================
-    async function init(){renderItinerary();initExpenseForm();const hadCache=loadCache();if(hadCache){renderAll();}fetchRates();const success=await fetchAllData();if(success||hadCache){renderAll();}}
-    init();
-    </script>
+// ==================== INIT ====================
+async function init(){
+    const hadCache=loadCache();
+    if(hadCache)renderMarketplace();
+    else document.getElementById('main').innerHTML='<div class="loading" style="padding-top:100px"><div class="spinner"></div><div style="margin-top:12px">טוען את הטיול...</div></div>';
+    await Promise.all([fetchRates(),fetchWeather()]);
+    const success=await fetchAllData();
+    if(success||hadCache){renderApp();}
+}
+init();
+</script>
 </body>
 </html>
