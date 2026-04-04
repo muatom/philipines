@@ -296,7 +296,7 @@
         .budget-form-row .desc-input { flex: 1; }
         .budget-form-row .date-input { flex: 0 0 140px; direction: ltr; }
         .budget-form-conversion { font-size: 12px; color: var(--text-light); text-align: center; padding: 4px 0 8px; min-height: 20px; }
-        .budget-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+        .budget-cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .budget-cat-btn { padding: 8px 4px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card); font-family: inherit; font-size: 11px; cursor: pointer; text-align: center; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
         .budget-cat-btn.active { border-color: var(--primary); background: rgba(14,165,233,0.06); color: var(--primary); font-weight: 600; }
         .budget-cat-btn:active { transform: scale(0.96); }
@@ -759,12 +759,14 @@
 
     // ==================== EXPENSE MANAGEMENT ====================
     const PRE_TRIP_CATS = ['לינה', 'טיסות', 'ביורוקרטיה'];
-    const ON_TRIP_CATS = ['אוכל', 'תחבורה', 'אטרקציות', 'קניות'];
+    const ON_TRIP_CATS = ['אוכל', 'תחבורה', 'אטרקציות', 'קניות', 'משיכת כסף', 'שונות'];
     const ALL_CATS = [
         { id: 'אוכל', icon: '🍜', label: 'אוכל', color: '#f59e0b' },
         { id: 'תחבורה', icon: '🚕', label: 'תחבורה', color: '#4a9eed' },
         { id: 'אטרקציות', icon: '🏝️', label: 'אטרקציות', color: '#22c55e' },
         { id: 'קניות', icon: '🛍️', label: 'קניות', color: '#8b5cf6' },
+        { id: 'משיכת כסף', icon: '🏧', label: 'משיכת כסף', color: '#0d9488' },
+        { id: 'שונות', icon: '📦', label: 'שונות', color: '#a855f7' },
         { id: 'לינה', icon: '🏨', label: 'לינה', color: '#0ea5e9' },
         { id: 'טיסות', icon: '✈️', label: 'טיסות', color: '#06b6d4' },
         { id: 'ביורוקרטיה', icon: '📋', label: 'ביורוקרטיה', color: '#64748b' },
