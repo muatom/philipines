@@ -907,13 +907,14 @@
         const expense = {
             Date: dateFormatted, Description: desc, Amount: amount,
             Currency: currency, Category: selectedCat, Who: selectedWho,
-            Type: type, ...locked,
+            Type: type, ...locked, Origin_Cur: currency,
         };
 
         if (!DB.expenses) DB.expenses = [];
 
         if (editingExpenseIdx !== null) {
-            // Edit mode
+            // Edit mode — preserve original currency from when it was first added
+            expense.Origin_Cur = DB.expenses[editingExpenseIdx]['Origin_Cur'] || DB.expenses[editingExpenseIdx]['Currency'] || currency;
             DB.expenses[editingExpenseIdx] = expense;
             setCooldown('expenses');
             saveCache();

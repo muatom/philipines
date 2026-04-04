@@ -2,16 +2,17 @@
  * Google Apps Script - Philippines Trip API
  *
  * This script handles write operations to the Google Sheet:
- * - addExpense: Append a row to the "expenses" tab (11 columns)
+ * - addExpense: Append a row to the "expenses" tab (12 columns)
  * - editExpense: Update an existing expense row
  * - deleteExpense: Delete an expense row
  * - toggleTask: Update the Done column for a task
  * - addTask: Append a new task row
  * - togglePacking: Toggle the Packed column for a packing item
  *
- * EXPENSE SHEET COLUMNS (A-K):
+ * EXPENSE SHEET COLUMNS (A-L):
  * A=Date, B=Description, C=Amount, D=Currency, E=Category, F=Who,
- * G=Type, H=ILS_Amount, I=USD_Amount, J=PHP_Amount, K=Exchange_Rate
+ * G=Type, H=ILS_Amount, I=USD_Amount, J=PHP_Amount, K=Exchange_Rate,
+ * L=Origin_Cur
  *
  * DEPLOYMENT INSTRUCTIONS:
  * 1. Open your Google Sheet
@@ -71,6 +72,7 @@ function addExpense(data) {
     data.USD_Amount || 0,
     data.PHP_Amount || 0,
     data.Exchange_Rate || '',
+    data.Origin_Cur || data.Currency || 'ILS',
   ];
 
   sheet.appendRow(row);
@@ -85,6 +87,12 @@ function editExpense(data) {
   const row = data.row;
   if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
 
+  // Preserve Origin_Cur: if not provided, read it from the existing row
+  let originCur = data.Origin_Cur;
+  if (!originCur) {
+    originCur = sheet.getRange(row, 12).getValue() || data.Currency || 'ILS';
+  }
+
   const values = [
     data.Date || '',
     data.Description || '',
@@ -97,6 +105,7 @@ function editExpense(data) {
     data.USD_Amount || 0,
     data.PHP_Amount || 0,
     data.Exchange_Rate || '',
+    originCur,
   ];
 
   sheet.getRange(row, 1, 1, values.length).setValues([values]);
