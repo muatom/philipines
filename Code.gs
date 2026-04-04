@@ -5,6 +5,9 @@
  * A=Date, B=Description, C=Amount, D=Currency, E=Category, F=Who,
  * G=Type, H=ILS_Amount, I=USD_Amount, J=PHP_Amount, K=Exchange_Rate, L=Origin_Cur
  *
+ * LINKS SHEET COLUMNS (A-D):
+ * A=Name, B=URL, C=Description, D=Icon
+ *
  * PACKING SHEET COLUMNS (A-E):
  * A=Item, B=Category, C=Packed, D=Who, E=Critical
  *
@@ -30,6 +33,9 @@ function doPost(e) {
       case 'editPackingItem': return editPackingItem(data);
       case 'deletePackingItem': return deletePackingItem(data);
       case 'toggleCritical': return toggleCritical(data);
+      case 'addLink': return addLink(data);
+      case 'editLink': return editLink(data);
+      case 'deleteLink': return deleteLink(data);
       case 'addNote': return addNote(data);
       case 'toggleNote': return toggleNote(data);
       case 'deleteNote': return deleteNote(data);
@@ -173,6 +179,45 @@ function toggleCritical(data) {
   const currentValue = String(sheet.getRange(row, 5).getValue()).toUpperCase();
   sheet.getRange(row, 5).setValue(currentValue === 'TRUE' ? 'FALSE' : 'TRUE');
   return jsonResponse({ success: true, row: row });
+}
+
+// ========== LINKS ==========
+
+function addLink(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('links');
+  if (!sheet) return jsonResponse({ error: 'Sheet "links" not found' }, 404);
+  const row = [
+    data.Name || '',
+    data.URL || '',
+    data.Description || '',
+    data.Icon || '📦',
+  ];
+  sheet.appendRow(row);
+  return jsonResponse({ success: true, message: 'Link added' });
+}
+
+function editLink(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('links');
+  if (!sheet) return jsonResponse({ error: 'Sheet "links" not found' }, 404);
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+  sheet.getRange(row, 1).setValue(data.Name || '');
+  sheet.getRange(row, 2).setValue(data.URL || '');
+  sheet.getRange(row, 3).setValue(data.Description || '');
+  sheet.getRange(row, 4).setValue(data.Icon || '📦');
+  return jsonResponse({ success: true, message: 'Link updated', row: row });
+}
+
+function deleteLink(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('links');
+  if (!sheet) return jsonResponse({ error: 'Sheet "links" not found' }, 404);
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+  sheet.deleteRow(row);
+  return jsonResponse({ success: true, message: 'Link deleted', row: row });
 }
 
 // ========== DESTINATION NOTES ==========

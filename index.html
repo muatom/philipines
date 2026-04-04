@@ -288,12 +288,27 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-h
 .modal-btns button{flex:1;padding:10px;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .modal-save{background:var(--pri);color:#fff}
 .modal-cancel-btn{background:var(--border);color:var(--text)}
-/* ===== LINK ITEM ===== */
-.link-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--rs);margin-bottom:6px;border:1px solid var(--border);text-decoration:none;color:inherit}
-.link-icon{width:38px;height:38px;background:rgba(13,148,136,.06);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 auto}
-.link-info{flex:1}
-.link-title{font-size:14px;font-weight:600}
-.link-desc{font-size:11px;color:var(--text-l);margin-top:1px}
+/* ===== LINKS ===== */
+.link-add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px}
+.link-add-inp{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:13px;background:var(--card);outline:none;direction:rtl;margin-bottom:8px}
+.link-add-inp:focus{border-color:var(--pri)}
+.link-add-inp.url{direction:ltr;text-align:right;font-size:14px}
+.link-sel-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.link-sel-btn{padding:6px 8px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:10px;cursor:pointer;text-align:center;transition:.15s;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.link-sel-btn.active{border-color:var(--pri);background:rgba(13,148,136,.06);color:var(--pri);font-weight:600}
+.link-cat-hdr{font-size:12px;font-weight:600;color:var(--text-l);padding:10px 0 6px;display:flex;align-items:center;gap:6px}
+.link-card{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border-radius:var(--rs);margin-bottom:8px;border:1px solid var(--border);box-shadow:var(--sh);text-decoration:none;color:inherit;cursor:pointer;transition:box-shadow .15s}
+.link-card:active{box-shadow:var(--sh-md)}
+.link-card-icon{width:42px;height:42px;background:rgba(13,148,136,.06);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:0 0 auto}
+.link-card-info{flex:1;min-width:0}
+.link-card-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:4px}
+.link-card-name .ext{font-size:11px;color:var(--text-m)}
+.link-card-desc{font-size:11px;color:var(--text-l);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.link-card-actions{display:flex;gap:4px;flex:0 0 auto}
+.link-card-actions button{background:none;border:none;font-size:15px;cursor:pointer;padding:4px;border-radius:6px;line-height:1}
+.link-card-actions button:active{background:var(--border)}
+.link-card.removing{opacity:0;transform:translateX(-40px);transition:all .3s ease}
+.link-card.new-item{animation:packSlideIn .3s ease}
 /* ===== NOTE ADD FORM ===== */
 .note-form{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-top:10px}
 .note-cat-row{display:flex;gap:5px;margin-bottom:8px}
@@ -319,6 +334,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-h
 .pack-chk,.todo-chk,.note-check{background:#1e293b}
 .pack-add-inp,.pack-edit-inp,.pack-edit-sel{background:#0f172a;color:var(--text)}
 .pack-sel-btn{background:#1e293b}
+.link-add-inp{background:#0f172a;color:var(--text)}
+.link-sel-btn{background:#1e293b}
 .ht-date{background:#0f172a}
 .conv-result{background:#0f172a}
 .fl-line::before{background:linear-gradient(to left,var(--pri),#334155)}
@@ -499,6 +516,12 @@ const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
 let expFilter = 'all', editExpIdx = null, selCat = 'אוכל', selWho = 'Both';
 let currentPackWho = 'all';
 let packSelCat = 'שונות', packSelWho = 'Shared', packSelCrit = false, editPackRow = null;
+// Link state
+const LINK_CATS = [
+    {id:'📄',label:'מסמכים'},{id:'🏨',label:'הזמנות'},{id:'🗺️',label:'מפות'},
+    {id:'🛡️',label:'ביטוח'},{id:'✈️',label:'טיסות'},{id:'📱',label:'שירותים'},{id:'📦',label:'אחר'}
+];
+let linkSelIcon = '📦', editLinkRow = null;
 const PACK_CATS = [
     {id:'ביגוד',icon:'👕'},{id:'טואלטיקה',icon:'🧴'},{id:'אלקטרוניקה',icon:'🔌'},
     {id:'מסמכים',icon:'📄'},{id:'תרופות',icon:'💊'},{id:'ציוד ספורט',icon:'🏄'},{id:'שונות',icon:'📦'}
@@ -1316,9 +1339,89 @@ function renderEmergencySection(){
 // --- LINKS ---
 function renderLinksSection(){
     const main=document.getElementById('main');
-    const data=DB.links;
-    if(!data||!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🔗 קישורים</div><div class="empty">לא נמצאו קישורים</div></div>';return;}
-    main.innerHTML='<div class="section-view"><div class="section-view-title">🔗 קישורים</div>'+data.map(l=>`<a href="${esc(l['URL'])}" class="link-item" target="_blank"><div class="link-icon">${esc(l['Icon'])||'🔗'}</div><div class="link-info"><div class="link-title">${esc(l['Name'])}</div>${l['Description']?`<div class="link-desc">${esc(l['Description'])}</div>`:''}</div></a>`).join('')+'</div>';
+    const data=DB.links||[];
+    const all=data.map((l,i)=>({...l,_row:i+2}));
+
+    // group by icon category
+    const groups={};
+    all.forEach(l=>{const ic=l['Icon']||'📦';if(!groups[ic])groups[ic]=[];groups[ic].push(l);});
+    const catLabel={};LINK_CATS.forEach(c=>catLabel[c.id]=c.label);
+
+    // editing state — pre-fill form
+    const ed=editLinkRow?all.find(l=>l._row===editLinkRow):null;
+    const formName=ed?esc(ed['Name']):'';
+    const formUrl=ed?esc(ed['URL']):'';
+    const formDesc=ed?esc(ed['Description']||''):'';
+    const formIcon=ed?(ed['Icon']||'📦'):linkSelIcon;
+    if(ed)linkSelIcon=formIcon;
+
+    main.innerHTML=`<div class="section-view"><div class="section-view-title">🔗 קישורים</div>
+        <div class="link-add-form">
+            <input type="text" class="link-add-inp" id="link-name" placeholder="שם הקישור" value="${formName}" autocomplete="off">
+            <input type="url" class="link-add-inp url" id="link-url" placeholder="הדביקו קישור..." value="${formUrl}" autocomplete="off">
+            <input type="text" class="link-add-inp" id="link-desc" placeholder="תיאור קצר (אופציונלי)" value="${formDesc}" autocomplete="off">
+            <div class="link-sel-row">${LINK_CATS.map(c=>`<button class="link-sel-btn ${linkSelIcon===c.id?'active':''}" onclick="linkSelIcon='${c.id}';document.querySelectorAll('.link-sel-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">${c.id} ${c.label}</button>`).join('')}</div>
+            ${ed
+              ?`<div style="display:flex;gap:8px"><button class="submit-btn" onclick="saveLinkEdit(${ed._row})" style="flex:1">שמור שינויים</button><button class="submit-btn" onclick="editLinkRow=null;renderLinksSection()" style="flex:0 0 auto;background:var(--border);color:var(--text)">ביטול</button></div>`
+              :`<button class="submit-btn" onclick="addLinkItem()">+ הוסף קישור</button>`}
+        </div>
+
+        ${all.length===0?'<div class="empty" style="padding:30px 16px;line-height:1.7">אין קישורים עדיין.<br>הוסיפו קישורים חשובים כמו פוליסת ביטוח,<br>אישורי הזמנות ומסמכי טיול</div>':''}
+        ${Object.entries(groups).map(([icon,items])=>{
+            const label=catLabel[icon]||'אחר';
+            return`<div class="link-cat-hdr">${icon} ${esc(label)} (${items.length})</div>
+            ${items.map(l=>`<div class="link-card" id="link-row-${l._row}" onclick="window.open('${esc(l['URL'])}','_blank')">
+                <div class="link-card-icon">${esc(l['Icon'])||'📦'}</div>
+                <div class="link-card-info">
+                    <div class="link-card-name">${esc(l['Name'])}<span class="ext">↗️</span></div>
+                    ${l['Description']?`<div class="link-card-desc">${esc(l['Description'])}</div>`:''}
+                </div>
+                <div class="link-card-actions" onclick="event.stopPropagation()">
+                    <button onclick="startEditLink(${l._row})" title="ערוך">✏️</button>
+                    <button onclick="deleteLinkItem(${l._row},'${esc(l['Name'])}')" title="מחק">🗑️</button>
+                </div>
+            </div>`).join('')}`;
+        }).join('')}
+    </div>`;
+}
+
+async function addLinkItem(){
+    const name=(document.getElementById('link-name')?.value||'').trim();
+    const url=(document.getElementById('link-url')?.value||'').trim();
+    const desc=(document.getElementById('link-desc')?.value||'').trim();
+    if(!name||!url){showToast('יש להזין שם וקישור');return;}
+    if(!DB.links)DB.links=[];
+    DB.links.push({Name:name,URL:url,Description:desc,Icon:linkSelIcon});
+    setCooldown('links');saveCache();
+    renderLinksSection();showToast('קישור נוסף ✓');
+    setTimeout(()=>{const cards=document.querySelectorAll('.link-card');if(cards.length)cards[cards.length-1].classList.add('new-item');},50);
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addLink',data:{Name:name,URL:url,Description:desc,Icon:linkSelIcon}})});}catch(e){}
+}
+
+function startEditLink(row){editLinkRow=row;renderLinksSection();document.getElementById('link-name')?.focus();}
+
+async function saveLinkEdit(row){
+    const name=(document.getElementById('link-name')?.value||'').trim();
+    const url=(document.getElementById('link-url')?.value||'').trim();
+    const desc=(document.getElementById('link-desc')?.value||'').trim();
+    if(!name||!url){showToast('יש להזין שם וקישור');return;}
+    const idx=row-2;
+    if(DB.links&&DB.links[idx]){
+        DB.links[idx]['Name']=name;DB.links[idx]['URL']=url;DB.links[idx]['Description']=desc;DB.links[idx]['Icon']=linkSelIcon;
+        setCooldown('links');saveCache();
+    }
+    editLinkRow=null;renderLinksSection();showToast('קישור עודכן ✓');
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editLink',data:{row,Name:name,URL:url,Description:desc,Icon:linkSelIcon}})});}catch(e){}
+}
+
+async function deleteLinkItem(row,name){
+    if(!confirm(`למחוק את הקישור "${name}"?`))return;
+    const el=document.getElementById('link-row-'+row);
+    if(el){el.classList.add('removing');await new Promise(r=>setTimeout(r,300));}
+    const idx=row-2;
+    if(DB.links&&DB.links[idx]){DB.links.splice(idx,1);setCooldown('links');saveCache();}
+    renderLinksSection();showToast('קישור נמחק');
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteLink',data:{row}})});}catch(e){}
 }
 
 // ==================== NOTES MANAGEMENT ====================
