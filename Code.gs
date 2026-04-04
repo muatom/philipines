@@ -23,6 +23,9 @@ function doPost(e) {
       case 'toggleTask': return toggleTask(data);
       case 'addTask': return addTask(data);
       case 'togglePacking': return togglePacking(data);
+      case 'addPackingItem': return addPackingItem(data);
+      case 'editPackingItem': return editPackingItem(data);
+      case 'deletePackingItem': return deletePackingItem(data);
       case 'addNote': return addNote(data);
       case 'toggleNote': return toggleNote(data);
       case 'deleteNote': return deleteNote(data);
@@ -115,6 +118,42 @@ function togglePacking(data) {
   const currentValue = String(sheet.getRange(row, 3).getValue()).toUpperCase();
   sheet.getRange(row, 3).setValue(currentValue === 'TRUE' ? 'FALSE' : 'TRUE');
   return jsonResponse({ success: true, row: row });
+}
+
+function addPackingItem(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('packing');
+  if (!sheet) return jsonResponse({ error: 'Sheet "packing" not found' }, 404);
+  const row = [
+    data.Item || '',
+    data.Category || 'שונות',
+    'FALSE',
+    data.Who || 'Shared',
+  ];
+  sheet.appendRow(row);
+  return jsonResponse({ success: true, message: 'Packing item added' });
+}
+
+function editPackingItem(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('packing');
+  if (!sheet) return jsonResponse({ error: 'Sheet "packing" not found' }, 404);
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+  sheet.getRange(row, 1).setValue(data.Item || '');
+  sheet.getRange(row, 2).setValue(data.Category || 'שונות');
+  sheet.getRange(row, 4).setValue(data.Who || 'Shared');
+  return jsonResponse({ success: true, message: 'Packing item updated', row: row });
+}
+
+function deletePackingItem(data) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('packing');
+  if (!sheet) return jsonResponse({ error: 'Sheet "packing" not found' }, 404);
+  const row = data.row;
+  if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
+  sheet.deleteRow(row);
+  return jsonResponse({ success: true, message: 'Packing item deleted', row: row });
 }
 
 // ========== DESTINATION NOTES ==========

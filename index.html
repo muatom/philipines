@@ -204,25 +204,51 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-h
 .todo-due{font-size:10px;color:var(--text-l)}.todo-due.overdue{color:var(--err);font-weight:600}
 .todo-del{background:none;border:none;color:var(--text-m);font-size:16px;cursor:pointer;padding:2px;opacity:.4}
 /* ===== PACKING ===== */
+.pack-summary{text-align:center;padding:12px;font-size:14px;font-weight:600;color:var(--pri-d);background:linear-gradient(135deg,rgba(13,148,136,.06),rgba(13,148,136,.02));border-radius:var(--rs);margin-bottom:12px}
+.pack-summary.done{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(16,185,129,.02));color:var(--ok)}
+.pack-add-form{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:14px}
+.pack-add-row{display:flex;gap:8px;margin-bottom:10px}
+.pack-add-inp{flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:inherit;font-size:14px;background:var(--card);outline:none;direction:rtl;min-width:0}
+.pack-add-inp:focus{border-color:var(--pri)}
+.pack-add-btn{padding:12px 18px;background:linear-gradient(135deg,var(--ok),#34d399);color:#fff;border:none;border-radius:var(--rs);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pack-add-btn:active{opacity:.85}
+.pack-sel-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.pack-sel-btn{padding:6px 8px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);font-family:inherit;font-size:10px;cursor:pointer;text-align:center;transition:.15s;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.pack-sel-btn.active{border-color:var(--pri);background:rgba(13,148,136,.06);color:var(--pri);font-weight:600}
+.pack-sel-label{font-size:10px;color:var(--text-l);font-weight:600;margin-bottom:4px}
 .pack-tabs{display:flex;gap:3px;margin-bottom:14px;background:var(--border);border-radius:10px;padding:3px}
-.pack-tab{flex:1;padding:8px;border:none;border-radius:8px;background:none;font-family:inherit;font-size:12px;font-weight:500;color:var(--text-l);cursor:pointer;transition:.2s}
+.pack-tab{flex:1;padding:8px 4px;border:none;border-radius:8px;background:none;font-family:inherit;font-size:11px;font-weight:500;color:var(--text-l);cursor:pointer;transition:.2s;white-space:nowrap}
 .pack-tab.active{background:var(--card);color:var(--text);box-shadow:var(--sh);font-weight:600}
-.pack-sum{display:flex;gap:6px;margin-bottom:14px}
-.pack-sum-card{flex:1;text-align:center;padding:8px;background:var(--card);border-radius:var(--rs);border:1px solid var(--border)}
-.pack-sum-num{font-size:20px;font-weight:700;color:var(--pri)}
-.pack-sum-lbl{font-size:9px;color:var(--text-l);margin-top:1px}
-.pack-cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--card);border-radius:var(--rs) var(--rs) 0 0;border:1px solid var(--border);border-bottom:none;cursor:pointer}
-.pack-cat-hdr h3{font-size:13px;font-weight:600}
-.pack-cat-cnt{font-size:11px;color:var(--text-l);background:var(--bg);padding:1px 7px;border-radius:8px}
-.pack-cat-items{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--rs) var(--rs);overflow:hidden;margin-bottom:10px}
-.pack-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer}
+.pack-cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--card);border-radius:var(--rs) var(--rs) 0 0;border:1px solid var(--border);border-bottom:none;cursor:pointer}
+.pack-cat-hdr h3{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.pack-cat-cnt{font-size:11px;color:var(--text-l);background:var(--bg);padding:2px 8px;border-radius:8px}
+.pack-cat-hdr .chevron{font-size:12px;color:var(--text-l);transition:transform .2s}
+.pack-cat-hdr.collapsed .chevron{transform:rotate(-90deg)}
+.pack-cat-items{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--rs) var(--rs);overflow:hidden;margin-bottom:10px;transition:max-height .25s ease}
+.pack-cat-items.collapsed{max-height:0 !important;border:none;margin-bottom:0}
+.pack-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;position:relative;transition:opacity .2s,background .15s}
 .pack-item:last-child{border-bottom:none}
-.pack-item.done{opacity:.4}
+.pack-item.done{opacity:.45}
 .pack-item.done .pack-txt{text-decoration:line-through}
-.pack-chk{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:.2s}
+.pack-item.removing{opacity:0;transform:translateX(-40px);transition:all .3s ease}
+.pack-item.new-item{animation:packSlideIn .3s ease}
+@keyframes packSlideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.pack-chk{width:22px;height:22px;border:2px solid var(--border);border-radius:5px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:.2s;cursor:pointer}
 .pack-item.done .pack-chk{background:var(--ok);border-color:var(--ok)}
-.pack-item.done .pack-chk::after{content:'';width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-1px}
-.pack-txt{flex:1}
+.pack-item.done .pack-chk::after{content:'';width:5px;height:9px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);margin-top:-2px}
+.pack-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pack-who-badge{font-size:9px;padding:2px 6px;border-radius:6px;font-weight:600;flex:0 0 auto;white-space:nowrap}
+.pack-who-badge.tom{background:rgba(59,130,246,.1);color:#3b82f6}
+.pack-who-badge.dani{background:rgba(236,72,153,.1);color:#ec4899}
+.pack-who-badge.shared{background:rgba(139,92,246,.1);color:#8b5cf6}
+.pack-item-actions{display:flex;gap:4px;flex:0 0 auto}
+.pack-act-btn{background:none;border:none;font-size:15px;cursor:pointer;padding:4px;border-radius:6px;transition:background .15s;line-height:1}
+.pack-act-btn:active{background:var(--border)}
+.pack-edit-row{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;background:rgba(13,148,136,.03);border-bottom:1px solid var(--border)}
+.pack-edit-inp{flex:1;min-width:120px;padding:8px 10px;border:1.5px solid var(--pri);border-radius:8px;font-family:inherit;font-size:13px;outline:none;direction:rtl;background:var(--card)}
+.pack-edit-sel{padding:8px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:11px;background:var(--card);outline:none}
+.pack-edit-save{padding:8px 14px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.pack-edit-cancel{padding:8px 14px;background:var(--border);color:var(--text);border:none;border-radius:8px;font-family:inherit;font-size:12px;cursor:pointer}
 /* ===== CONVERTER ===== */
 .conv-card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh);border:1px solid var(--border)}
 .conv-row{display:flex;gap:8px;margin-bottom:10px}
@@ -284,6 +310,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-h
 .cat-btn,.who-btn,.fil-btn,.note-cat-btn,.conv-quick-btn{background:#1e293b}
 .pack-tabs{background:#334155}.pack-tab.active{background:#1e293b}
 .pack-chk,.todo-chk,.note-check{background:#1e293b}
+.pack-add-inp,.pack-edit-inp,.pack-edit-sel{background:#0f172a;color:var(--text)}
+.pack-sel-btn{background:#1e293b}
 .ht-date{background:#0f172a}
 .conv-result{background:#0f172a}
 .fl-line::before{background:linear-gradient(to left,var(--pri),#334155)}
@@ -462,7 +490,14 @@ const ALL_CATS = [
 ];
 const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
 let expFilter = 'all', editExpIdx = null, selCat = 'אוכל', selWho = 'Both';
-let currentPackWho = 'tom';
+let currentPackWho = 'all';
+let packSelCat = 'שונות', packSelWho = 'Shared', editPackRow = null;
+const PACK_CATS = [
+    {id:'ביגוד',icon:'👕'},{id:'טואלטיקה',icon:'🧴'},{id:'אלקטרוניקה',icon:'🔌'},
+    {id:'מסמכים',icon:'📄'},{id:'תרופות',icon:'💊'},{id:'שונות',icon:'📦'}
+];
+const PACK_CAT_MAP = {}; PACK_CATS.forEach(c=>PACK_CAT_MAP[c.id]=c);
+const collapsedCats = {};
 
 // ==================== CSV PARSER ====================
 function parseCSV(text) {
@@ -1011,36 +1046,158 @@ async function addTaskItem(){
 function delLocalTask(idx){const lt=JSON.parse(localStorage.getItem('ph-local-tasks')||'[]');if(idx>=0&&idx<lt.length){lt.splice(idx,1);localStorage.setItem('ph-local-tasks',JSON.stringify(lt));}renderTasksSection();}
 
 // --- PACKING ---
+function packCatIcon(cat){const c=PACK_CAT_MAP[cat];return c?c.icon:'📦';}
+function packWhoLabel(w){return w==='Tom'?'Tom':w==='Dani'||w==='Daniella'?'Daniella':'משותף';}
+function packWhoClass(w){return w==='Tom'?'tom':w==='Dani'||w==='Daniella'?'dani':'shared';}
+function packWhoSheetVal(w){return w==='tom'?'Tom':w==='dani'?'Dani':'Shared';}
+
 function renderPackingSection(){
     const main=document.getElementById('main');
     const data=DB.packing;
     if(!data){main.innerHTML='<div class="section-view"><div class="section-view-title">🎒 ציוד</div><div class="empty">טוען ציוד...</div></div>';return;}
-    if(!data.length){main.innerHTML='<div class="section-view"><div class="section-view-title">🎒 ציוד</div><div class="empty">אין פריטים ברשימת הציוד</div></div>';return;}
-    const whoMap={tom:'Tom',dani:'Dani',shared:'Shared'};
-    const wantedWho=whoMap[currentPackWho]||'Tom';
-    const totalI=data.length,packedI=data.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
-    const tabI=data.map((r,i)=>({...r,_row:i+2})).filter(r=>(r['Who']||'')===wantedWho);
-    const tabT=tabI.length,tabP=tabI.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
-    const cats={};tabI.forEach(r=>{const c=r['Category']||'אחר';if(!cats[c])cats[c]=[];cats[c].push(r);});
+
+    // annotate rows
+    const all=data.map((r,i)=>({...r,_row:i+2}));
+    const totalI=all.length, packedI=all.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
+
+    // count per who tab
+    const tomC=all.filter(r=>r['Who']==='Tom').length, daniC=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella').length, sharedC=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella').length;
+
+    // filter
+    let filtered=all;
+    if(currentPackWho==='tom') filtered=all.filter(r=>r['Who']==='Tom');
+    else if(currentPackWho==='dani') filtered=all.filter(r=>r['Who']==='Dani'||r['Who']==='Daniella');
+    else if(currentPackWho==='shared') filtered=all.filter(r=>r['Who']!=='Tom'&&r['Who']!=='Dani'&&r['Who']!=='Daniella');
+
+    // group by category (preserve PACK_CATS order, then extras)
+    const cats={};
+    PACK_CATS.forEach(c=>{const items=filtered.filter(r=>(r['Category']||'שונות')===c.id);if(items.length)cats[c.id]=items;});
+    filtered.forEach(r=>{const c=r['Category']||'שונות';if(!PACK_CAT_MAP[c]){if(!cats[c])cats[c]=[];cats[c].push(r);}});
+
+    // summary
+    const allDone=totalI>0&&packedI===totalI;
+    const summaryText=allDone?'הכל ארוז! 🎉':`ארזנו ${packedI} מתוך ${totalI} פריטים`;
+
     main.innerHTML=`<div class="section-view"><div class="section-view-title">🎒 ציוד</div>
-        <div class="pack-sum"><div class="pack-sum-card"><div class="pack-sum-num">${packedI}/${totalI}</div><div class="pack-sum-lbl">סה"כ ארוז</div></div><div class="pack-sum-card"><div class="pack-sum-num">${tabP}/${tabT}</div><div class="pack-sum-lbl">${currentPackWho==='shared'?'משותף':currentPackWho==='tom'?'Tom':'Dani'}</div></div><div class="pack-sum-card"><div class="pack-sum-num">${totalI-packedI}</div><div class="pack-sum-lbl">נותר</div></div></div>
-        <div class="pack-tabs"><button class="pack-tab ${currentPackWho==='tom'?'active':''}" onclick="setPackWho('tom')">Tom</button><button class="pack-tab ${currentPackWho==='dani'?'active':''}" onclick="setPackWho('dani')">Dani</button><button class="pack-tab ${currentPackWho==='shared'?'active':''}" onclick="setPackWho('shared')">משותף</button></div>
+        <div class="pack-summary ${allDone?'done':''}">${summaryText}</div>
+
+        <div class="pack-add-form">
+            <div class="pack-add-row">
+                <input type="text" class="pack-add-inp" id="pack-inp" placeholder="הוסף פריט..." autocomplete="off">
+                <button class="pack-add-btn" onclick="addPackItem()">הוסף</button>
+            </div>
+            <div class="pack-sel-label">קטגוריה</div>
+            <div class="pack-sel-row">${PACK_CATS.map(c=>`<button class="pack-sel-btn ${packSelCat===c.id?'active':''}" onclick="packSelCat='${c.id}';renderPackingSection()">${c.icon} ${c.id}</button>`).join('')}</div>
+            <div class="pack-sel-label">למי</div>
+            <div class="pack-sel-row">
+                <button class="pack-sel-btn ${packSelWho==='Tom'?'active':''}" onclick="packSelWho='Tom';renderPackingSection()">👨 Tom</button>
+                <button class="pack-sel-btn ${packSelWho==='Dani'?'active':''}" onclick="packSelWho='Dani';renderPackingSection()">👩 Daniella</button>
+                <button class="pack-sel-btn ${packSelWho==='Shared'?'active':''}" onclick="packSelWho='Shared';renderPackingSection()">👫 משותף</button>
+            </div>
+        </div>
+
+        <div class="pack-tabs">
+            <button class="pack-tab ${currentPackWho==='all'?'active':''}" onclick="setPackWho('all')">הכל (${totalI})</button>
+            <button class="pack-tab ${currentPackWho==='tom'?'active':''}" onclick="setPackWho('tom')">👨 Tom (${tomC})</button>
+            <button class="pack-tab ${currentPackWho==='dani'?'active':''}" onclick="setPackWho('dani')">👩 Daniella (${daniC})</button>
+            <button class="pack-tab ${currentPackWho==='shared'?'active':''}" onclick="setPackWho('shared')">👫 משותף (${sharedC})</button>
+        </div>
+
+        ${Object.keys(cats).length===0?'<div class="empty">אין פריטים בסינון הנוכחי</div>':''}
         ${Object.entries(cats).map(([cat,items])=>{
             const cp=items.filter(r=>(r['Packed']||'').toUpperCase()==='TRUE').length;
-            return`<div class="pack-cat-hdr"><h3>${esc(cat)}</h3><span class="pack-cat-cnt">${cp}/${items.length}</span></div><div class="pack-cat-items">${items.map(r=>{
+            const icon=packCatIcon(cat);
+            const isCollapsed=!!collapsedCats[cat];
+            return`<div class="pack-cat-hdr ${isCollapsed?'collapsed':''}" onclick="togglePackCat('${esc(cat)}')">
+                <h3>${icon} ${esc(cat)} — <span style="font-weight:400;color:var(--text-l)">${cp}/${items.length}</span></h3>
+                <span class="chevron">▼</span>
+            </div>
+            <div class="pack-cat-items ${isCollapsed?'collapsed':''}">${items.map(r=>{
                 const done=(r['Packed']||'').toUpperCase()==='TRUE';
-                return`<div class="pack-item ${done?'done':''}" onclick="togglePackItem(${r._row})"><div class="pack-chk"></div><div class="pack-txt">${esc(r['Item'])}</div></div>`;
+                const who=r['Who']||'Shared';
+                const isEditing=editPackRow===r._row;
+                if(isEditing){
+                    return`<div class="pack-edit-row" id="pack-edit-${r._row}">
+                        <input class="pack-edit-inp" id="pe-name-${r._row}" value="${esc(r['Item'])}">
+                        <select class="pack-edit-sel" id="pe-cat-${r._row}">${PACK_CATS.map(c=>`<option value="${c.id}" ${(r['Category']||'שונות')===c.id?'selected':''}>${c.icon} ${c.id}</option>`).join('')}</select>
+                        <select class="pack-edit-sel" id="pe-who-${r._row}"><option value="Tom" ${who==='Tom'?'selected':''}>👨 Tom</option><option value="Dani" ${who==='Dani'||who==='Daniella'?'selected':''}>👩 Daniella</option><option value="Shared" ${who!=='Tom'&&who!=='Dani'&&who!=='Daniella'?'selected':''}>👫 משותף</option></select>
+                        <button class="pack-edit-save" onclick="savePackEdit(${r._row})">שמור</button>
+                        <button class="pack-edit-cancel" onclick="editPackRow=null;renderPackingSection()">ביטול</button>
+                    </div>`;
+                }
+                return`<div class="pack-item ${done?'done':''}" id="pack-row-${r._row}">
+                    <div class="pack-chk" onclick="togglePackItem(${r._row})"></div>
+                    <div class="pack-txt" onclick="togglePackItem(${r._row})">${esc(r['Item'])}</div>
+                    <span class="pack-who-badge ${packWhoClass(who)}">${packWhoLabel(who)}</span>
+                    <div class="pack-item-actions">
+                        <button class="pack-act-btn" onclick="startEditPack(${r._row})" title="ערוך">✏️</button>
+                        <button class="pack-act-btn" onclick="deletePackItem(${r._row},'${esc(r['Item'])}')" title="מחק">🗑️</button>
+                    </div>
+                </div>`;
             }).join('')}</div>`;
         }).join('')}
     </div>`;
+    // focus input if no items (inviting feel)
+    const inp=document.getElementById('pack-inp');
+    if(inp && !data.length) inp.focus();
+    // enter key to add
+    if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')addPackItem();});
 }
+
 function setPackWho(w){currentPackWho=w;renderPackingSection();}
+function togglePackCat(cat){collapsedCats[cat]=!collapsedCats[cat];renderPackingSection();}
+
+async function addPackItem(){
+    const inp=document.getElementById('pack-inp');
+    const name=(inp?inp.value:'').trim();
+    if(!name){inp&&inp.focus();return;}
+    // optimistic
+    if(!DB.packing)DB.packing=[];
+    DB.packing.push({Item:name,Category:packSelCat,Packed:'FALSE',Who:packSelWho==='Dani'?'Dani':packSelWho});
+    setCooldown('packing');saveCache();
+    renderPackingSection();
+    showToast('פריט נוסף ✓');
+    // highlight new item
+    setTimeout(()=>{const items=document.querySelectorAll('.pack-item');if(items.length){const last=items[items.length-1];last.classList.add('new-item');}},50);
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addPackingItem',data:{Item:name,Category:packSelCat,Who:packSelWho==='Dani'?'Dani':packSelWho}})});}catch(e){}
+}
+
 async function togglePackItem(row){
     const idx=row-2;if(DB.packing&&DB.packing[idx]){
         const cur=(DB.packing[idx]['Packed']||'').toUpperCase()==='TRUE';DB.packing[idx]['Packed']=cur?'FALSE':'TRUE';
         setCooldown('packing');renderPackingSection();saveCache();
     }
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'togglePacking',data:{row}})});}catch(e){}
+}
+
+function startEditPack(row){editPackRow=row;renderPackingSection();const inp=document.getElementById('pe-name-'+row);if(inp)inp.focus();}
+
+async function savePackEdit(row){
+    const name=(document.getElementById('pe-name-'+row)?.value||'').trim();
+    const cat=document.getElementById('pe-cat-'+row)?.value||'שונות';
+    const who=document.getElementById('pe-who-'+row)?.value||'Shared';
+    if(!name){showToast('יש להזין שם פריט');return;}
+    const idx=row-2;
+    if(DB.packing&&DB.packing[idx]){
+        DB.packing[idx]['Item']=name;DB.packing[idx]['Category']=cat;DB.packing[idx]['Who']=who;
+        setCooldown('packing');saveCache();
+    }
+    editPackRow=null;renderPackingSection();showToast('פריט עודכן ✓');
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'editPackingItem',data:{row,Item:name,Category:cat,Who:who}})});}catch(e){}
+}
+
+async function deletePackItem(row,name){
+    if(!confirm(`למחוק את "${name}"?`))return;
+    // animate out
+    const el=document.getElementById('pack-row-'+row);
+    if(el){el.classList.add('removing');await new Promise(r=>setTimeout(r,300));}
+    const idx=row-2;
+    if(DB.packing&&DB.packing[idx]){
+        DB.packing.splice(idx,1);
+        setCooldown('packing');saveCache();
+    }
+    renderPackingSection();showToast('פריט נמחק');
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deletePackingItem',data:{row}})});}catch(e){}
 }
 
 // --- CONVERTER ---
