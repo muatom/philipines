@@ -410,6 +410,52 @@ html{scroll-behavior:smooth}
 /* ========== PULL REFRESH HINT (subtle) ========== */
 .refreshing{animation:spinSlow 1s linear infinite}
 @keyframes spinSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* ========== ACTIVITY MARKETPLACE ========== */
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+.act-cat-card{aspect-ratio:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--sh-2);transition:transform .2s var(--ease);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.act-cat-card:active{transform:scale(.95)}
+.act-cat-icon{font-size:40px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
+.act-cat-name{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.act-cat-count{font-size:11px;opacity:.85;font-weight:500}
+
+/* Activity List View */
+.act-list-hdr{padding:16px 20px 8px;display:flex;align-items:center;justify-content:space-between}
+.act-list-title{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.act-list-count{font-size:13px;color:var(--text-3);font-weight:500}
+.act-filters{display:flex;gap:8px;padding:4px 20px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.act-filters::-webkit-scrollbar{display:none}
+.act-fil{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;background:var(--gray-6);color:var(--text-2);transition:all .2s}
+.act-fil.active{background:var(--blue);color:#fff}
+.act-card{background:var(--card);border-radius:16px;padding:16px;margin:0 20px 12px;box-shadow:var(--sh-1);position:relative;cursor:pointer;transition:transform .2s var(--ease)}
+.act-card:active{transform:scale(.98)}
+.act-card-name{font-size:17px;font-weight:700;letter-spacing:-.2px;padding-left:36px}
+.act-card-desc{font-size:13px;color:var(--text-3);margin-top:4px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.act-card-meta{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;align-items:center}
+.act-chip{font-size:12px;color:var(--text-2);font-weight:500;display:flex;align-items:center;gap:3px}
+.act-hearts{color:var(--red);font-size:11px;letter-spacing:-1px}
+.act-save{position:absolute;top:14px;left:14px;background:none;border:none;font-size:22px;cursor:pointer;padding:4px;transition:transform .2s var(--ease);z-index:2;filter:grayscale(1) opacity(.4)}
+.act-save.saved{filter:none;animation:heartPop .4s var(--ease)}
+@keyframes heartPop{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+/* Activity Detail Sheet */
+.act-detail{padding:4px 0 20px}
+.act-detail-name{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+.act-detail-pill{display:inline-flex;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;color:#fff;margin-bottom:14px}
+.act-detail-desc{font-size:15px;line-height:1.6;color:var(--text-2);margin-bottom:16px}
+.act-detail-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.act-detail-chip{background:var(--gray-6);padding:8px 12px;border-radius:var(--r-s);font-size:13px;font-weight:500;display:flex;align-items:center;gap:5px}
+.act-tips{background:rgba(255,204,0,.12);border-radius:var(--r-m);padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.6;color:var(--text-2)}
+.act-tips-title{font-weight:700;margin-bottom:4px;color:var(--text)}
+.act-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.act-tag{background:var(--gray-6);color:var(--text-3);padding:4px 10px;border-radius:12px;font-size:11px;font-weight:500}
+.act-actions{display:flex;flex-direction:column;gap:8px}
+.act-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:var(--r-m);font-size:15px;font-weight:600;border:none;cursor:pointer;transition:transform .15s var(--ease)}
+.act-btn:active{transform:scale(.97)}
+.act-btn-save{background:var(--blue);color:#fff;width:100%}
+.act-btn-save.saved{background:var(--green)}
+.act-btn-row{display:flex;gap:8px}
+.act-btn-row .act-btn{flex:1;background:var(--gray-6);color:var(--blue);font-size:13px;padding:12px 8px}
 </style>
 </head>
 <body>
@@ -500,6 +546,15 @@ const TRIP_START = new Date('2026-04-05T15:40:00+02:00');
 let BUDGET_LIMIT = parseInt(localStorage.getItem('ph-budget-limit')) || 15000;
 const CACHE_KEY = 'ph-trip-cache-v3';
 const WEATHER_KEY = 'ph-weather-cache';
+const ACTIVITIES_SHEET = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQpzUCWEkT39Jem71jrr2cnXLvfHCH3Pb2FK7QE4ff47XEYoCdIYXLi7ucqm9vDj34Em3VSyukc6h8_/pub';
+const ACT_TABS = {
+    boracay:  { gid:'695770430',  name:'בורקאי' },
+    siargao:  { gid:'2132539686', name:'שירגאו' },
+    'el-nido':{ gid:'812377063',  name:'אל נידו' },
+};
+const ACT_DEST_MAP = { siargao:'siargao', 'el-nido':'el-nido', boracay:'boracay' };
+const ACT_CACHE_KEY = 'ph-activities-cache';
+const ACT_CACHE_TTL = 3600000;
 const DEFAULT_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzU1HaG0zdzaNNbhSXBnwTjEZ1ZgunpIdyvP1g107vVhag7biVLygglNOMIKsusSHrXzA/exec';
 const APPS_SCRIPT_URL = localStorage.getItem('ph-apps-script-url') || DEFAULT_APPS_SCRIPT_URL;
 
@@ -606,6 +661,21 @@ const LINK_CATS = [
     {id:'🛡️',label:'ביטוח'},{id:'✈️',label:'טיסות'},{id:'📱',label:'שירותים'},{id:'📦',label:'אחר'}
 ];
 let linkSelIcon = '📦', editLinkRow = null;
+const ACT_CAT_STYLE = {
+    'Water Sports':{he:'ספורט ימי',icon:'🤿',grad:'linear-gradient(135deg,#0077B6,#00B4D8)'},
+    'Surfing Spots':{he:'גלישה',icon:'🏄',grad:'linear-gradient(135deg,#0096C7,#48CAE4)'},
+    'Dining':{he:'אוכל',icon:'🍜',grad:'linear-gradient(135deg,#E85D04,#FAA307)'},
+    'Adventure':{he:'הרפתקאות',icon:'🧗',grad:'linear-gradient(135deg,#2D6A4F,#52B788)'},
+    'Beach':{he:'חופים',icon:'🏖️',grad:'linear-gradient(135deg,#F4A261,#E9C46A)'},
+    'Nature':{he:'טבע',icon:'🌿',grad:'linear-gradient(135deg,#1B4332,#40916C)'},
+    'Culture':{he:'תרבות',icon:'🎭',grad:'linear-gradient(135deg,#7B2CBF,#C77DFF)'},
+    'Photography':{he:'צילום',icon:'📸',grad:'linear-gradient(135deg,#DB7093,#FFB6C1)'},
+    'Spa & Wellness':{he:'ספא',icon:'💆',grad:'linear-gradient(135deg,#7209B7,#B5179E)'},
+    'Scuba Diving':{he:'צלילה',icon:'🐠',grad:'linear-gradient(135deg,#023E8A,#0077B6)'},
+    'Snorkeling Spots':{he:'שנורקלינג',icon:'🐚',grad:'linear-gradient(135deg,#00B4D8,#90E0EF)'},
+};
+let activitiesDB = {};
+let actCurrentDest = null, actCurrentCat = null, actFilter = 'all';
 const PACK_CATS = [
     {id:'ביגוד',icon:'👕'},{id:'טואלטיקה',icon:'🧴'},{id:'אלקטרוניקה',icon:'🔌'},
     {id:'מסמכים',icon:'📄'},{id:'תרופות',icon:'💊'},{id:'ציוד ספורט',icon:'🏄'},{id:'שונות',icon:'📦'}
@@ -644,6 +714,51 @@ async function fetchAllData(){
     results.forEach((r,i)=>{if(r.status==='fulfilled'){DB[fetchNames[i]]=r.value;ok=true;}});
     if(ok){dataFetchedAt=Date.now();saveCache();}
     return ok;
+}
+
+// ==================== ACTIVITIES DATA ====================
+function parseActivitiesCSV(text){
+    const rows=[];let current='',inQ=false;const chars=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n');let row=[];
+    for(let i=0;i<chars.length;i++){
+        const c=chars[i];
+        if(inQ){if(c==='"'&&chars[i+1]==='"'){current+='"';i++;}else if(c==='"'){inQ=false;}else{current+=c;}}
+        else{if(c==='"'){inQ=true;}else if(c===','){row.push(current.trim());current='';}else if(c==='\n'){row.push(current.trim());if(row.some(v=>v))rows.push(row);row=[];current='';}else{current+=c;}}
+    }
+    if(current||row.length){row.push(current.trim());if(row.some(v=>v))rows.push(row);}
+    if(rows.length<4)return[];
+    const headers=rows[2];
+    return rows.slice(3).filter(r=>r[0]&&r[1]).map(r=>{const obj={};headers.forEach((h,i)=>{obj[h]=r[i]||'';});return obj;});
+}
+function loadActivitiesCache(){
+    try{const c=JSON.parse(localStorage.getItem(ACT_CACHE_KEY));
+    if(c&&Date.now()-c.ts<ACT_CACHE_TTL){activitiesDB=c.data;return true;}}catch(e){}return false;
+}
+function saveActivitiesCache(){try{localStorage.setItem(ACT_CACHE_KEY,JSON.stringify({data:activitiesDB,ts:Date.now()}));}catch(e){}}
+async function fetchActivities(){
+    const keys=Object.keys(ACT_TABS);
+    const results=await Promise.allSettled(keys.map(k=>{
+        const url=`${ACTIVITIES_SHEET}?gid=${ACT_TABS[k].gid}&single=true&output=csv&_=${Date.now()}`;
+        return fetch(url).then(r=>r.ok?r.text():Promise.reject(r.status));
+    }));
+    let ok=false;
+    results.forEach((r,i)=>{if(r.status==='fulfilled'){activitiesDB[keys[i]]=parseActivitiesCSV(r.value);ok=true;}});
+    if(ok)saveActivitiesCache();
+    return ok;
+}
+function getActivitiesForDest(destId){
+    const key=ACT_DEST_MAP[destId];
+    return key?activitiesDB[key]||[]:[];
+}
+function getActivityCategories(destId){
+    const acts=getActivitiesForDest(destId);
+    const cats={};
+    acts.forEach(a=>{const c=a['Category']||'';if(c){if(!cats[c])cats[c]=0;cats[c]++;}});
+    return Object.entries(cats).map(([name,count])=>({name,count,style:ACT_CAT_STYLE[name]||{he:name,icon:'📍',grad:'linear-gradient(135deg,#8E8E93,#AEAEB2)'}}));
+}
+function countRomanticHearts(s){return(s||'').split('❤').length-1;}
+function isActivitySaved(actName,destId){
+    const notes=getNotesForDest(destId);
+    return notes.some(n=>n['Title']===actName);
 }
 
 // ==================== HELPERS ====================
@@ -738,6 +853,7 @@ function renderApp(){
     setTimeout(()=>{
         if(currentView==='home')renderMarketplace();
         else if(currentView==='space')renderSpace(currentSpaceId);
+        else if(currentView==='activityList')renderActivityList();
         else if(currentView==='section')renderSection(currentSection);
         updateHeader();updateNav();
         main.classList.remove('fading');
@@ -748,6 +864,7 @@ function updateHeader(){
     const back=document.getElementById('hdr-back'),title=document.getElementById('hdr-title');
     if(currentView==='home'){back.style.display='none';title.textContent='🇵🇭 הטיול של תום ודני';}
     else if(currentView==='space'){back.style.display='flex';title.textContent=DEST_MAP[currentSpaceId]?.name||'';}
+    else if(currentView==='activityList'){back.style.display='flex';const cs=ACT_CAT_STYLE[actCurrentCat];title.textContent=(cs?cs.icon+' ':'')+DEST_MAP[actCurrentDest]?.name||'';}
     else{
         back.style.display='flex';
         const names={flights:'כל הטיסות',hotels:'כל המלונות',expenses:'הוצאות',tasks:'משימות',packing:'ציוד',converter:'המרת מטבע',emergency:'חירום',links:'קישורים'};
@@ -913,6 +1030,22 @@ function renderSpace(destId){
         }).join('');
     } else { html+=`<div class="empty"><div class="empty-icon">✨</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">עדיין לא הוספתם המלצות</div>מסעדות, אטרקציות, ביקורים חובה<br>הכל במקום אחד כדי לא לשכוח</div>`; }
     html+=`<button class="btn-secondary" onclick="openNoteSheet('${destId}')" style="margin-top:12px">+ הוספת המלצה</button></div>`;
+
+    // Activity Discovery
+    if(ACT_DEST_MAP[destId]){
+        const cats=getActivityCategories(destId);
+        if(cats.length){
+            html+=`<div class="section-subtitle">🏝️ מה עושים ב${esc(dest.name)}?</div><div class="act-grid">`;
+            cats.forEach(c=>{
+                html+=`<div class="act-cat-card" style="background:${c.style.grad}" onclick="openActivityList('${destId}','${c.name}')">
+                    <div class="act-cat-icon">${c.style.icon}</div>
+                    <div class="act-cat-name">${esc(c.style.he)}</div>
+                    <div class="act-cat-count">(${c.count} אפשרויות)</div>
+                </div>`;
+            });
+            html+=`</div>`;
+        }
+    }
 
     // Local budget
     html+=`<div class="section-subtitle">💰 הוצאות ב${esc(dest.name)}</div><div class="section" style="padding-top:0">`;
@@ -1579,6 +1712,105 @@ async function deleteNoteItem(row,destId){
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteNote',data:{row}})});}catch(e){}
 }
 
+// ==================== ACTIVITIES ====================
+function openActivityList(destId,cat){
+    viewHistory.push({v:currentView,s:currentSpaceId,sec:currentSection});
+    actCurrentDest=destId;actCurrentCat=cat;actFilter='all';
+    currentView='activityList';currentSpaceId=null;currentSection=null;
+    renderApp();
+}
+function renderActivityList(){
+    const main=document.getElementById('main');
+    const dest=DEST_MAP[actCurrentDest];
+    const cs=ACT_CAT_STYLE[actCurrentCat]||{he:actCurrentCat,icon:'📍',grad:''};
+    let acts=getActivitiesForDest(actCurrentDest).filter(a=>a['Category']===actCurrentCat);
+    if(actFilter==='romantic')acts=acts.filter(a=>countRomanticHearts(a['Romantic ❤️'])>=4);
+    else if(actFilter==='free')acts=acts.filter(a=>{const c=(a['Cost Display']||a['Cost (USD)']||'').toLowerCase();return c.includes('free')||c.includes('$0')||c.startsWith('~$0');});
+    else if(actFilter==='half')acts=acts.filter(a=>(a['Duration']||'').toLowerCase().includes('half')||(a['Duration']||'').includes('2–3')||(a['Duration']||'').includes('1–2'));
+    const total=getActivitiesForDest(actCurrentDest).filter(a=>a['Category']===actCurrentCat).length;
+    let html=`<div class="act-list-hdr"><div class="act-list-title">${cs.icon} ${esc(cs.he)} ב${esc(dest?.name||'')}</div><div class="act-list-count">${total} אפשרויות</div></div>`;
+    html+=`<div class="act-filters">
+        <button class="act-fil${actFilter==='all'?' active':''}" onclick="actFilter='all';renderActivityList()">הכל</button>
+        <button class="act-fil${actFilter==='romantic'?' active':''}" onclick="actFilter='romantic';renderActivityList()">רומנטי ❤️</button>
+        <button class="act-fil${actFilter==='free'?' active':''}" onclick="actFilter='free';renderActivityList()">חינם</button>
+        <button class="act-fil${actFilter==='half'?' active':''}" onclick="actFilter='half';renderActivityList()">חצי יום</button>
+    </div>`;
+    if(acts.length){
+        acts.forEach((a,i)=>{
+            const hearts=countRomanticHearts(a['Romantic ❤️']);
+            const saved=isActivitySaved(a['Name'],actCurrentDest);
+            html+=`<div class="act-card" onclick="openActivityDetail(${i})">
+                <button class="act-save ${saved?'saved':''}" onclick="event.stopPropagation();saveActivityToPicks(${i})" title="שמירה">❤️</button>
+                <div class="act-card-name">${esc(a['Name'])}</div>
+                <div class="act-card-desc">${esc(a['Description'])}</div>
+                <div class="act-card-meta">
+                    ${a['Cost Display']?`<span class="act-chip">💰 ${esc(a['Cost Display'])}</span>`:''}
+                    ${a['Duration']?`<span class="act-chip">⏱️ ${esc(a['Duration'])}</span>`:''}
+                    ${hearts?`<span class="act-hearts">${'❤️'.repeat(hearts)}</span>`:''}
+                </div>
+            </div>`;
+        });
+    } else {
+        html+=`<div class="empty"><div class="empty-icon">${cs.icon}</div>אין תוצאות בסינון הנוכחי<br><span style="font-size:12px">נסו לבחור סינון אחר</span></div>`;
+    }
+    main.innerHTML=html;
+}
+function openActivityDetail(idx){
+    const acts=getActivitiesForDest(actCurrentDest).filter(a=>a['Category']===actCurrentCat);
+    if(actFilter==='romantic')var filtered=acts.filter(a=>countRomanticHearts(a['Romantic ❤️'])>=4);
+    else if(actFilter==='free')var filtered=acts.filter(a=>{const c=(a['Cost Display']||a['Cost (USD)']||'').toLowerCase();return c.includes('free')||c.includes('$0')||c.startsWith('~$0');});
+    else if(actFilter==='half')var filtered=acts.filter(a=>(a['Duration']||'').toLowerCase().includes('half')||(a['Duration']||'').includes('2–3')||(a['Duration']||'').includes('1–2'));
+    else var filtered=acts;
+    const a=filtered[idx];if(!a)return;
+    const cs=ACT_CAT_STYLE[a['Category']]||{he:a['Category'],icon:'📍',grad:'linear-gradient(135deg,#8E8E93,#AEAEB2)'};
+    const hearts=countRomanticHearts(a['Romantic ❤️']);
+    const saved=isActivitySaved(a['Name'],actCurrentDest);
+    const tags=(a['Tags']||'').split(',').map(t=>t.trim()).filter(Boolean);
+    const tips=a['Notes / Tips']||'';
+    const maps=a['Google Maps']||'';
+    const booking=a['Booking / Website']||'';
+    const contact=a['Contact']||'';
+    const hasContact=contact&&contact!=='—'&&contact!=='—';
+
+    let html=`<div class="act-detail">
+        <div class="act-detail-name">${esc(a['Name'])}</div>
+        <div class="act-detail-pill" style="background:${cs.grad}">${cs.icon} ${esc(cs.he)}</div>
+        <div class="act-detail-desc">${esc(a['Description'])}</div>
+        <div class="act-detail-chips">
+            ${a['Cost Display']?`<div class="act-detail-chip">💰 ${esc(a['Cost Display'])}</div>`:''}
+            ${a['Duration']?`<div class="act-detail-chip">⏱️ ${esc(a['Duration'])}</div>`:''}
+            ${a['Best Time']?`<div class="act-detail-chip">🕐 ${esc(a['Best Time'])}</div>`:''}
+            ${hearts?`<div class="act-detail-chip">❤️ ${hearts}/5 רומנטי</div>`:''}
+        </div>
+        ${tips?`<div class="act-tips"><div class="act-tips-title">💡 טיפים</div>${esc(tips)}</div>`:''}
+        ${tags.length?`<div class="act-tags">${tags.map(t=>`<span class="act-tag">${esc(t)}</span>`).join('')}</div>`:''}
+        <div class="act-actions">
+            <button class="act-btn act-btn-save ${saved?'saved':''}" onclick="saveActivityToPicks(${idx});this.classList.add('saved');this.innerHTML='✓ ברשימה'">${saved?'✓ ברשימה':'❤️ שמירה לרשימה'}</button>
+            <div class="act-btn-row">
+                ${maps?`<a href="${esc(maps)}" target="_blank" class="act-btn" style="text-decoration:none">🗺️ ניווט</a>`:''}
+                ${booking?`<a href="${esc(booking)}" target="_blank" class="act-btn" style="text-decoration:none">🔗 הזמנה / אתר</a>`:''}
+                ${hasContact?`<a href="tel:${esc(contact)}" class="act-btn" style="text-decoration:none">📞 יצירת קשר</a>`:''}
+            </div>
+        </div>
+    </div>`;
+    openSheet(a['Name'],html);
+}
+async function saveActivityToPicks(idx){
+    const acts=getActivitiesForDest(actCurrentDest).filter(a=>a['Category']===actCurrentCat);
+    if(actFilter==='romantic')var filtered=acts.filter(a=>countRomanticHearts(a['Romantic ❤️'])>=4);
+    else if(actFilter==='free')var filtered=acts.filter(a=>{const c=(a['Cost Display']||a['Cost (USD)']||'').toLowerCase();return c.includes('free')||c.includes('$0')||c.startsWith('~$0');});
+    else if(actFilter==='half')var filtered=acts.filter(a=>(a['Duration']||'').toLowerCase().includes('half')||(a['Duration']||'').includes('2–3')||(a['Duration']||'').includes('1–2'));
+    else var filtered=acts;
+    const a=filtered[idx];if(!a)return;
+    if(isActivitySaved(a['Name'],actCurrentDest)){showToast('כבר ברשימה','✓');return;}
+    const desc=[(a['Cost Display']||''),(a['Duration']||''),((a['Description']||'').substring(0,100))].filter(Boolean).join(' | ');
+    const note={DestinationID:actCurrentDest,Category:'Visit',Title:a['Name'],Link:a['Google Maps']||'',Description:desc,Done:'FALSE',ID:Date.now().toString(36)};
+    if(!DB.notes)DB.notes=[];DB.notes.push(note);setCooldown('notes');saveCache();
+    showToast('נשמר לרשימה ❤️','❤️');
+    renderActivityList();
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addNote',data:note})});}catch(e){}
+}
+
 // ==================== SYNC & REFRESH ====================
 async function refreshData(showIndicator){
     const refreshBtn=document.querySelector('.hdr-refresh');
@@ -1587,6 +1819,7 @@ async function refreshData(showIndicator){
     if(success){
         if(currentView==='home')renderMarketplace();
         else if(currentView==='space')renderSpace(currentSpaceId);
+        else if(currentView==='activityList')renderActivityList();
         else if(currentView==='section')renderSection(currentSection);
     }
     if(showIndicator){
@@ -1606,11 +1839,13 @@ async function fetchRates(){
 // ==================== INIT ====================
 async function init(){
     const hadCache=loadCache();
+    const hadActCache=loadActivitiesCache();
     if(hadCache)renderMarketplace();
     else document.getElementById('main').innerHTML='<div class="loading" style="padding-top:80px"><div class="spinner"></div><div>טוענים את הטיול...</div></div>';
     await Promise.all([fetchRates(),fetchWeather()]);
     const success=await fetchAllData();
     if(success||hadCache){renderApp();}
+    if(!hadActCache)fetchActivities();
 }
 init();
 </script>
