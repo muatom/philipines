@@ -188,6 +188,25 @@ a{color:var(--blue);text-decoration:none}
 .pace-banner.o{background:rgba(255,149,0,.12);color:var(--orange)}
 .pace-banner.r{background:rgba(255,59,48,.12);color:var(--red)}
 
+/* ========== CASH WALLET ========== */
+.wallet-card{background:linear-gradient(135deg,rgba(52,199,89,.08),rgba(48,176,199,.06));border:1px solid rgba(52,199,89,.18);border-radius:var(--r-l);padding:16px 18px;margin-bottom:14px;box-shadow:var(--sh-1)}
+.wallet-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.wallet-title{font-size:13px;font-weight:600;color:var(--text-2);letter-spacing:.2px}
+.wallet-bal{font-size:28px;font-weight:800;letter-spacing:-.8px;color:var(--green)}
+.wallet-bal-sub{font-size:13px;color:var(--text-3);font-weight:500;margin-top:2px;margin-bottom:14px}
+.wallet-btns{display:flex;gap:8px}
+.wallet-btn{flex:1;padding:11px;background:var(--card);border:1px solid var(--separator-s);border-radius:var(--r-m);font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:.2s}
+.wallet-btn:active{transform:scale(.97);background:var(--gray-6)}
+.wallet-btn-alt{background:rgba(0,122,255,.08);color:var(--blue);border-color:transparent}
+.wallet-empty .wallet-bal,.wallet-empty .wallet-bal-sub{display:none}
+.wallet-empty-msg{font-size:13px;color:var(--text-3);line-height:1.5;margin:4px 0 14px}
+.cw-hint{font-size:13px;color:var(--text-3);background:var(--gray-6);padding:10px 14px;border-radius:var(--r-m);margin-bottom:12px;line-height:1.5}
+.cw-big{font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:6px;text-align:center}
+.cw-expected{font-size:13px;color:var(--text-3);text-align:center;margin-bottom:14px}
+.cw-expected b{color:var(--text);font-weight:600}
+.cw-big-input{font-size:28px;font-weight:700;text-align:center;padding:14px}
+.cw-note{font-size:12px;color:var(--text-3);line-height:1.5;margin:8px 0 12px;padding:10px 14px;background:rgba(255,204,0,.08);border-radius:var(--r-m)}
+
 /* ========== CATEGORY BREAKDOWN ========== */
 .cat-bd-card{background:var(--card);border-radius:var(--r-l);padding:16px;margin-bottom:14px;box-shadow:var(--sh-1)}
 .cat-bd-title{font-size:12px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px}
@@ -214,6 +233,11 @@ a{color:var(--blue);text-decoration:none}
 .tx-desc{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
 .tx-meta{font-size:11px;color:var(--text-3);margin-top:1px}
 .tx-tag{font-size:9px;padding:1px 6px;border-radius:5px;font-weight:600;background:var(--gray-6);color:var(--text-3);flex-shrink:0}
+.tx-tag-cw{background:rgba(48,176,199,.18);color:#30B0C7}
+.tx-pay{font-size:12px;opacity:.6;margin-left:2px}
+.tx-cw{opacity:.75}
+.tx-cw .tx-desc{font-style:italic}
+.tx-cw .tx-amt{color:var(--text-2);font-weight:600}
 .tx-right{text-align:left;flex:0 0 auto}
 .tx-amt{font-size:15px;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
 .tx-ils{font-size:11px;color:var(--text-3);margin-top:1px;white-space:nowrap}
@@ -245,6 +269,10 @@ a{color:var(--blue);text-decoration:none}
 .seg{display:flex;gap:6px;background:var(--gray-6);border-radius:var(--r-m);padding:4px}
 .seg-btn{flex:1;padding:10px;border:none;border-radius:10px;background:none;font-size:13px;font-weight:500;cursor:pointer;color:var(--text-2);transition:.2s}
 .seg-btn.active{background:var(--card);color:var(--text);font-weight:600;box-shadow:var(--sh-1)}
+.form-label-sub{font-size:11px;color:var(--text-3);font-weight:500;margin-right:4px}
+.pay-row{display:flex;gap:8px;margin-bottom:14px}
+.pay-btn{flex:1;padding:12px;border:1.5px solid var(--gray-5);border-radius:var(--r-m);background:var(--card);font-size:14px;font-weight:500;cursor:pointer;color:var(--text-2);transition:.2s}
+.pay-btn.active{border-color:var(--blue);background:rgba(0,122,255,.08);color:var(--blue);font-weight:600}
 
 .btn-primary{width:100%;padding:15px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-m);font-size:16px;font-weight:600;cursor:pointer;transition:.2s;min-height:50px;margin-top:16px}
 .btn-primary:active{transform:scale(.98);opacity:.9}
@@ -689,7 +717,7 @@ const ALL_CATS = [
     {id:'ביורוקרטיה',icon:'📋',label:'ביורוקרטיה',color:'#FF2D55'},
 ];
 const CAT_MAP = {}; ALL_CATS.forEach(c => CAT_MAP[c.id] = c);
-let expFilter = 'all', editExpIdx = null, selCat = 'אוכל', selWho = 'Both';
+let expFilter = 'all', editExpIdx = null, selCat = 'אוכל', selWho = 'Both', selPay = '';
 let currentPackWho = 'all';
 let packSelCat = 'שונות', packSelWho = 'Shared', packSelCrit = false, editPackRow = null;
 const LINK_CATS = [
@@ -821,7 +849,8 @@ function parseExp(e,idx){
     const a=parsePriceNum(e['Amount']),c=e['Currency']||'ILS',cat=e['Category']||'',type=e['Type']||getExpType(cat);
     let ils=parsePriceNum(e['ILS_Amount']),usd=parsePriceNum(e['USD_Amount']),php=parsePriceNum(e['PHP_Amount']);
     if(!ils&&a)ils=convertToILS(a,c);if(!usd&&a)usd=convertFromILS(convertToILS(a,c),'USD');if(!php&&a)php=convertFromILS(convertToILS(a,c),'PHP');
-    return{idx,desc:e['Description']||'',amount:a,currency:c,cat,type,who:e['Who']||'',date:e['Date']||'',ils,usd,php};
+    const pay=(e['PaymentMethod']||'').toLowerCase();
+    return{idx,desc:e['Description']||'',amount:a,currency:c,cat,type,who:e['Who']||'',date:e['Date']||'',ils,usd,php,pay};
 }
 function showToast(m,icon='✓'){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;document.getElementById('toast-ic').textContent=icon;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 function todayStr(){const d=new Date();return`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;}
@@ -1278,6 +1307,8 @@ function renderExpensesSection(){
         <div class="ins-row" id="bs-insights"></div>
         <!-- PACE BANNER -->
         <div id="bs-pace"></div>
+        <!-- CASH WALLET WIDGET -->
+        <div id="bs-wallet"></div>
         <!-- CATEGORY BREAKDOWN -->
         <div id="bs-cats"></div>
         <!-- TRANSACTIONS -->
@@ -1287,6 +1318,16 @@ function renderExpensesSection(){
     </div>
     <button class="fab" onclick="openExpenseSheet()" title="הוצאה חדשה">+</button>`;
     renderBudgetData();
+}
+function computeCashBalance(all){
+    // Sum of withdrawals (Type=cash_withdrawal) minus sum of cash-tagged expenses. Values in PHP.
+    const withdrawals=all.filter(e=>e.type==='cash_withdrawal');
+    const cashExp=all.filter(e=>e.type!=='cash_withdrawal'&&e.pay==='cash');
+    const phpIn=withdrawals.reduce((s,e)=>s+e.php,0);
+    const phpOut=cashExp.reduce((s,e)=>s+e.php,0);
+    const balancePHP=Math.max(0,phpIn-phpOut);
+    const balanceILS=convertToILS(balancePHP,'PHP');
+    return{balancePHP,balanceILS,withdrawalCount:withdrawals.length,cashExpCount:cashExp.length};
 }
 function computeTripPace(onTrip){
     // dailyBudget = BUDGET_LIMIT / total trip days; dailyAverage = on-trip spent / days elapsed
@@ -1311,6 +1352,7 @@ function computeTripPace(onTrip){
 }
 function renderBudgetData(){
     const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
+    // Cash withdrawals are transfers, not spending — excluded from budget totals
     const onTrip=all.filter(e=>e.type==='on'),preTrip=all.filter(e=>e.type==='pre');
     const onILS=onTrip.reduce((s,e)=>s+e.ils,0),onUSD=onTrip.reduce((s,e)=>s+e.usd,0);
     let flILS=0,htILS=0;
@@ -1345,6 +1387,31 @@ function renderBudgetData(){
         else if(p.pace==='under')pb.innerHTML=`<div class="pace-banner g">✅ מתחת לקצב — בכיוון הנכון!</div>`;
         else if(p.pace==='at')pb.innerHTML=`<div class="pace-banner o">⚠️ בקצב — שימו לב</div>`;
         else pb.innerHTML=`<div class="pace-banner r">🔴 מעל הקצב! ממוצע יומי גבוה מהתקציב</div>`;
+    }
+
+    // CASH WALLET WIDGET
+    const wallet=document.getElementById('bs-wallet');
+    if(wallet){
+        const cb=computeCashBalance(all);
+        if(cb.withdrawalCount>0||cb.cashExpCount>0){
+            wallet.innerHTML=`<div class="wallet-card">
+                <div class="wallet-hdr"><span class="wallet-title">💵 ארנק מזומן</span></div>
+                <div class="wallet-bal">${fmtMoney(cb.balancePHP,'PHP')}</div>
+                <div class="wallet-bal-sub">≈ ${fmtMoney(cb.balanceILS,'ILS')}</div>
+                <div class="wallet-btns">
+                    <button class="wallet-btn" onclick="openCashWithdrawSheet()">🏧 משיכת מזומן</button>
+                    <button class="wallet-btn wallet-btn-alt" onclick="openCashReconcileSheet()">📝 עדכון יתרה</button>
+                </div>
+            </div>`;
+        } else {
+            wallet.innerHTML=`<div class="wallet-card wallet-empty">
+                <div class="wallet-hdr"><span class="wallet-title">💵 ארנק מזומן</span></div>
+                <div class="wallet-empty-msg">עקבו אחרי המזומן בקלות — משיכות, תשלומים ויתרה מעודכנת</div>
+                <div class="wallet-btns">
+                    <button class="wallet-btn" onclick="openCashWithdrawSheet()">🏧 משיכת מזומן ראשונה</button>
+                </div>
+            </div>`;
+        }
     }
 
     // CATEGORY BREAKDOWN (horizontal bar chart, on-trip only, sorted desc)
@@ -1384,15 +1451,20 @@ function renderBudgetData(){
     if(!list)return;
     if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">💰</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין הוצאות עדיין</div>הוצאה ראשונה מתחילה בכפתור ה+</div>';return;}
     list.innerHTML=`<div class="tx-list">`+shown.map((e,i)=>{
+        const isCW=e.type==='cash_withdrawal';
         const c=CAT_MAP[e.cat],bg=c?c.color+'22':'var(--gray-6)';
         const isILS=e.currency==='ILS';
         const primary=fmtMoney(e.amount,e.currency);
         const ilsBelow=isILS?'':`<div class="tx-ils">${fmtMoney(e.ils,'ILS')}</div>`;
-        return`<div class="tx-wrap"><div class="tx-card" onclick="toggleTxDet(${i})">
+        const payIc=isCW?'🏧':(e.pay==='cash'?'💵':e.pay==='card'?'💳':'');
+        const tags=[];
+        if(e.type==='pre')tags.push('<span class="tx-tag">מוקדמת</span>');
+        if(isCW)tags.push('<span class="tx-tag tx-tag-cw">משיכה</span>');
+        return`<div class="tx-wrap${isCW?' tx-cw':''}"><div class="tx-card" onclick="toggleTxDet(${i})">
             <div class="tx-left">
-                <div class="tx-ic" style="background:${bg};color:${c?c.color:'var(--text-2)'}">${c?c.icon:'📦'}</div>
+                <div class="tx-ic" style="background:${bg};color:${c?c.color:'var(--text-2)'}">${isCW?'🏧':(c?c.icon:'📦')}</div>
                 <div class="tx-info">
-                    <div class="tx-desc">${esc(e.desc)}${e.type==='pre'?'<span class="tx-tag">מוקדמת</span>':''}</div>
+                    <div class="tx-desc">${payIc?`<span class="tx-pay">${payIc}</span>`:''}${esc(e.desc)}${tags.join('')}</div>
                     <div class="tx-meta">${esc(e.date)}</div>
                 </div>
             </div>
@@ -1420,6 +1492,7 @@ function openExpenseSheet(editIdx){
     // Remember last "Who" selection
     const lastWho=localStorage.getItem('ph-last-who')||'Both';
     selWho=e?(e['Who']||'Both'):lastWho;
+    selPay=e?((e['PaymentMethod']||'').toLowerCase()):'';
     // Smart currency default: PHP during trip, ILS before
     const now=new Date(),tripStarted=now>=new Date(DESTS[0].start),tripEnded=now>new Date(DESTS[DESTS.length-1].end);
     const lastCur=localStorage.getItem('ph-last-cur')||(tripStarted&&!tripEnded?'PHP':'ILS');
@@ -1447,6 +1520,11 @@ function openExpenseSheet(editIdx){
             <button type="button" class="seg-btn ${selWho==='Tom'?'active':''}" onclick="pickWho(this,'Tom')">👤 תום</button>
             <button type="button" class="seg-btn ${selWho==='Daniella'?'active':''}" onclick="pickWho(this,'Daniella')">👤 דני</button>
         </div>
+        <div class="form-label">אמצעי תשלום <span class="form-label-sub">(אופציונלי)</span></div>
+        <div class="pay-row">
+            <button type="button" class="pay-btn ${selPay==='card'?'active':''}" onclick="pickPay(this,'card')">💳 כרטיס</button>
+            <button type="button" class="pay-btn ${selPay==='cash'?'active':''}" onclick="pickPay(this,'cash')">💵 מזומן</button>
+        </div>
         <button class="btn-primary" onclick="submitExp()">${e?'שמירת שינויים':'+ הוספת הוצאה'}</button>
         ${e?'<button class="btn-destructive" onclick="deleteExp('+editIdx+');closeSheet()">מחיקת הוצאה</button>':''}
     `;
@@ -1459,6 +1537,11 @@ function openExpenseSheet(editIdx){
 }
 function pickCat(btn,id){selCat=id;document.querySelectorAll('#sheet-body .cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 function pickWho(btn,w){selWho=w;document.querySelectorAll('#sheet-body .seg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function pickPay(btn,p){
+    // Toggle: tap same to deselect (unset)
+    if(selPay===p){selPay='';btn.classList.remove('active');return;}
+    selPay=p;document.querySelectorAll('#sheet-body .pay-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+}
 function updateExpConv(){
     const a=parseFloat(document.getElementById('ea-amt').value),c=document.getElementById('ea-cur').value,el=document.getElementById('ea-conv');
     if(!el)return;
@@ -1474,7 +1557,7 @@ async function submitExp(){
     try{localStorage.setItem('ph-last-who',selWho);localStorage.setItem('ph-last-cur',c);}catch(err){}
     const dateF=dt?new Date(dt).toLocaleDateString('en-GB'):todayStr();
     const type=getExpType(selCat),locked=lockRates(a,c);
-    const exp={Date:dateF,Description:desc,Amount:a,Currency:c,Category:selCat,Who:selWho,Type:type,...locked,Origin_Cur:c};
+    const exp={Date:dateF,Description:desc,Amount:a,Currency:c,Category:selCat,Who:selWho,Type:type,...locked,Origin_Cur:c,PaymentMethod:selPay||''};
     if(!DB.expenses)DB.expenses=[];
     if(editExpIdx!==null){
         exp.Origin_Cur=DB.expenses[editExpIdx]['Origin_Cur']||DB.expenses[editExpIdx]['Currency']||c;
@@ -1487,6 +1570,103 @@ async function submitExp(){
     }
 }
 async function deleteExp(idx){if(!confirm('למחוק את ההוצאה?'))return;DB.expenses.splice(idx,1);setCooldown('expenses');saveCache();renderBudgetData();showToast('ההוצאה נמחקה','🗑️');try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteExpense',data:{row:idx+2}})});}catch(e){}}
+
+// ==================== CASH WALLET ====================
+function openCashWithdrawSheet(){
+    const lastCur=localStorage.getItem('ph-wallet-cur')||'PHP';
+    const today=new Date().toISOString().split('T')[0];
+    const html=`
+        <div class="cw-hint">הוסיפו משיכה מהכספומט. היתרה תעודכן אוטומטית — אין השפעה על התקציב.</div>
+        <div class="input-row">
+            <input type="number" class="input amt" id="cw-amt" placeholder="0" inputmode="decimal">
+            <select class="input cur" id="cw-cur">
+                <option value="PHP" ${lastCur==='PHP'?'selected':''}>₱ PHP</option>
+                <option value="USD" ${lastCur==='USD'?'selected':''}>$ USD</option>
+                <option value="ILS" ${lastCur==='ILS'?'selected':''}>₪ ILS</option>
+            </select>
+        </div>
+        <div class="conv-hint" id="cw-conv"></div>
+        <input type="date" class="input dt" id="cw-date" value="${today}">
+        <button class="btn-primary" onclick="submitCashWithdraw()">🏧 הוספת משיכה</button>
+    `;
+    openSheet('משיכת מזומן',html);
+    setTimeout(()=>{
+        const a=document.getElementById('cw-amt'),c=document.getElementById('cw-cur');
+        const upd=()=>{const v=parseFloat(a.value),cc=c.value,el=document.getElementById('cw-conv');if(!el)return;if(!v||!exchangeRates){el.textContent='';return;}const l=lockRates(v,cc),parts=[];if(cc!=='ILS')parts.push(fmtMoney(l.ILS_Amount,'ILS'));if(cc!=='USD')parts.push(fmtMoney(l.USD_Amount,'USD'));if(cc!=='PHP')parts.push(fmtMoney(l.PHP_Amount,'PHP'));el.textContent='≈ '+parts.join(' · ');};
+        if(a){a.addEventListener('input',upd);a.focus();}
+        if(c)c.addEventListener('change',upd);
+    },100);
+}
+async function submitCashWithdraw(){
+    const a=parseFloat(document.getElementById('cw-amt').value),c=document.getElementById('cw-cur').value,dt=document.getElementById('cw-date').value;
+    if(!a||a<=0){showToast('נדרש סכום','⚠️');return;}
+    try{localStorage.setItem('ph-wallet-cur',c);}catch(err){}
+    const dateF=dt?new Date(dt).toLocaleDateString('en-GB'):todayStr();
+    const locked=lockRates(a,c);
+    const exp={Date:dateF,Description:'משיכת מזומן מכספומט',Amount:a,Currency:c,Category:'משיכת מזומן',Who:'Both',Type:'cash_withdrawal',...locked,Origin_Cur:c,PaymentMethod:''};
+    if(!DB.expenses)DB.expenses=[];
+    DB.expenses.push(exp);setCooldown('expenses');saveCache();closeSheet();renderBudgetData();showToast(`נרשמה משיכה של ${fmtMoney(a,c)} 🏧`,'💵');
+    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){}
+}
+function openCashReconcileSheet(){
+    const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
+    const cb=computeCashBalance(all);
+    const lastCur=localStorage.getItem('ph-wallet-cur')||'PHP';
+    const expectedInCur=lastCur==='PHP'?cb.balancePHP:lastCur==='ILS'?cb.balanceILS:convertFromILS(cb.balanceILS,'USD');
+    const html=`
+        <div class="cw-big">כמה מזומן יש לכם עכשיו?</div>
+        <div class="cw-expected">יתרה צפויה: <b>${fmtMoney(expectedInCur,lastCur)}</b></div>
+        <div class="input-row">
+            <input type="number" class="input amt cw-big-input" id="cr-amt" placeholder="0" inputmode="decimal">
+            <select class="input cur" id="cr-cur">
+                <option value="PHP" ${lastCur==='PHP'?'selected':''}>₱ PHP</option>
+                <option value="USD" ${lastCur==='USD'?'selected':''}>$ USD</option>
+                <option value="ILS" ${lastCur==='ILS'?'selected':''}>₪ ILS</option>
+            </select>
+        </div>
+        <div class="cw-note">אם חסר כסף — ההפרש יירשם כ"הוצאות מזומן כלליות". אם יש עודף — היתרה פשוט תעודכן.</div>
+        <button class="btn-primary" onclick="submitCashReconcile()">עדכון</button>
+    `;
+    openSheet('עדכון יתרת מזומן',html);
+    setTimeout(()=>{const a=document.getElementById('cr-amt');if(a)a.focus();},100);
+}
+async function submitCashReconcile(){
+    const rawNew=parseFloat(document.getElementById('cr-amt').value);
+    if(isNaN(rawNew)||rawNew<0){showToast('נדרש סכום תקין','⚠️');return;}
+    const cur=document.getElementById('cr-cur').value;
+    try{localStorage.setItem('ph-wallet-cur',cur);}catch(err){}
+    const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
+    const cb=computeCashBalance(all);
+    // Convert new balance to PHP for comparison
+    const newPHP=cur==='PHP'?rawNew:cur==='ILS'?convertFromILS(rawNew,'PHP'):convertFromILS(convertToILS(rawNew,'USD'),'PHP');
+    const unaccountedPHP=cb.balancePHP-newPHP;
+    if(unaccountedPHP>0.5){
+        // Create an unaccounted cash expense in the user's input currency for transparency
+        const unaccountedInCur=cur==='PHP'?unaccountedPHP:cur==='ILS'?convertToILS(unaccountedPHP,'PHP'):convertFromILS(convertToILS(unaccountedPHP,'PHP'),'USD');
+        const locked=lockRates(unaccountedInCur,cur);
+        const dateF=todayStr();
+        const exp={Date:dateF,Description:'הוצאות מזומן כלליות',Amount:unaccountedInCur,Currency:cur,Category:'שונות',Who:'Both',Type:'on',...locked,Origin_Cur:cur,PaymentMethod:'cash'};
+        if(!DB.expenses)DB.expenses=[];
+        DB.expenses.push(exp);setCooldown('expenses');saveCache();closeSheet();renderBudgetData();
+        showToast(`נרשמה הוצאה של ${fmtMoney(unaccountedInCur,cur)} שלא דווחה`,'💵');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){}
+    } else {
+        // Balance matches or user has more — silent update (no record to adjust, since withdrawals/expenses are fixed)
+        // We record a zero-sum "adjustment" withdrawal so future reconciliations align.
+        const diffPHP=newPHP-cb.balancePHP;
+        if(diffPHP>0.5){
+            const diffInCur=cur==='PHP'?diffPHP:cur==='ILS'?convertToILS(diffPHP,'PHP'):convertFromILS(convertToILS(diffPHP,'PHP'),'USD');
+            const locked=lockRates(diffInCur,cur);
+            const dateF=todayStr();
+            const exp={Date:dateF,Description:'התאמת יתרת מזומן',Amount:diffInCur,Currency:cur,Category:'משיכת מזומן',Who:'Both',Type:'cash_withdrawal',...locked,Origin_Cur:cur,PaymentMethod:''};
+            if(!DB.expenses)DB.expenses=[];
+            DB.expenses.push(exp);setCooldown('expenses');saveCache();
+            try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){}
+        }
+        closeSheet();renderBudgetData();
+        showToast('היתרה עודכנה','✓');
+    }
+}
 function openBgtModal(){document.getElementById('bgt-modal-inp').value=BUDGET_LIMIT;document.getElementById('bgt-modal').classList.add('open');}
 function closeBgtModal(){document.getElementById('bgt-modal').classList.remove('open');}
 function saveBudget(){const v=parseInt(document.getElementById('bgt-modal-inp').value);if(!v||v<=0)return;BUDGET_LIMIT=v;localStorage.setItem('ph-budget-limit',v);closeBgtModal();renderBudgetData();showToast('התקציב עודכן');}
