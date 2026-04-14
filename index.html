@@ -163,32 +163,69 @@ a{color:var(--blue);text-decoration:none}
 .note-del:active{color:var(--red)}
 
 /* ========== BUDGET / PROGRESS ========== */
-.bgt-card{background:var(--card);border-radius:var(--r-l);padding:20px;margin-bottom:12px;box-shadow:var(--sh-1)}
-.bgt-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.bgt-card{background:var(--card);border-radius:var(--r-l);padding:20px;margin-bottom:14px;box-shadow:var(--sh-1)}
+.bgt-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .bgt-title{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
 .bgt-gear{background:none;border:none;font-size:18px;cursor:pointer;padding:4px;color:var(--text-3)}
-.bgt-amount{display:flex;align-items:baseline;gap:6px;margin-bottom:12px}
-.bgt-spent{font-size:34px;font-weight:800;letter-spacing:-.8px}
+.bgt-amount{display:flex;align-items:baseline;gap:6px;margin-bottom:14px}
+.bgt-spent{font-size:30px;font-weight:800;letter-spacing:-.8px}
 .bgt-limit{font-size:15px;color:var(--text-3);font-weight:500}
-.bgt-bar{height:6px;background:var(--gray-5);border-radius:3px;overflow:hidden}
-.bgt-fill{height:100%;border-radius:3px;transition:width .5s var(--ease);background:var(--green)}
-.bgt-fill.o{background:var(--orange)}.bgt-fill.r{background:var(--red)}
-.bgt-pct{font-size:12px;color:var(--text-3);text-align:left;margin-top:6px;font-weight:500}
-.bgt-warn{background:rgba(255,59,48,.1);border-radius:var(--r-s);padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--red);font-weight:600;text-align:center;display:none}
+.bgt-bar-thin{height:3px;background:var(--gray-5);border-radius:2px;overflow:hidden}
+.bgt-fill-thin{height:100%;border-radius:2px;transition:width .6s var(--ease);background:var(--green)}
+.bgt-fill-thin.g{background:var(--green)}.bgt-fill-thin.o{background:var(--orange)}.bgt-fill-thin.r{background:var(--red)}
+.bgt-remaining{font-size:13px;font-weight:600;margin-top:10px;color:var(--green)}
+.bgt-remaining.o{color:var(--orange)}.bgt-remaining.r{color:var(--red)}
 
-.bgt-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
-.bgt-sum-card{background:var(--card);border-radius:var(--r-m);padding:12px 10px;text-align:center;box-shadow:var(--sh-1)}
-.bgt-sum-lbl{font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
-.bgt-sum-val{font-size:17px;font-weight:700;letter-spacing:-.3px;margin-top:4px}
-.bgt-sum-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+/* ========== INSIGHTS ROW ========== */
+.ins-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.ins-card{background:var(--card);border-radius:var(--r-m);padding:12px 10px;text-align:center;box-shadow:var(--sh-1)}
+.ins-lbl{font-size:10px;color:var(--text-3);font-weight:600;letter-spacing:.2px;line-height:1.3}
+.ins-val{font-size:15px;font-weight:700;letter-spacing:-.3px;margin-top:5px}
+.ins-val.g{color:var(--green)}.ins-val.o{color:var(--orange)}.ins-val.r{color:var(--red)}
+.ins-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+.pace-banner{border-radius:var(--r-m);padding:10px 14px;margin-bottom:14px;font-size:13px;font-weight:600;text-align:center}
+.pace-banner.g{background:rgba(52,199,89,.12);color:var(--green)}
+.pace-banner.o{background:rgba(255,149,0,.12);color:var(--orange)}
+.pace-banner.r{background:rgba(255,59,48,.12);color:var(--red)}
 
-.bgt-chart{background:var(--card);border-radius:var(--r-l);padding:16px;margin-bottom:12px;box-shadow:var(--sh-1)}
-.bgt-chart-title{font-size:12px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
-.bgt-chart-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--gray-5);margin-bottom:10px}
-.bgt-chart-seg{height:100%;min-width:2px}
-.bgt-chart-legend{display:flex;flex-wrap:wrap;gap:6px 14px}
-.bgt-chart-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-2)}
-.bgt-chart-dot{width:8px;height:8px;border-radius:50%}
+/* ========== CATEGORY BREAKDOWN ========== */
+.cat-bd-card{background:var(--card);border-radius:var(--r-l);padding:16px;margin-bottom:14px;box-shadow:var(--sh-1)}
+.cat-bd-title{font-size:12px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px}
+.cat-bd-row{display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:10px;margin-bottom:10px}
+.cat-bd-row:last-child{margin-bottom:0}
+.cat-bd-label{font-size:13px;color:var(--text-2);font-weight:500;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-bd-ic{font-size:14px}
+.cat-bd-track{height:6px;background:var(--gray-5);border-radius:3px;overflow:hidden}
+.cat-bd-fill{height:100%;border-radius:3px;transition:width .5s var(--ease)}
+.cat-bd-amt{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap}
+.cat-bd-pct{font-size:11px;font-weight:500;color:var(--text-3);margin-right:2px}
+
+/* ========== TRANSACTIONS ========== */
+.tx-hdr{display:flex;justify-content:space-between;align-items:center;margin:4px 0 6px;padding:0 2px}
+.tx-title{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
+.tx-list{background:var(--card);border-radius:var(--r-l);overflow:hidden;box-shadow:var(--sh-1);margin-bottom:12px}
+.tx-wrap{border-bottom:.5px solid var(--separator-s)}
+.tx-wrap:last-child{border-bottom:none}
+.tx-card{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;background:var(--card);gap:10px}
+.tx-card:active{background:var(--gray-6)}
+.tx-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.tx-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto}
+.tx-info{min-width:0;flex:1}
+.tx-desc{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.tx-meta{font-size:11px;color:var(--text-3);margin-top:1px}
+.tx-tag{font-size:9px;padding:1px 6px;border-radius:5px;font-weight:600;background:var(--gray-6);color:var(--text-3);flex-shrink:0}
+.tx-right{text-align:left;flex:0 0 auto}
+.tx-amt{font-size:15px;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
+.tx-ils{font-size:11px;color:var(--text-3);margin-top:1px;white-space:nowrap}
+.tx-det{display:none;background:var(--card-2);padding:0 14px;border-top:.5px solid var(--separator-s)}
+.tx-det.open{display:block;padding:10px 14px}
+.tx-det-row{display:flex;gap:8px}
+.tx-edit,.tx-del{flex:1;padding:9px;border:none;border-radius:var(--r-s);font-size:13px;cursor:pointer;font-weight:500}
+.tx-edit{background:rgba(0,122,255,.1);color:var(--blue)}
+.tx-del{background:rgba(255,59,48,.1);color:var(--red)}
+.show-all-btn{width:100%;padding:12px;background:none;border:none;color:var(--blue);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px}
+.show-all-btn:active{opacity:.7}
+
 
 /* ========== FORM COMPONENTS ========== */
 .form-label{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.3px;margin:14px 0 8px}
@@ -219,8 +256,9 @@ a{color:var(--blue);text-decoration:none}
 .sheet-ov.open{opacity:1;pointer-events:auto}
 .bottom-sheet{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:var(--r-xl) var(--r-xl) 0 0;z-index:200;transform:translateY(100%);transition:transform .4s var(--ease);max-height:92vh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -10px 40px rgba(0,0,0,.15)}
 .bottom-sheet.open{transform:translateY(0)}
-.sheet-handle{width:40px;height:5px;background:var(--gray-4);border-radius:3px;margin:10px auto 4px;cursor:grab}
-.sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 14px;border-bottom:.5px solid var(--separator-s)}
+.sheet-handle{width:40px;height:5px;background:var(--gray-4);border-radius:3px;margin:10px auto 4px;cursor:grab;touch-action:none}
+.sheet-handle:active{cursor:grabbing;background:var(--gray-3)}
+.sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 20px 14px;border-bottom:.5px solid var(--separator-s);touch-action:none}
 .sheet-title{font-size:17px;font-weight:700;letter-spacing:-.2px;flex:1;text-align:center;padding:0 40px}
 .sheet-close{background:var(--gray-6);border:none;width:30px;height:30px;border-radius:50%;font-size:13px;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:600;position:absolute;left:16px;top:22px}
 .sheet-body{flex:1;overflow-y:auto;padding:18px 20px 28px;-webkit-overflow-scrolling:touch}
@@ -242,16 +280,6 @@ a{color:var(--blue);text-decoration:none}
 .exp-amount{text-align:left}
 .exp-primary{font-size:15px;font-weight:700;white-space:nowrap;letter-spacing:-.2px}
 .exp-secondary{font-size:11px;color:var(--text-3);white-space:nowrap;margin-top:1px}
-.exp-detail{display:none;padding:0 16px 14px;background:var(--card-2);border-top:.5px solid var(--separator-s)}
-.exp-detail.open{display:block;padding-top:12px}
-.exp-currencies{display:flex;gap:10px;margin-bottom:10px;direction:ltr}
-.exp-curr{text-align:center;flex:1;background:var(--card);border-radius:var(--r-s);padding:8px}
-.exp-curr-val{font-size:14px;font-weight:700}
-.exp-curr-lbl{font-size:10px;color:var(--text-3);margin-top:1px}
-.exp-actions{display:flex;gap:8px}
-.exp-actions button{flex:1;padding:10px;border:none;border-radius:var(--r-s);font-size:13px;cursor:pointer;font-weight:500}
-.exp-actions .edit{background:rgba(0,122,255,.1);color:var(--blue)}
-.exp-actions .del{background:rgba(255,59,48,.1);color:var(--red)}
 
 /* ========== FILTER PILLS ========== */
 .filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-top:4px}
@@ -415,6 +443,14 @@ html{scroll-behavior:smooth}
 .act-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
 .act-cat-card{aspect-ratio:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--sh-2);transition:transform .2s var(--ease);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3)}
 .act-cat-card:active{transform:scale(.95)}
+.act-cat-card.skeleton{background:linear-gradient(110deg,var(--gray-6) 8%,var(--gray-5) 18%,var(--gray-6) 33%);background-size:200% 100%;animation:skel 1.4s linear infinite;box-shadow:none;cursor:default}
+.act-cat-card.skeleton:active{transform:none}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.act-error{background:var(--card);border-radius:16px;padding:24px 20px;margin:0 16px;text-align:center;box-shadow:var(--sh-1)}
+.act-error-ic{font-size:32px;margin-bottom:8px}
+.act-error-msg{font-size:14px;color:var(--text-2);margin-bottom:14px;font-weight:500}
+.act-error-btn{background:var(--blue);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.act-error-btn:active{transform:scale(.96)}
 .act-cat-icon{font-size:40px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
 .act-cat-name{font-size:15px;font-weight:700;letter-spacing:-.2px}
 .act-cat-count{font-size:11px;opacity:.85;font-weight:500}
@@ -675,6 +711,7 @@ const ACT_CAT_STYLE = {
     'Snorkeling Spots':{he:'שנורקלינג',icon:'🐚',grad:'linear-gradient(135deg,#00B4D8,#90E0EF)'},
 };
 let activitiesDB = {};
+let activitiesLoading = false, activitiesError = false;
 let actCurrentDest = null, actCurrentCat = null, actFilter = 'all';
 const PACK_CATS = [
     {id:'ביגוד',icon:'👕'},{id:'טואלטיקה',icon:'🧴'},{id:'אלקטרוניקה',icon:'🔌'},
@@ -735,6 +772,8 @@ function loadActivitiesCache(){
 }
 function saveActivitiesCache(){try{localStorage.setItem(ACT_CACHE_KEY,JSON.stringify({data:activitiesDB,ts:Date.now()}));}catch(e){}}
 async function fetchActivities(){
+    activitiesLoading=true;activitiesError=false;
+    if(currentView==='space')renderSpace(currentSpaceId);
     const keys=Object.keys(ACT_TABS);
     const results=await Promise.allSettled(keys.map(k=>{
         const url=`${ACTIVITIES_SHEET}?gid=${ACT_TABS[k].gid}&single=true&output=csv&_=${Date.now()}`;
@@ -742,9 +781,12 @@ async function fetchActivities(){
     }));
     let ok=false;
     results.forEach((r,i)=>{if(r.status==='fulfilled'){activitiesDB[keys[i]]=parseActivitiesCSV(r.value);ok=true;}});
+    activitiesLoading=false;activitiesError=!ok;
     if(ok)saveActivitiesCache();
+    if(currentView==='space')renderSpace(currentSpaceId);
     return ok;
 }
+function retryFetchActivities(){if(activitiesLoading)return;fetchActivities();}
 function getActivitiesForDest(destId){
     const key=ACT_DEST_MAP[destId];
     return key?activitiesDB[key]||[]:[];
@@ -783,6 +825,11 @@ function parseExp(e,idx){
 }
 function showToast(m,icon='✓'){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=m;document.getElementById('toast-ic').textContent=icon;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
 function todayStr(){const d=new Date();return`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;}
+// Normalize DD/MM/YYYY to zero-padded form for reliable equality ("4/4/2026" -> "04/04/2026")
+function normDateStr(s){if(!s)return'';const p=String(s).split('/');if(p.length!==3)return s;return`${p[0].padStart(2,'0')}/${p[1].padStart(2,'0')}/${p[2]}`;}
+function isToday(dateStr){return normDateStr(dateStr)===todayStr();}
+// Parse DD/MM/YYYY to Date object for comparisons
+function parseDateDMY(s){if(!s)return null;const p=String(s).split('/');if(p.length!==3)return null;return new Date(parseInt(p[2]),parseInt(p[1])-1,parseInt(p[0]));}
 
 // ==================== BOTTOM SHEET ====================
 function openSheet(title, contentHtml){
@@ -790,17 +837,85 @@ function openSheet(title, contentHtml){
     const sh=document.getElementById('bottom-sheet');
     document.getElementById('sheet-title').textContent=title;
     document.getElementById('sheet-body').innerHTML=contentHtml;
+    sh.style.transform='';sh.style.transition='';
     ov.classList.add('open');
     sh.classList.add('open');
     document.body.style.overflow='hidden';
 }
 function closeSheet(){
+    const sh=document.getElementById('bottom-sheet');
+    sh.style.transform='';sh.style.transition='';
     document.getElementById('sheet-ov').classList.remove('open');
-    document.getElementById('bottom-sheet').classList.remove('open');
+    sh.classList.remove('open');
     document.body.style.overflow='';
     // reset edit states
     editExpIdx=null;editPackRow=null;editLinkRow=null;
 }
+
+// ==================== SWIPE-TO-DISMISS ====================
+(function initSheetSwipe(){
+    let startY=0,startT=0,curY=0,dragging=false,fromHandle=false;
+    const sh=()=>document.getElementById('bottom-sheet');
+    const body=()=>document.getElementById('sheet-body');
+    function onStart(e){
+        const t=e.touches?e.touches[0]:e;
+        const sheet=sh();if(!sheet||!sheet.classList.contains('open'))return;
+        // Only start drag if body is scrolled to top OR grip handle area is touched
+        const b=body();
+        fromHandle=!!e.target.closest('.sheet-handle')||!!e.target.closest('.sheet-hdr');
+        if(!fromHandle&&b&&b.scrollTop>0)return;
+        startY=t.clientY;curY=0;startT=Date.now();dragging=true;
+        sheet.style.transition='none';
+    }
+    function onMove(e){
+        if(!dragging)return;
+        const t=e.touches?e.touches[0]:e;
+        const dy=t.clientY-startY;
+        if(dy<0){curY=0;sh().style.transform='';return;}
+        // If scrolling inside content and not from handle, bail
+        const b=body();
+        if(!fromHandle&&b&&b.scrollTop>0){dragging=false;sh().style.transition='';sh().style.transform='';return;}
+        curY=dy;
+        sh().style.transform=`translateY(${dy}px)`;
+        if(e.cancelable)e.preventDefault();
+    }
+    function onEnd(){
+        if(!dragging)return;
+        const elapsed=Date.now()-startT;
+        const vel=curY/Math.max(elapsed,1);
+        const sheet=sh();
+        sheet.style.transition='transform .3s var(--ease)';
+        if(curY>100||vel>0.6){
+            sheet.style.transform='translateY(100%)';
+            setTimeout(()=>closeSheet(),280);
+        } else {
+            sheet.style.transform='';
+        }
+        dragging=false;curY=0;
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+        const sheet=document.getElementById('bottom-sheet');
+        if(!sheet)return;
+        sheet.addEventListener('touchstart',onStart,{passive:true});
+        sheet.addEventListener('touchmove',onMove,{passive:false});
+        sheet.addEventListener('touchend',onEnd);
+        sheet.addEventListener('touchcancel',onEnd);
+        // Also support mouse for desktop testing
+        sheet.addEventListener('mousedown',e=>{if(e.target.closest('.sheet-handle')||e.target.closest('.sheet-hdr')){onStart(e);const mm=ev=>onMove(ev);const mu=()=>{onEnd();document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);}});
+    });
+    // If document already loaded (fallback)
+    if(document.readyState!=='loading'){
+        setTimeout(()=>{
+            const sheet=document.getElementById('bottom-sheet');
+            if(!sheet)return;
+            sheet.addEventListener('touchstart',onStart,{passive:true});
+            sheet.addEventListener('touchmove',onMove,{passive:false});
+            sheet.addEventListener('touchend',onEnd);
+            sheet.addEventListener('touchcancel',onEnd);
+            sheet.addEventListener('mousedown',e=>{if(e.target.closest('.sheet-handle')||e.target.closest('.sheet-hdr')){onStart(e);const mm=ev=>onMove(ev);const mu=()=>{onEnd();document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);}});
+        },0);
+    }
+})();
 
 // ==================== WEATHER ====================
 async function fetchWeather(){
@@ -1034,8 +1149,9 @@ function renderSpace(destId){
     // Activity Discovery
     if(ACT_DEST_MAP[destId]){
         const cats=getActivityCategories(destId);
+        html+=`<div class="section-subtitle">🏝️ מה עושים ב${esc(dest.name)}?</div>`;
         if(cats.length){
-            html+=`<div class="section-subtitle">🏝️ מה עושים ב${esc(dest.name)}?</div><div class="act-grid">`;
+            html+=`<div class="act-grid">`;
             cats.forEach(c=>{
                 html+=`<div class="act-cat-card" style="background:${c.style.grad}" onclick="openActivityList('${destId}','${c.name}')">
                     <div class="act-cat-icon">${c.style.icon}</div>
@@ -1043,6 +1159,12 @@ function renderSpace(destId){
                     <div class="act-cat-count">(${c.count} אפשרויות)</div>
                 </div>`;
             });
+            html+=`</div>`;
+        } else if(activitiesError){
+            html+=`<div class="act-error"><div class="act-error-ic">😕</div><div class="act-error-msg">לא הצלחנו לטעון פעילויות</div><button class="act-error-btn" onclick="retryFetchActivities()">נסו שוב</button></div>`;
+        } else {
+            html+=`<div class="act-grid">`;
+            for(let i=0;i<6;i++){html+=`<div class="act-cat-card skeleton"></div>`;}
             html+=`</div>`;
         }
     }
@@ -1140,84 +1262,155 @@ function renderHotelsSection(){
 }
 
 // --- EXPENSES ---
+let expShowAll=false;
 function renderExpensesSection(){
     const main=document.getElementById('main');
     main.innerHTML=`<div class="section">
         <div class="section-title">💰 הוצאות</div>
+        <!-- BUDGET OVERVIEW -->
         <div class="bgt-card">
             <div class="bgt-hdr"><span class="bgt-title">תקציב שוטפות</span><button class="bgt-gear" onclick="openBgtModal()">⚙️</button></div>
             <div class="bgt-amount"><span class="bgt-spent" id="bs-spent">₪0</span><span class="bgt-limit" id="bs-limit">/ ₪15,000</span></div>
-            <div class="bgt-bar"><div class="bgt-fill" id="bs-bar"></div></div>
-            <div class="bgt-pct" id="bs-pct">0%</div>
+            <div class="bgt-bar-thin"><div class="bgt-fill-thin" id="bs-bar"></div></div>
+            <div class="bgt-remaining" id="bs-remaining">נשאר ₪0</div>
         </div>
-        <div class="bgt-warn" id="bs-warn">⚠ התקציב מתקרב לגבול שלו</div>
-        <div class="bgt-summary" id="bs-summary"></div>
-        <div class="bgt-chart" id="bs-chart" style="display:none"><div class="bgt-chart-title">פילוח לפי קטגוריה</div><div class="bgt-chart-bar" id="bs-chartbar"></div><div class="bgt-chart-legend" id="bs-legend"></div></div>
+        <!-- INSIGHTS -->
+        <div class="ins-row" id="bs-insights"></div>
+        <!-- PACE BANNER -->
+        <div id="bs-pace"></div>
+        <!-- CATEGORY BREAKDOWN -->
+        <div id="bs-cats"></div>
+        <!-- TRANSACTIONS -->
+        <div class="tx-hdr"><span class="tx-title">תנועות אחרונות</span></div>
         <div class="filters" id="bs-filters"></div>
         <div id="bs-list"></div>
     </div>
     <button class="fab" onclick="openExpenseSheet()" title="הוצאה חדשה">+</button>`;
     renderBudgetData();
 }
+function computeTripPace(onTrip){
+    // dailyBudget = BUDGET_LIMIT / total trip days; dailyAverage = on-trip spent / days elapsed
+    const firstStart=new Date(DESTS[0].start),lastEnd=new Date(DESTS[DESTS.length-1].end);
+    const totalDays=Math.max(1,Math.round((lastEnd-firstStart)/86400000));
+    const dailyBudget=BUDGET_LIMIT/totalDays;
+    const now=new Date();
+    let daysElapsed=0;
+    if(now>=firstStart){
+        const cap=now<lastEnd?now:lastEnd;
+        daysElapsed=Math.max(1,Math.ceil((cap-firstStart)/86400000));
+    }
+    const onILS=onTrip.reduce((s,e)=>s+e.ils,0);
+    const dailyAverage=daysElapsed>0?onILS/daysElapsed:0;
+    let pace='preTrip';
+    if(daysElapsed>0){
+        if(dailyAverage<dailyBudget*0.9)pace='under';
+        else if(dailyAverage<=dailyBudget*1.1)pace='at';
+        else pace='over';
+    }
+    return{dailyBudget,dailyAverage,daysElapsed,totalDays,pace};
+}
 function renderBudgetData(){
     const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
     const onTrip=all.filter(e=>e.type==='on'),preTrip=all.filter(e=>e.type==='pre');
-    const onILS=onTrip.reduce((s,e)=>s+e.ils,0),onUSD=onTrip.reduce((s,e)=>s+e.usd,0),onPHP=onTrip.reduce((s,e)=>s+e.php,0);
+    const onILS=onTrip.reduce((s,e)=>s+e.ils,0),onUSD=onTrip.reduce((s,e)=>s+e.usd,0);
     let flILS=0,htILS=0;
     if(DB.flights)DB.flights.forEach(f=>{const p=parsePriceNum(f['Price']);if(p&&f['Route'])flILS+=convertToILS(p,'USD');});
     if(DB.hotels)DB.hotels.forEach(h=>{const t=parsePriceNum(h['Total Price']);if(t)htILS+=t;});
     const preILS=preTrip.reduce((s,e)=>s+e.ils,0)+flILS+htILS;
     const grandILS=preILS+onILS;
-    const todayILS=onTrip.filter(e=>e.date===todayStr()).reduce((s,e)=>s+e.ils,0);
+    const todayILS=onTrip.filter(e=>isToday(e.date)).reduce((s,e)=>s+e.ils,0);
     const pct=BUDGET_LIMIT>0?Math.min(100,onILS/BUDGET_LIMIT*100):0;
+    const remaining=Math.max(0,BUDGET_LIMIT-onILS);
+    const tier=pct<60?'g':pct<85?'o':'r';
+    // BUDGET card
     const sp=document.getElementById('bs-spent');if(sp)sp.textContent=fmtMoney(onILS,'ILS');
     const lm=document.getElementById('bs-limit');if(lm)lm.textContent=`/ ${fmtMoney(BUDGET_LIMIT,'ILS')}`;
-    const bar=document.getElementById('bs-bar');if(bar){bar.style.width=pct+'%';bar.className='bgt-fill '+(pct<60?'':pct<85?'o':'r');}
-    const pc=document.getElementById('bs-pct');if(pc)pc.textContent=Math.round(pct)+'%';
-    const warn=document.getElementById('bs-warn');if(warn)warn.style.display=pct>=85?'block':'none';
+    const bar=document.getElementById('bs-bar');if(bar){bar.style.width=pct+'%';bar.className='bgt-fill-thin '+tier;}
+    const rem=document.getElementById('bs-remaining');if(rem){rem.textContent=`נשאר ${fmtMoney(remaining,'ILS')}`;rem.className='bgt-remaining '+tier;}
 
-    const sm=document.getElementById('bs-summary');
-    if(sm)sm.innerHTML=`<div class="bgt-sum-card"><div class="bgt-sum-lbl">היום</div><div class="bgt-sum-val">${fmtMoney(todayILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(todayILS,'USD'),'USD')}</div></div>
-        <div class="bgt-sum-card"><div class="bgt-sum-lbl">שוטפות</div><div class="bgt-sum-val">${fmtMoney(onILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(onUSD,'USD')}</div></div>
-        <div class="bgt-sum-card"><div class="bgt-sum-lbl">סה"כ</div><div class="bgt-sum-val" style="color:var(--blue)">${fmtMoney(grandILS,'ILS')}</div><div class="bgt-sum-sub">${fmtMoney(convertFromILS(grandILS,'USD'),'USD')}</div></div>`;
+    // INSIGHTS (3 mini cards: today, daily avg w/pace, grand total)
+    const p=computeTripPace(onTrip);
+    const paceIc=p.pace==='under'?'✅':p.pace==='at'?'⚠️':p.pace==='over'?'🔴':'⏳';
+    const paceCls=p.pace==='under'?'g':p.pace==='at'?'o':p.pace==='over'?'r':'';
+    const ins=document.getElementById('bs-insights');
+    if(ins)ins.innerHTML=`
+        <div class="ins-card"><div class="ins-lbl">הוצאות היום</div><div class="ins-val">${fmtMoney(todayILS,'ILS')}</div><div class="ins-sub">${fmtMoney(convertFromILS(todayILS,'USD'),'USD')}</div></div>
+        <div class="ins-card"><div class="ins-lbl">ממוצע יומי ${paceIc}</div><div class="ins-val ${paceCls}">${fmtMoney(p.dailyAverage,'ILS')}</div><div class="ins-sub">יעד ${fmtMoney(p.dailyBudget,'ILS')}</div></div>
+        <div class="ins-card"><div class="ins-lbl">עלות כוללת</div><div class="ins-val" style="color:var(--blue)">${fmtMoney(grandILS,'ILS')}</div><div class="ins-sub">${fmtMoney(convertFromILS(grandILS,'USD'),'USD')}</div></div>`;
 
-    const chartCard=document.getElementById('bs-chart');
-    if(chartCard&&onTrip.length){
-        chartCard.style.display='block';const byCat={};
-        onTrip.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+e.ils;});
-        const entries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('bs-chartbar').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat];return`<div class="bgt-chart-seg" style="width:${onILS>0?amt/onILS*100:0}%;background:${c?c.color:'#8E8E93'}"></div>`;}).join('');
-        document.getElementById('bs-legend').innerHTML=entries.map(([cat,amt])=>{const c=CAT_MAP[cat],p=onILS>0?Math.round(amt/onILS*100):0;return`<div class="bgt-chart-item"><div class="bgt-chart-dot" style="background:${c?c.color:'#8E8E93'}"></div>${c?c.icon:''} ${fmtMoney(amt,'ILS')} (${p}%)</div>`;}).join('');
+    // PACE BANNER
+    const pb=document.getElementById('bs-pace');
+    if(pb){
+        if(p.pace==='preTrip')pb.innerHTML='';
+        else if(p.pace==='under')pb.innerHTML=`<div class="pace-banner g">✅ מתחת לקצב — בכיוון הנכון!</div>`;
+        else if(p.pace==='at')pb.innerHTML=`<div class="pace-banner o">⚠️ בקצב — שימו לב</div>`;
+        else pb.innerHTML=`<div class="pace-banner r">🔴 מעל הקצב! ממוצע יומי גבוה מהתקציב</div>`;
     }
 
+    // CATEGORY BREAKDOWN (horizontal bar chart, on-trip only, sorted desc)
+    const catBox=document.getElementById('bs-cats');
+    if(catBox){
+        if(onTrip.length){
+            const byCat={};
+            onTrip.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+e.ils;});
+            const entries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+            const max=entries[0]?entries[0][1]:1;
+            catBox.innerHTML=`<div class="cat-bd-card"><div class="cat-bd-title">פילוח לפי קטגוריה</div>`+entries.map(([cat,amt])=>{
+                const c=CAT_MAP[cat]||{icon:'📦',color:'#8E8E93'};const w=(amt/max*100);const p2=onILS>0?Math.round(amt/onILS*100):0;
+                return`<div class="cat-bd-row">
+                    <div class="cat-bd-label"><span class="cat-bd-ic">${c.icon}</span>${esc(cat)}</div>
+                    <div class="cat-bd-track"><div class="cat-bd-fill" style="width:${w}%;background:${c.color}"></div></div>
+                    <div class="cat-bd-amt">${fmtMoney(amt,'ILS')} <span class="cat-bd-pct">${p2}%</span></div>
+                </div>`;
+            }).join('')+`</div>`;
+        } else catBox.innerHTML='';
+    }
+
+    // FILTERS
     const fEl=document.getElementById('bs-filters');
     if(fEl){
         const cats=[...new Set(all.map(e=>e.cat))];
         fEl.innerHTML=`<button class="fil-btn ${expFilter==='all'?'active':''}" onclick="setExpFilter('all')">הכל</button><button class="fil-btn ${expFilter==='on'?'active':''}" onclick="setExpFilter('on')">שוטפות</button><button class="fil-btn ${expFilter==='pre'?'active':''}" onclick="setExpFilter('pre')">מוקדמות</button>`+cats.map(cat=>{const c=CAT_MAP[cat];return`<button class="fil-btn ${expFilter===cat?'active':''}" onclick="setExpFilter('${cat}')">${c?c.icon+' ':''}${cat}</button>`;}).join('');
     }
 
+    // TRANSACTIONS LIST
     let filtered=all;
     if(expFilter==='on')filtered=onTrip;else if(expFilter==='pre')filtered=preTrip;else if(expFilter!=='all')filtered=all.filter(e=>e.cat===expFilter);
-    filtered.sort((a,b)=>{const pd=s=>{const p=s.split('/');return p.length===3?new Date(`${p[2]}-${p[1]}-${p[0]}`):new Date(s);};return pd(b.date)-pd(a.date);});
+    filtered.sort((a,b)=>{const da=parseDateDMY(a.date),db=parseDateDMY(b.date);return(db?db.getTime():0)-(da?da.getTime():0);});
+    const totalCount=filtered.length;
+    const showCount=expShowAll?filtered.length:Math.min(20,filtered.length);
+    const shown=filtered.slice(0,showCount);
     const list=document.getElementById('bs-list');
     if(!list)return;
     if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">💰</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין הוצאות עדיין</div>הוצאה ראשונה מתחילה בכפתור ה+</div>';return;}
-    list.innerHTML=`<div class="exp-list">`+filtered.map(e=>{
+    list.innerHTML=`<div class="tx-list">`+shown.map((e,i)=>{
         const c=CAT_MAP[e.cat],bg=c?c.color+'22':'var(--gray-6)';
-        const sec=['ILS','USD','PHP'].filter(x=>x!==e.currency).map(x=>fmtMoney(x==='ILS'?e.ils:x==='USD'?e.usd:e.php,x)).join(' · ');
-        const wl=e.who==='Both'?'משותף':e.who==='Tom'?'תום':e.who==='Daniella'?'דני':e.who;
-        return`<div class="exp-card" onclick="toggleExpDet(this.parentElement.children[${filtered.indexOf(e)*2+1}])">
-            <div class="exp-icon" style="background:${bg};color:${c?c.color:'var(--text-2)'}">${c?c.icon:'📦'}</div>
-            <div class="exp-info"><div class="exp-desc">${esc(e.desc)}</div><div class="exp-meta"><span>${esc(e.date)}</span><span>·</span><span>${esc(wl)}</span>${e.type==='pre'?'<span class="exp-tag">מוקדמת</span>':''}</div></div>
-            <div class="exp-amount"><div class="exp-primary">${fmtMoney(e.amount,e.currency)}</div><div class="exp-secondary">${sec}</div></div>
+        const isILS=e.currency==='ILS';
+        const primary=fmtMoney(e.amount,e.currency);
+        const ilsBelow=isILS?'':`<div class="tx-ils">${fmtMoney(e.ils,'ILS')}</div>`;
+        return`<div class="tx-wrap"><div class="tx-card" onclick="toggleTxDet(${i})">
+            <div class="tx-left">
+                <div class="tx-ic" style="background:${bg};color:${c?c.color:'var(--text-2)'}">${c?c.icon:'📦'}</div>
+                <div class="tx-info">
+                    <div class="tx-desc">${esc(e.desc)}${e.type==='pre'?'<span class="tx-tag">מוקדמת</span>':''}</div>
+                    <div class="tx-meta">${esc(e.date)}</div>
+                </div>
+            </div>
+            <div class="tx-right">
+                <div class="tx-amt">${primary}</div>
+                ${ilsBelow}
+            </div>
         </div>
-        <div class="exp-detail"><div class="exp-currencies"><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.ils,'ILS')}</div><div class="exp-curr-lbl">ILS</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.usd,'USD')}</div><div class="exp-curr-lbl">USD</div></div><div class="exp-curr"><div class="exp-curr-val">${fmtMoney(e.php,'PHP')}</div><div class="exp-curr-lbl">PHP</div></div></div>
-            <div class="exp-actions"><button class="edit" onclick="event.stopPropagation();openExpenseSheet(${e.idx})">עריכה</button><button class="del" onclick="event.stopPropagation();deleteExp(${e.idx})">מחיקה</button></div>
-        </div>`;
+        <div class="tx-det" id="tx-det-${i}"><div class="tx-det-row"><button class="tx-edit" onclick="event.stopPropagation();openExpenseSheet(${e.idx})">✏️ עריכה</button><button class="tx-del" onclick="event.stopPropagation();deleteExp(${e.idx})">🗑️ מחיקה</button></div></div></div>`;
     }).join('')+`</div>`;
+    if(totalCount>20&&!expShowAll){
+        list.innerHTML+=`<button class="show-all-btn" onclick="expShowAll=true;renderBudgetData()">הצגת הכל (${totalCount})</button>`;
+    } else if(expShowAll&&totalCount>20){
+        list.innerHTML+=`<button class="show-all-btn" onclick="expShowAll=false;renderBudgetData()">הצגה מצומצמת</button>`;
+    }
 }
-function toggleExpDet(el){if(el&&el.classList.contains('exp-detail'))el.classList.toggle('open');}
-function setExpFilter(c){expFilter=c;renderBudgetData();}
+function toggleTxDet(i){const el=document.getElementById('tx-det-'+i);if(el)el.classList.toggle('open');}
+function setExpFilter(c){expFilter=c;expShowAll=false;renderBudgetData();}
 
 function openExpenseSheet(editIdx){
     if(editIdx===undefined)editIdx=null;
@@ -1756,12 +1949,7 @@ function renderActivityList(){
     main.innerHTML=html;
 }
 function openActivityDetail(idx){
-    const acts=getActivitiesForDest(actCurrentDest).filter(a=>a['Category']===actCurrentCat);
-    if(actFilter==='romantic')var filtered=acts.filter(a=>countRomanticHearts(a['Romantic ❤️'])>=4);
-    else if(actFilter==='free')var filtered=acts.filter(a=>{const c=(a['Cost Display']||a['Cost (USD)']||'').toLowerCase();return c.includes('free')||c.includes('$0')||c.startsWith('~$0');});
-    else if(actFilter==='half')var filtered=acts.filter(a=>(a['Duration']||'').toLowerCase().includes('half')||(a['Duration']||'').includes('2–3')||(a['Duration']||'').includes('1–2'));
-    else var filtered=acts;
-    const a=filtered[idx];if(!a)return;
+    const a=getFilteredActs()[idx];if(!a)return;
     const cs=ACT_CAT_STYLE[a['Category']]||{he:a['Category'],icon:'📍',grad:'linear-gradient(135deg,#8E8E93,#AEAEB2)'};
     const hearts=countRomanticHearts(a['Romantic ❤️']);
     const saved=isActivitySaved(a['Name'],actCurrentDest);
@@ -1785,7 +1973,7 @@ function openActivityDetail(idx){
         ${tips?`<div class="act-tips"><div class="act-tips-title">💡 טיפים</div>${esc(tips)}</div>`:''}
         ${tags.length?`<div class="act-tags">${tags.map(t=>`<span class="act-tag">${esc(t)}</span>`).join('')}</div>`:''}
         <div class="act-actions">
-            <button class="act-btn act-btn-save ${saved?'saved':''}" onclick="saveActivityToPicks(${idx});this.classList.add('saved');this.innerHTML='✓ ברשימה'">${saved?'✓ ברשימה':'❤️ שמירה לרשימה'}</button>
+            <button id="act-save-btn" class="act-btn act-btn-save ${saved?'saved':''}" onclick="toggleActivitySave(${idx})">${saved?'✓ ברשימה':'❤️ שמירה לרשימה'}</button>
             <div class="act-btn-row">
                 ${maps?`<a href="${esc(maps)}" target="_blank" class="act-btn" style="text-decoration:none">🗺️ ניווט</a>`:''}
                 ${booking?`<a href="${esc(booking)}" target="_blank" class="act-btn" style="text-decoration:none">🔗 הזמנה / אתר</a>`:''}
@@ -1795,20 +1983,43 @@ function openActivityDetail(idx){
     </div>`;
     openSheet(a['Name'],html);
 }
-async function saveActivityToPicks(idx){
+function getFilteredActs(){
     const acts=getActivitiesForDest(actCurrentDest).filter(a=>a['Category']===actCurrentCat);
-    if(actFilter==='romantic')var filtered=acts.filter(a=>countRomanticHearts(a['Romantic ❤️'])>=4);
-    else if(actFilter==='free')var filtered=acts.filter(a=>{const c=(a['Cost Display']||a['Cost (USD)']||'').toLowerCase();return c.includes('free')||c.includes('$0')||c.startsWith('~$0');});
-    else if(actFilter==='half')var filtered=acts.filter(a=>(a['Duration']||'').toLowerCase().includes('half')||(a['Duration']||'').includes('2–3')||(a['Duration']||'').includes('1–2'));
-    else var filtered=acts;
-    const a=filtered[idx];if(!a)return;
-    if(isActivitySaved(a['Name'],actCurrentDest)){showToast('כבר ברשימה','✓');return;}
-    const desc=[(a['Cost Display']||''),(a['Duration']||''),((a['Description']||'').substring(0,100))].filter(Boolean).join(' | ');
-    const note={DestinationID:actCurrentDest,Category:'Visit',Title:a['Name'],Link:a['Google Maps']||'',Description:desc,Done:'FALSE',ID:Date.now().toString(36)};
-    if(!DB.notes)DB.notes=[];DB.notes.push(note);setCooldown('notes');saveCache();
-    showToast('נשמר לרשימה ❤️','❤️');
-    renderActivityList();
-    try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addNote',data:note})});}catch(e){}
+    if(actFilter==='romantic')return acts.filter(a=>countRomanticHearts(a['Romantic ❤️'])>=4);
+    if(actFilter==='free')return acts.filter(a=>{const c=(a['Cost Display']||a['Cost (USD)']||'').toLowerCase();return c.includes('free')||c.includes('$0')||c.startsWith('~$0');});
+    if(actFilter==='half')return acts.filter(a=>(a['Duration']||'').toLowerCase().includes('half')||(a['Duration']||'').includes('2–3')||(a['Duration']||'').includes('1–2'));
+    return acts;
+}
+function updateActSaveBtn(saved){
+    const btn=document.getElementById('act-save-btn');if(!btn)return;
+    btn.className='act-btn act-btn-save'+(saved?' saved':'');
+    btn.textContent=saved?'✓ ברשימה':'❤️ שמירה לרשימה';
+}
+async function toggleActivitySave(idx){
+    const a=getFilteredActs()[idx];if(!a)return;
+    const saved=isActivitySaved(a['Name'],actCurrentDest);
+    if(saved){
+        if(!confirm('להסיר מהרשימה?'))return;
+        // Find the note row matching this activity name
+        const note=(DB.notes||[]).find(n=>n['DestinationID']===actCurrentDest&&n['Title']===a['Name']);
+        if(!note)return;
+        const idxInDB=DB.notes.indexOf(note);const row=idxInDB+2;
+        DB.notes.splice(idxInDB,1);setCooldown('notes');saveCache();
+        updateActSaveBtn(false);renderActivityList();
+        showToast('הוסר מהרשימה','🗑️');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'deleteNote',data:{row}})});}catch(e){}
+    } else {
+        const desc=[(a['Cost Display']||''),(a['Duration']||''),((a['Description']||'').substring(0,100))].filter(Boolean).join(' | ');
+        const note={DestinationID:actCurrentDest,Category:'Visit',Title:a['Name'],Link:a['Google Maps']||'',Description:desc,Done:'FALSE',ID:Date.now().toString(36)};
+        if(!DB.notes)DB.notes=[];DB.notes.push(note);setCooldown('notes');saveCache();
+        updateActSaveBtn(true);renderActivityList();
+        showToast('נשמר לרשימה ❤️','❤️');
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addNote',data:note})});}catch(e){}
+    }
+}
+async function saveActivityToPicks(idx){
+    // Heart button on activity card in list — delegates to toggle for consistency
+    toggleActivitySave(idx);
 }
 
 // ==================== SYNC & REFRESH ====================
@@ -1845,7 +2056,9 @@ async function init(){
     await Promise.all([fetchRates(),fetchWeather()]);
     const success=await fetchAllData();
     if(success||hadCache){renderApp();}
-    if(!hadActCache)fetchActivities();
+    // Always fetch activities — cache is fallback, fresh data is primary source.
+    // fetchActivities() will re-render current space when data arrives.
+    fetchActivities();
 }
 init();
 </script>
