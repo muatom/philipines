@@ -1,9 +1,10 @@
 /**
  * Google Apps Script - Philippines Trip API v2
  *
- * EXPENSE SHEET COLUMNS (A-L):
+ * EXPENSE SHEET COLUMNS (A-M):
  * A=Date, B=Description, C=Amount, D=Currency, E=Category, F=Who,
- * G=Type, H=ILS_Amount, I=USD_Amount, J=PHP_Amount, K=Exchange_Rate, L=Origin_Cur
+ * G=Type, H=ILS_Amount, I=USD_Amount, J=PHP_Amount, K=Exchange_Rate, L=Origin_Cur,
+ * M=PaymentMethod ("card" | "cash" | "")
  *
  * LINKS SHEET COLUMNS (A-D):
  * A=Name, B=URL, C=Description, D=Icon
@@ -62,6 +63,7 @@ function addExpense(data) {
     data.Category || '', data.Who || 'Both', data.Type || 'on',
     data.ILS_Amount || 0, data.USD_Amount || 0, data.PHP_Amount || 0,
     data.Exchange_Rate || '', data.Origin_Cur || data.Currency || 'ILS',
+    data.PaymentMethod || '',
   ];
   sheet.appendRow(row);
   return jsonResponse({ success: true, message: 'Expense added' });
@@ -75,11 +77,15 @@ function editExpense(data) {
   if (!row || row < 2) return jsonResponse({ error: 'Invalid row' }, 400);
   let originCur = data.Origin_Cur;
   if (!originCur) originCur = sheet.getRange(row, 12).getValue() || data.Currency || 'ILS';
+  // Preserve existing PaymentMethod if not provided (legacy edits from older clients)
+  let paymentMethod = data.PaymentMethod;
+  if (paymentMethod === undefined) paymentMethod = sheet.getRange(row, 13).getValue() || '';
   const values = [
     data.Date || '', data.Description || '', data.Amount || 0, data.Currency || 'ILS',
     data.Category || '', data.Who || 'Both', data.Type || 'on',
     data.ILS_Amount || 0, data.USD_Amount || 0, data.PHP_Amount || 0,
     data.Exchange_Rate || '', originCur,
+    paymentMethod,
   ];
   sheet.getRange(row, 1, 1, values.length).setValues([values]);
   return jsonResponse({ success: true, message: 'Expense updated', row: row });
