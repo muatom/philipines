@@ -1320,12 +1320,14 @@ function renderExpensesSection(){
     renderBudgetData();
 }
 function computeCashBalance(all){
-    // Sum of withdrawals (Type=cash_withdrawal) minus sum of cash-tagged expenses. Values in PHP.
+    // SINGLE SOURCE OF TRUTH: Sheet data only.
+    // balance = sum(Type=cash_withdrawal) - sum(PaymentMethod=cash AND Type=on). Values in PHP.
+    // No localStorage, no clamp — a negative result is a real signal that expenses exceed withdrawals.
     const withdrawals=all.filter(e=>e.type==='cash_withdrawal');
-    const cashExp=all.filter(e=>e.type!=='cash_withdrawal'&&e.pay==='cash');
+    const cashExp=all.filter(e=>e.type==='on'&&e.pay==='cash');
     const phpIn=withdrawals.reduce((s,e)=>s+e.php,0);
     const phpOut=cashExp.reduce((s,e)=>s+e.php,0);
-    const balancePHP=Math.max(0,phpIn-phpOut);
+    const balancePHP=phpIn-phpOut;
     const balanceILS=convertToILS(balancePHP,'PHP');
     return{balancePHP,balanceILS,withdrawalCount:withdrawals.length,cashExpCount:cashExp.length};
 }
@@ -1573,16 +1575,15 @@ async function deleteExp(idx){if(!confirm('למחוק את ההוצאה?'))retur
 
 // ==================== CASH WALLET ====================
 function openCashWithdrawSheet(){
-    const lastCur=localStorage.getItem('ph-wallet-cur')||'PHP';
     const today=new Date().toISOString().split('T')[0];
     const html=`
         <div class="cw-hint">הוסיפו משיכה מהכספומט. היתרה תעודכן אוטומטית — אין השפעה על התקציב.</div>
         <div class="input-row">
             <input type="number" class="input amt" id="cw-amt" placeholder="0" inputmode="decimal">
             <select class="input cur" id="cw-cur">
-                <option value="PHP" ${lastCur==='PHP'?'selected':''}>₱ PHP</option>
-                <option value="USD" ${lastCur==='USD'?'selected':''}>$ USD</option>
-                <option value="ILS" ${lastCur==='ILS'?'selected':''}>₪ ILS</option>
+                <option value="PHP" selected>₱ PHP</option>
+                <option value="USD">$ USD</option>
+                <option value="ILS">₪ ILS</option>
             </select>
         </div>
         <div class="conv-hint" id="cw-conv"></div>
@@ -1600,41 +1601,49 @@ function openCashWithdrawSheet(){
 async function submitCashWithdraw(){
     const a=parseFloat(document.getElementById('cw-amt').value),c=document.getElementById('cw-cur').value,dt=document.getElementById('cw-date').value;
     if(!a||a<=0){showToast('נדרש סכום','⚠️');return;}
-    try{localStorage.setItem('ph-wallet-cur',c);}catch(err){}
     const dateF=dt?new Date(dt).toLocaleDateString('en-GB'):todayStr();
     const locked=lockRates(a,c);
+    // Withdrawal is just another Sheet row (Type=cash_withdrawal). Balance recomputes from Sheet data.
     const exp={Date:dateF,Description:'משיכת מזומן מכספומט',Amount:a,Currency:c,Category:'משיכת מזומן',Who:'Both',Type:'cash_withdrawal',...locked,Origin_Cur:c,PaymentMethod:''};
     if(!DB.expenses)DB.expenses=[];
     DB.expenses.push(exp);setCooldown('expenses');saveCache();closeSheet();renderBudgetData();showToast(`נרשמה משיכה של ${fmtMoney(a,c)} 🏧`,'💵');
     try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){}
 }
 function openCashReconcileSheet(){
+    // Always recompute expected balance from Sheet data (DB.expenses is the parsed Sheet).
     const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
     const cb=computeCashBalance(all);
-    const lastCur=localStorage.getItem('ph-wallet-cur')||'PHP';
-    const expectedInCur=lastCur==='PHP'?cb.balancePHP:lastCur==='ILS'?cb.balanceILS:convertFromILS(cb.balanceILS,'USD');
     const html=`
         <div class="cw-big">כמה מזומן יש לכם עכשיו?</div>
-        <div class="cw-expected">יתרה צפויה: <b>${fmtMoney(expectedInCur,lastCur)}</b></div>
+        <div class="cw-expected">יתרה צפויה: <b id="cr-expected">${fmtMoney(cb.balancePHP,'PHP')}</b></div>
         <div class="input-row">
             <input type="number" class="input amt cw-big-input" id="cr-amt" placeholder="0" inputmode="decimal">
             <select class="input cur" id="cr-cur">
-                <option value="PHP" ${lastCur==='PHP'?'selected':''}>₱ PHP</option>
-                <option value="USD" ${lastCur==='USD'?'selected':''}>$ USD</option>
-                <option value="ILS" ${lastCur==='ILS'?'selected':''}>₪ ILS</option>
+                <option value="PHP" selected>₱ PHP</option>
+                <option value="USD">$ USD</option>
+                <option value="ILS">₪ ILS</option>
             </select>
         </div>
         <div class="cw-note">אם חסר כסף — ההפרש יירשם כ"הוצאות מזומן כלליות". אם יש עודף — היתרה פשוט תעודכן.</div>
         <button class="btn-primary" onclick="submitCashReconcile()">עדכון</button>
     `;
     openSheet('עדכון יתרת מזומן',html);
-    setTimeout(()=>{const a=document.getElementById('cr-amt');if(a)a.focus();},100);
+    setTimeout(()=>{
+        const a=document.getElementById('cr-amt'),c=document.getElementById('cr-cur'),ex=document.getElementById('cr-expected');
+        if(a)a.focus();
+        // Keep the displayed expected balance in sync with the chosen currency
+        if(c&&ex)c.addEventListener('change',()=>{
+            const v=c.value;
+            const amt=v==='PHP'?cb.balancePHP:v==='ILS'?cb.balanceILS:convertFromILS(cb.balanceILS,'USD');
+            ex.textContent=fmtMoney(amt,v);
+        });
+    },100);
 }
 async function submitCashReconcile(){
     const rawNew=parseFloat(document.getElementById('cr-amt').value);
     if(isNaN(rawNew)||rawNew<0){showToast('נדרש סכום תקין','⚠️');return;}
     const cur=document.getElementById('cr-cur').value;
-    try{localStorage.setItem('ph-wallet-cur',cur);}catch(err){}
+    // Recompute expected balance from Sheet data at submit time (no cached/localStorage value).
     const all=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
     const cb=computeCashBalance(all);
     // Convert new balance to PHP for comparison
