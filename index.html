@@ -206,6 +206,13 @@ a{color:var(--blue);text-decoration:none}
 .cw-expected b{color:var(--text);font-weight:600}
 .cw-big-input{font-size:28px;font-weight:700;text-align:center;padding:14px}
 .cw-note{font-size:12px;color:var(--text-3);line-height:1.5;margin:8px 0 12px;padding:10px 14px;background:rgba(255,204,0,.08);border-radius:var(--r-m)}
+.spread-lbl{font-size:14px;color:var(--text-2);text-align:center;margin:14px 0 10px;font-weight:500}
+.spread-row{display:flex;align-items:center;justify-content:center;gap:18px;margin:4px 0 6px}
+.spread-btn{width:44px;height:44px;border-radius:50%;border:none;background:var(--gray-6);font-size:22px;font-weight:600;color:var(--text);cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;line-height:1}
+.spread-btn:active{background:var(--gray-5);transform:scale(.94)}
+.spread-btn:disabled{opacity:.35;cursor:not-allowed}
+.spread-num{font-size:34px;font-weight:700;color:var(--text);min-width:64px;text-align:center;letter-spacing:-.5px}
+.spread-range{text-align:center;color:var(--text-3);font-size:13px;margin-bottom:14px}
 
 /* ========== CATEGORY BREAKDOWN ========== */
 .cat-bd-card{background:var(--card);border-radius:var(--r-l);padding:16px;margin-bottom:14px;box-shadow:var(--sh-1)}
@@ -1650,15 +1657,10 @@ async function submitCashReconcile(){
     const newPHP=cur==='PHP'?rawNew:cur==='ILS'?convertFromILS(rawNew,'PHP'):convertFromILS(convertToILS(rawNew,'USD'),'PHP');
     const unaccountedPHP=cb.balancePHP-newPHP;
     if(unaccountedPHP>0.5){
-        // Create an unaccounted cash expense in the user's input currency for transparency
+        // Unaccounted cash was spent over some span of days — let the user pick how many.
         const unaccountedInCur=cur==='PHP'?unaccountedPHP:cur==='ILS'?convertToILS(unaccountedPHP,'PHP'):convertFromILS(convertToILS(unaccountedPHP,'PHP'),'USD');
-        const locked=lockRates(unaccountedInCur,cur);
-        const dateF=todayStr();
-        const exp={Date:dateF,Description:'הוצאות מזומן כלליות',Amount:unaccountedInCur,Currency:cur,Category:'שונות',Who:'Both',Type:'on',...locked,Origin_Cur:cur,PaymentMethod:'cash'};
-        if(!DB.expenses)DB.expenses=[];
-        DB.expenses.push(exp);setCooldown('expenses');saveCache();closeSheet();renderBudgetData();
-        showToast(`נרשמה הוצאה של ${fmtMoney(unaccountedInCur,cur)} שלא דווחה`,'💵');
-        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:exp})});}catch(e){}
+        showCashSpreadStep(unaccountedInCur,cur);
+        return;
     } else {
         // Balance matches or user has more — silent update (no record to adjust, since withdrawals/expenses are fixed)
         // We record a zero-sum "adjustment" withdrawal so future reconciliations align.
@@ -1674,6 +1676,93 @@ async function submitCashReconcile(){
         }
         closeSheet();renderBudgetData();
         showToast('היתרה עודכנה','✓');
+    }
+}
+// Smart default: days since the most recent cash_withdrawal OR "הוצאות מזומן כלליות".
+function computeSmartSpreadDays(){
+    const parsed=(DB.expenses||[]).map((e,i)=>parseExp(e,i));
+    const candidates=parsed.filter(e=>e.type==='cash_withdrawal'||e.desc==='הוצאות מזומן כלליות');
+    if(!candidates.length)return 1;
+    const parseDate=s=>{const p=(s||'').split('/');if(p.length!==3)return null;const d=new Date(+p[2],+p[1]-1,+p[0]);return isNaN(d)?null:d;};
+    let mostRecent=null;
+    for(const c of candidates){const d=parseDate(c.date);if(d&&(!mostRecent||d>mostRecent))mostRecent=d;}
+    if(!mostRecent)return 1;
+    const today=new Date();today.setHours(0,0,0,0);mostRecent.setHours(0,0,0,0);
+    const diff=Math.round((today-mostRecent)/86400000);
+    return Math.max(1,Math.min(30,diff||1));
+}
+// Step-3 UI: show the unaccounted total and let user pick how many days to spread across.
+function showCashSpreadStep(amtInCur,cur){
+    const def=computeSmartSpreadDays();
+    const body=document.getElementById('sheet-body');
+    if(!body)return;
+    body.innerHTML=`
+        <div class="cw-big">${fmtMoney(amtInCur,cur)} הוצאו ולא דווחו</div>
+        <div class="spread-lbl">על כמה ימים לפזר?</div>
+        <div class="spread-row">
+            <button class="spread-btn" id="sp-minus" onclick="adjustSpreadDays(-1)">−</button>
+            <div class="spread-num" id="sp-days">${def}</div>
+            <button class="spread-btn" id="sp-plus" onclick="adjustSpreadDays(1)">+</button>
+        </div>
+        <div class="spread-range" id="sp-range"></div>
+        <input type="hidden" id="sp-amt" value="${amtInCur}">
+        <input type="hidden" id="sp-cur" value="${cur}">
+        <button class="btn-primary" onclick="confirmCashSpread()">עדכון</button>
+    `;
+    updateSpreadRange();
+}
+function adjustSpreadDays(delta){
+    const el=document.getElementById('sp-days');if(!el)return;
+    const cur=parseInt(el.textContent)||1;
+    const next=Math.max(1,Math.min(30,cur+delta));
+    el.textContent=next;
+    const minus=document.getElementById('sp-minus'),plus=document.getElementById('sp-plus');
+    if(minus)minus.disabled=next<=1;
+    if(plus)plus.disabled=next>=30;
+    updateSpreadRange();
+}
+function updateSpreadRange(){
+    const el=document.getElementById('sp-days'),range=document.getElementById('sp-range');
+    if(!el||!range)return;
+    const days=parseInt(el.textContent)||1;
+    const minus=document.getElementById('sp-minus'),plus=document.getElementById('sp-plus');
+    if(minus)minus.disabled=days<=1;
+    if(plus)plus.disabled=days>=30;
+    if(days===1){range.textContent='יום (היום בלבד)';return;}
+    const today=new Date();
+    const start=new Date(today);start.setDate(today.getDate()-(days-1));
+    const f=d=>`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+    range.textContent=`ימים (מ-${f(start)} עד היום)`;
+}
+async function confirmCashSpread(){
+    const daysEl=document.getElementById('sp-days'),amtEl=document.getElementById('sp-amt'),curEl=document.getElementById('sp-cur');
+    if(!daysEl||!amtEl||!curEl)return;
+    const days=parseInt(daysEl.textContent)||1;
+    const totalAmt=parseFloat(amtEl.value);
+    const cur=curEl.value;
+    if(!(totalAmt>0)||!days){showToast('שגיאה בחישוב','⚠️');return;}
+    // Split evenly, put remainder (in cents) on today so the sum matches the total exactly.
+    const totalCents=Math.round(totalAmt*100);
+    const baseCents=Math.floor(totalCents/days);
+    const remCents=totalCents-baseCents*days;
+    const today=new Date();
+    const expenses=[];
+    for(let i=0;i<days;i++){
+        const d=new Date(today);d.setDate(today.getDate()-i);
+        const dateF=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+        const cents=i===0?baseCents+remCents:baseCents;
+        const amt=cents/100;
+        const locked=lockRates(amt,cur);
+        expenses.push({Date:dateF,Description:'הוצאות מזומן כלליות',Amount:amt,Currency:cur,Category:'שונות',Who:'Both',Type:'on',...locked,Origin_Cur:cur,PaymentMethod:'cash'});
+    }
+    if(!DB.expenses)DB.expenses=[];
+    for(const e of expenses)DB.expenses.push(e);
+    setCooldown('expenses');saveCache();closeSheet();renderBudgetData();
+    if(days===1)showToast(`נרשמה הוצאה של ${fmtMoney(totalAmt,cur)} שלא דווחה`,'💵');
+    else showToast(`נרשמו ${days} הוצאות על פני ${days} ימים`,'💵');
+    // POST sequentially so we don't hammer the Apps Script endpoint.
+    for(const e of expenses){
+        try{await fetch(APPS_SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'addExpense',data:e})});}catch(err){}
     }
 }
 function openBgtModal(){document.getElementById('bgt-modal-inp').value=BUDGET_LIMIT;document.getElementById('bgt-modal').classList.add('open');}
