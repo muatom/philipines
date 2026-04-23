@@ -1328,10 +1328,13 @@ function renderExpensesSection(){
 }
 function computeCashBalance(all){
     // SINGLE SOURCE OF TRUTH: Sheet data only.
-    // balance = sum(Type=cash_withdrawal) - sum(PaymentMethod=cash AND Type=on). Values in PHP.
-    // No localStorage, no clamp — a negative result is a real signal that expenses exceed withdrawals.
-    const withdrawals=all.filter(e=>e.type==='cash_withdrawal');
-    const cashExp=all.filter(e=>e.type==='on'&&e.pay==='cash');
+    // The wallet tracks physical PHP cash. PH ATMs only dispense PHP, and a non-PHP
+    // cash expense (e.g. paying $20 USD in cash) comes from a separate physical
+    // wallet — it must not deplete the PHP balance. So we filter both sides to
+    // Currency='PHP'. Off-currency cash spending is still recorded for the budget
+    // total; it's just not part of this wallet's accounting.
+    const withdrawals=all.filter(e=>e.type==='cash_withdrawal'&&e.currency==='PHP');
+    const cashExp=all.filter(e=>e.type==='on'&&e.pay==='cash'&&e.currency==='PHP');
     const phpIn=withdrawals.reduce((s,e)=>s+e.php,0);
     const phpOut=cashExp.reduce((s,e)=>s+e.php,0);
     const balancePHP=phpIn-phpOut;
