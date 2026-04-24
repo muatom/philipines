@@ -178,11 +178,13 @@ a{color:var(--blue);text-decoration:none}
 
 /* ========== INSIGHTS ROW ========== */
 .ins-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
-.ins-card{background:var(--card);border-radius:var(--r-m);padding:12px 10px;text-align:center;box-shadow:var(--sh-1)}
+.ins-card{background:var(--card);border-radius:var(--r-m);padding:12px 10px;text-align:center;box-shadow:var(--sh-1);min-width:0}
 .ins-lbl{font-size:10px;color:var(--text-3);font-weight:600;letter-spacing:.2px;line-height:1.3}
 .ins-val{font-size:15px;font-weight:700;letter-spacing:-.3px;margin-top:5px}
 .ins-val.g{color:var(--green)}.ins-val.o{color:var(--orange)}.ins-val.r{color:var(--red)}
 .ins-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+.ins-pay{font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.4;letter-spacing:.1px}
+.ins-pay span{display:inline-block;margin:0 2px}
 .pace-banner{border-radius:var(--r-m);padding:10px 14px;margin-bottom:14px;font-size:13px;font-weight:600;text-align:center}
 .pace-banner.g{background:rgba(52,199,89,.12);color:var(--green)}
 .pace-banner.o{background:rgba(255,149,0,.12);color:var(--orange)}
@@ -230,32 +232,54 @@ a{color:var(--blue);text-decoration:none}
 .tx-hdr{display:flex;justify-content:space-between;align-items:center;margin:4px 0 6px;padding:0 2px}
 .tx-title{font-size:13px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
 .tx-list{background:var(--card);border-radius:var(--r-l);overflow:hidden;box-shadow:var(--sh-1);margin-bottom:12px}
-.tx-wrap{border-bottom:.5px solid var(--separator-s)}
+.tx-wrap{border-bottom:.5px solid var(--separator-s);position:relative}
 .tx-wrap:last-child{border-bottom:none}
-.tx-card{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;background:var(--card);gap:10px}
-.tx-card:active{background:var(--gray-6)}
-.tx-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
-.tx-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto}
+.tx-card{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--card);gap:10px}
+.tx-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+.tx-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex:0 0 auto}
 .tx-info{min-width:0;flex:1}
-.tx-desc{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
-.tx-meta{font-size:11px;color:var(--text-3);margin-top:1px}
-.tx-tag{font-size:9px;padding:1px 6px;border-radius:5px;font-weight:600;background:var(--gray-6);color:var(--text-3);flex-shrink:0}
+.tx-desc{font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.1px}
+.tx-meta{font-size:12px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tx-pay{font-size:13px;opacity:.7}
+.tx-tag{font-size:10px;padding:2px 7px;border-radius:6px;font-weight:600;background:var(--gray-6);color:var(--text-3);flex-shrink:0;letter-spacing:.2px}
 .tx-tag-cw{background:rgba(48,176,199,.18);color:#30B0C7}
-.tx-pay{font-size:12px;opacity:.6;margin-left:2px}
-.tx-cw{opacity:.75}
-.tx-cw .tx-desc{font-style:italic}
+.tx-tag-pre{background:rgba(0,122,255,.12);color:var(--blue)}
+.tx-amts{display:flex;flex-direction:column;align-items:flex-end;text-align:left;flex:0 0 auto;min-width:0}
+.tx-amt{font-size:17px;font-weight:700;letter-spacing:-.3px;white-space:nowrap;color:var(--text)}
+.tx-ils{font-size:12px;color:var(--text-3);margin-top:2px;white-space:nowrap}
+.tx-more{width:30px;height:44px;border:none;background:none;color:var(--text-3);font-size:18px;font-weight:700;cursor:pointer;border-radius:var(--r-s);flex:0 0 auto;letter-spacing:1px;line-height:1;padding:0;display:flex;align-items:center;justify-content:center}
+.tx-more:active{background:var(--gray-6)}
+/* Type-specific styling */
+.tx-pre .tx-card{background:rgba(0,122,255,.04)}
+.tx-cw .tx-card{background:var(--gray-6)}
+.tx-cw .tx-desc{font-style:italic;color:var(--text-2);font-weight:500}
 .tx-cw .tx-amt{color:var(--text-2);font-weight:600}
-.tx-right{text-align:left;flex:0 0 auto}
-.tx-amt{font-size:15px;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
-.tx-ils{font-size:11px;color:var(--text-3);margin-top:1px;white-space:nowrap}
-.tx-det{display:none;background:var(--card-2);padding:0 14px;border-top:.5px solid var(--separator-s)}
-.tx-det.open{display:block;padding:10px 14px}
-.tx-det-row{display:flex;gap:8px}
-.tx-edit,.tx-del{flex:1;padding:9px;border:none;border-radius:var(--r-s);font-size:13px;cursor:pointer;font-weight:500}
+.tx-recon .tx-card{border-left:2px dotted var(--text-4)}
+.tx-recon .tx-desc{color:var(--text-2)}
+/* Expand panel */
+.tx-det{max-height:0;overflow:hidden;background:var(--card-2);transition:max-height .2s ease}
+.tx-det.open{max-height:80px;border-top:.5px solid var(--separator-s)}
+.tx-det-row{display:flex;gap:8px;padding:10px 14px}
+.tx-edit,.tx-del{flex:1;min-height:44px;padding:10px;border:none;border-radius:var(--r-s);font-size:14px;cursor:pointer;font-weight:600}
 .tx-edit{background:rgba(0,122,255,.1);color:var(--blue)}
 .tx-del{background:rgba(255,59,48,.1);color:var(--red)}
-.show-all-btn{width:100%;padding:12px;background:none;border:none;color:var(--blue);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px}
+.tx-edit:active,.tx-del:active{opacity:.7}
+.show-all-btn{width:100%;min-height:44px;padding:12px;background:none;border:none;color:var(--blue);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px}
 .show-all-btn:active{opacity:.7}
+/* ========== DAILY SPENDING CHART ========== */
+.dly-card{background:var(--card);border-radius:var(--r-l);padding:16px 0 14px;margin-bottom:14px;box-shadow:var(--sh-1);max-width:100%;overflow:hidden}
+.dly-title{font-size:12px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.4px;padding:0 16px;margin-bottom:12px}
+.dly-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:6px 12px 4px;scroll-snap-type:x mandatory}
+.dly-scroll::-webkit-scrollbar{height:0}
+.dly-svg{display:block;direction:ltr}
+.dly-svg .bar{fill:#007AFF;transition:fill .2s}
+.dly-svg .bar-today{fill:#FF9500}
+.dly-svg .bar-val{font-size:10px;fill:var(--text-3);font-weight:600}
+.dly-svg .bar-lbl{font-size:10px;fill:var(--text-3);font-weight:500}
+.dly-svg .dly-target{stroke:#FF3B30;stroke-width:1;opacity:.55}
+.dly-svg .dly-target-lbl{font-size:10px;fill:#FF3B30;font-weight:600;opacity:.85}
+.dly-svg .dly-cum{stroke:#34C759;stroke-width:2;fill:none;opacity:.7;stroke-linecap:round;stroke-linejoin:round}
+.dly-svg .dly-cum-dot{fill:#34C759;opacity:.75}
 
 
 /* ========== FORM COMPONENTS ========== */
@@ -1318,6 +1342,8 @@ function renderExpensesSection(){
         <div id="bs-wallet"></div>
         <!-- CATEGORY BREAKDOWN -->
         <div id="bs-cats"></div>
+        <!-- DAILY SPENDING CHART -->
+        <div id="bs-daily"></div>
         <!-- TRANSACTIONS -->
         <div class="tx-hdr"><span class="tx-title">תנועות אחרונות</span></div>
         <div class="filters" id="bs-filters"></div>
@@ -1382,14 +1408,28 @@ function renderBudgetData(){
     const bar=document.getElementById('bs-bar');if(bar){bar.style.width=pct+'%';bar.className='bgt-fill-thin '+tier;}
     const rem=document.getElementById('bs-remaining');if(rem){rem.textContent=`נשאר ${fmtMoney(remaining,'ILS')}`;rem.className='bgt-remaining '+tier;}
 
-    // INSIGHTS (3 mini cards: today, daily avg w/pace, grand total)
+    // INSIGHTS (3 mini cards: today, daily avg w/pace, grand total) — with optional payment split
     const p=computeTripPace(onTrip);
     const paceIc=p.pace==='under'?'✅':p.pace==='at'?'⚠️':p.pace==='over'?'🔴':'⏳';
     const paceCls=p.pace==='under'?'g':p.pace==='at'?'o':p.pace==='over'?'r':'';
+    // Payment-method splits (today + daily average), only counted if pay tag is present
+    const todayCard=onTrip.filter(e=>isToday(e.date)&&e.pay==='card').reduce((s,e)=>s+e.ils,0);
+    const todayCash=onTrip.filter(e=>isToday(e.date)&&e.pay==='cash').reduce((s,e)=>s+e.ils,0);
+    const totalCard=onTrip.filter(e=>e.pay==='card').reduce((s,e)=>s+e.ils,0);
+    const totalCash=onTrip.filter(e=>e.pay==='cash').reduce((s,e)=>s+e.ils,0);
+    const avgCard=p.daysElapsed>0?totalCard/p.daysElapsed:0;
+    const avgCash=p.daysElapsed>0?totalCash/p.daysElapsed:0;
+    const splitLine=(card,cash)=>{
+        if(card<=0&&cash<=0)return'';
+        const parts=[];
+        if(card>0)parts.push(`<span>💳 ${fmtMoney(card,'ILS')}</span>`);
+        if(cash>0)parts.push(`<span>💵 ${fmtMoney(cash,'ILS')}</span>`);
+        return`<div class="ins-pay">${parts.join(' · ')}</div>`;
+    };
     const ins=document.getElementById('bs-insights');
     if(ins)ins.innerHTML=`
-        <div class="ins-card"><div class="ins-lbl">הוצאות היום</div><div class="ins-val">${fmtMoney(todayILS,'ILS')}</div><div class="ins-sub">${fmtMoney(convertFromILS(todayILS,'USD'),'USD')}</div></div>
-        <div class="ins-card"><div class="ins-lbl">ממוצע יומי ${paceIc}</div><div class="ins-val ${paceCls}">${fmtMoney(p.dailyAverage,'ILS')}</div><div class="ins-sub">יעד ${fmtMoney(p.dailyBudget,'ILS')}</div></div>
+        <div class="ins-card"><div class="ins-lbl">הוצאות היום</div><div class="ins-val">${fmtMoney(todayILS,'ILS')}</div><div class="ins-sub">${fmtMoney(convertFromILS(todayILS,'USD'),'USD')}</div>${splitLine(todayCard,todayCash)}</div>
+        <div class="ins-card"><div class="ins-lbl">ממוצע יומי ${paceIc}</div><div class="ins-val ${paceCls}">${fmtMoney(p.dailyAverage,'ILS')}</div><div class="ins-sub">יעד ${fmtMoney(p.dailyBudget,'ILS')}</div>${splitLine(avgCard,avgCash)}</div>
         <div class="ins-card"><div class="ins-lbl">עלות כוללת</div><div class="ins-val" style="color:var(--blue)">${fmtMoney(grandILS,'ILS')}</div><div class="ins-sub">${fmtMoney(convertFromILS(grandILS,'USD'),'USD')}</div></div>`;
 
     // PACE BANNER
@@ -1445,6 +1485,9 @@ function renderBudgetData(){
         } else catBox.innerHTML='';
     }
 
+    // DAILY SPENDING CHART
+    renderDailyChart(onTrip,p.dailyBudget);
+
     // FILTERS
     const fEl=document.getElementById('bs-filters');
     if(fEl){
@@ -1464,26 +1507,32 @@ function renderBudgetData(){
     if(!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">💰</div><div style="font-weight:600;color:var(--text-2);margin-bottom:4px">אין הוצאות עדיין</div>הוצאה ראשונה מתחילה בכפתור ה+</div>';return;}
     list.innerHTML=`<div class="tx-list">`+shown.map((e,i)=>{
         const isCW=e.type==='cash_withdrawal';
+        const isPre=e.type==='pre';
+        const isRecon=e.desc==='הוצאות מזומן כלליות'||e.desc==='התאמת יתרת מזומן';
         const c=CAT_MAP[e.cat],bg=c?c.color+'22':'var(--gray-6)';
         const isILS=e.currency==='ILS';
         const primary=fmtMoney(e.amount,e.currency);
         const ilsBelow=isILS?'':`<div class="tx-ils">${fmtMoney(e.ils,'ILS')}</div>`;
-        const payIc=isCW?'🏧':(e.pay==='cash'?'💵':e.pay==='card'?'💳':'');
+        const payIc=e.pay==='cash'?'💵':e.pay==='card'?'💳':'';
         const tags=[];
-        if(e.type==='pre')tags.push('<span class="tx-tag">מוקדמת</span>');
+        if(isPre)tags.push('<span class="tx-tag tx-tag-pre">מוקדמת</span>');
         if(isCW)tags.push('<span class="tx-tag tx-tag-cw">משיכה</span>');
-        return`<div class="tx-wrap${isCW?' tx-cw':''}"><div class="tx-card" onclick="toggleTxDet(${i})">
+        const wrapCls=['tx-wrap'];
+        if(isCW)wrapCls.push('tx-cw');else if(isPre)wrapCls.push('tx-pre');
+        if(isRecon&&!isCW)wrapCls.push('tx-recon');
+        return`<div class="${wrapCls.join(' ')}"><div class="tx-card">
             <div class="tx-left">
                 <div class="tx-ic" style="background:${bg};color:${c?c.color:'var(--text-2)'}">${isCW?'🏧':(c?c.icon:'📦')}</div>
                 <div class="tx-info">
-                    <div class="tx-desc">${payIc?`<span class="tx-pay">${payIc}</span>`:''}${esc(e.desc)}${tags.join('')}</div>
-                    <div class="tx-meta">${esc(e.date)}</div>
+                    <div class="tx-desc">${esc(e.desc)}</div>
+                    <div class="tx-meta">${esc(e.date)}${payIc?` <span class="tx-pay">${payIc}</span>`:''}${tags.length?' '+tags.join(' '):''}</div>
                 </div>
             </div>
-            <div class="tx-right">
+            <div class="tx-amts">
                 <div class="tx-amt">${primary}</div>
                 ${ilsBelow}
             </div>
+            <button class="tx-more" onclick="toggleTxDet(${i})" aria-label="פעולות">⋯</button>
         </div>
         <div class="tx-det" id="tx-det-${i}"><div class="tx-det-row"><button class="tx-edit" onclick="event.stopPropagation();openExpenseSheet(${e.idx})">✏️ עריכה</button><button class="tx-del" onclick="event.stopPropagation();deleteExp(${e.idx})">🗑️ מחיקה</button></div></div></div>`;
     }).join('')+`</div>`;
@@ -1495,6 +1544,55 @@ function renderBudgetData(){
 }
 function toggleTxDet(i){const el=document.getElementById('tx-det-'+i);if(el)el.classList.toggle('open');}
 function setExpFilter(c){expFilter=c;expShowAll=false;renderBudgetData();}
+// Daily spending bar chart with cumulative-line overlay and a daily-target reference line
+function renderDailyChart(onTrip,dailyBudget){
+    const box=document.getElementById('bs-daily');
+    if(!box)return;
+    if(!onTrip||!onTrip.length){box.innerHTML='';return;}
+    // Bucket by date, sort ascending
+    const byDate={};
+    onTrip.forEach(e=>{if(!e.date)return;const k=normDateStr(e.date);byDate[k]=(byDate[k]||0)+e.ils;});
+    const entries=Object.entries(byDate).map(([d,amt])=>{const dt=parseDateDMY(d);return dt?{date:d,dt,amt}:null;}).filter(Boolean).sort((a,b)=>a.dt-b.dt);
+    if(!entries.length){box.innerHTML='';return;}
+    // Cumulative
+    let cum=0;entries.forEach(e=>{cum+=e.amt;e.cum=cum;});
+    const totalCum=entries[entries.length-1].cum||1;
+    // Scale: top is the larger of any daily total or daily-target * 1.15 (give the dashed line headroom)
+    const maxBar=Math.max(...entries.map(e=>e.amt));
+    const yMax=Math.max(maxBar,(dailyBudget||0)*1.15,1);
+    // Layout
+    const BAR_W=44,GAP=14,LEFT_PAD=10,RIGHT_PAD=14,TOP_PAD=22,CHART_H=140,LABEL_H=22;
+    const totalH=TOP_PAD+CHART_H+LABEL_H;
+    const totalW=LEFT_PAD+entries.length*(BAR_W+GAP)+RIGHT_PAD;
+    const todayKey=todayStr();
+    const dayNames=['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'];
+    const targetY=TOP_PAD+CHART_H-(dailyBudget/yMax)*CHART_H;
+    // Bars
+    const bars=entries.map((e,i)=>{
+        const x=LEFT_PAD+i*(BAR_W+GAP);
+        const h=Math.max(2,(e.amt/yMax)*CHART_H);
+        const y=TOP_PAD+CHART_H-h;
+        const today=e.date===todayKey;
+        const dayLbl=`${dayNames[e.dt.getDay()]} ${String(e.dt.getDate()).padStart(2,'0')}/${String(e.dt.getMonth()+1).padStart(2,'0')}`;
+        return`<g><text x="${x+BAR_W/2}" y="${y-5}" class="bar-val" text-anchor="middle">${fmtMoney(e.amt,'ILS')}</text><rect x="${x}" y="${y}" width="${BAR_W}" height="${h}" rx="6" class="bar${today?' bar-today':''}"></rect><text x="${x+BAR_W/2}" y="${TOP_PAD+CHART_H+15}" class="bar-lbl" text-anchor="middle">${dayLbl}</text></g>`;
+    }).join('');
+    // Cumulative path — scaled to its own max so the trajectory shape is visible across the chart
+    const cumPath=entries.map((e,i)=>{
+        const x=LEFT_PAD+i*(BAR_W+GAP)+BAR_W/2;
+        const y=TOP_PAD+CHART_H-(e.cum/totalCum)*CHART_H;
+        return`${i===0?'M':'L'}${x},${y}`;
+    }).join(' ');
+    const cumDots=entries.map((e,i)=>{
+        const x=LEFT_PAD+i*(BAR_W+GAP)+BAR_W/2;
+        const y=TOP_PAD+CHART_H-(e.cum/totalCum)*CHART_H;
+        return`<circle cx="${x}" cy="${y}" r="2.5" class="dly-cum-dot"/>`;
+    }).join('');
+    // Target line + label (label hugs the start of the line so it stays visible while scrolling)
+    const targetSvg=dailyBudget>0?`<line x1="0" y1="${targetY}" x2="${totalW}" y2="${targetY}" class="dly-target" stroke-dasharray="4,4"/><text x="${LEFT_PAD}" y="${targetY-4}" class="dly-target-lbl">יעד יומי ${fmtMoney(dailyBudget,'ILS')}</text>`:'';
+    box.innerHTML=`<div class="dly-card"><div class="dly-title">📊 הוצאות לפי ימים</div><div class="dly-scroll"><svg width="${totalW}" height="${totalH}" class="dly-svg" viewBox="0 0 ${totalW} ${totalH}">${targetSvg}${bars}<path d="${cumPath}" class="dly-cum"/>${cumDots}</svg></div></div>`;
+    // Natural RTL scroll behaviour already shows the most recent dates on the visual right —
+    // no programmatic scrollLeft adjustment needed.
+}
 
 function openExpenseSheet(editIdx){
     if(editIdx===undefined)editIdx=null;
